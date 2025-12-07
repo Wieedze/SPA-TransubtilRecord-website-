@@ -1,13 +1,22 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 import logoCircle from "../assets/transubtil_logo_circle.png"
+import backgroundSvg from "../assets/Bkg_pagedegarde.svg"
 
 export default function Landing() {
   const navigate = useNavigate()
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+
+  // Disable scroll on landing page
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [])
 
   const handleNavigation = (path: string) => {
     setIsTransitioning(true)
@@ -27,22 +36,39 @@ export default function Landing() {
         />
       </Helmet>
 
-      <motion.div
-        className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
-        style={{ backgroundColor: "#262626" }}
-        animate={{
-          opacity: isTransitioning ? 0 : 1,
-        }}
-        transition={{
-          duration: 0.6,
-          ease: "easeInOut",
-        }}
-      >
+      <div className="fixed inset-0" style={{ backgroundColor: "#262626" }}>
+        <motion.div
+          className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden"
+          animate={{
+            opacity: isTransitioning ? 0 : 1,
+          }}
+          transition={{
+            duration: 0.6,
+            ease: "easeInOut",
+          }}
+        >
+        {/* Background SVG with progressive fade-in */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.3 }}
+          transition={{
+            duration: 2,
+            ease: "easeOut",
+            delay: 0.5,
+          }}
+          style={{
+            backgroundImage: `url(${backgroundSvg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
         {/* Logo and Buttons Container */}
         <div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="flex flex-col items-center"
+          className="flex flex-col items-center relative z-10"
         >
           {/* Logo with continuous glow animation */}
           <motion.div
@@ -128,7 +154,8 @@ export default function Landing() {
           </button>
         </motion.div>
         </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </>
   )
 }

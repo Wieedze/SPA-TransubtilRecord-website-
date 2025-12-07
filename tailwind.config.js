@@ -7,14 +7,15 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["system-ui", "sans-serif"],
+        sans: ["Acumin Variable", "system-ui", "sans-serif"], // Primary font
+        display: ["Eras ITC", "Acumin Variable", "sans-serif"], // Secondary font for headings
       },
       colors: {
         brand: {
-          900: "#030008", // fond très sombre
-          700: "#12061f", // violet sombre
-          500: "#a855f7", // accent violet
-          300: "#c4b5fd", // accent clair
+          900: "#262626", // fond gris chaud
+          700: "#1a1a1a", // gris plus sombre
+          500: "#808782", // accent gris-vert
+          300: "#FAF4D3", // accent crème
           acid: "#a3ff12", // touche psyché
         },
       },

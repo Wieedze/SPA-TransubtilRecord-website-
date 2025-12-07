@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* Primary Font - Acumin Variable Concept */
+@font-face {
+  font-family: 'Acumin Variable';
+  src: url('./assets/Fonts/Acumin Variable Concept.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Secondary Font - Eras ITC Bold */
+@font-face {
+  font-family: 'Eras ITC';
+  src: url('./assets/Fonts/eras-itc-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+html, body {
   @apply bg-brand-900 text-white font-sans;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
 }

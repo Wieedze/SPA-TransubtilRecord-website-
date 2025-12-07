@@ -190,12 +190,67 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 ```
 
+### Create Label Submissions Table
+```sql
+-- Run the migration file: supabase/migrations/20241207_create_label_submissions.sql
+-- Or copy-paste the content from that file
+
+CREATE TABLE IF NOT EXISTS label_submissions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  track_title TEXT NOT NULL,
+  artist_name TEXT NOT NULL,
+  genre TEXT,
+  file_url TEXT NOT NULL,
+  description TEXT,
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+  feedback TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+ALTER TABLE label_submissions ENABLE ROW LEVEL SECURITY;
+
+CREATE INDEX idx_label_submissions_user_id ON label_submissions(user_id);
+CREATE INDEX idx_label_submissions_status ON label_submissions(status);
+
+-- Users can view their own submissions
+CREATE POLICY "Users can view own submissions"
+  ON label_submissions FOR SELECT
+  USING (auth.uid() = user_id);
+
+-- Users can create submissions
+CREATE POLICY "Users can create submissions"
+  ON label_submissions FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+-- Admins can view all submissions
+CREATE POLICY "Admins can view all submissions"
+  ON label_submissions FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+    )
+  );
+
+-- Admins can update submissions
+CREATE POLICY "Admins can update submissions"
+  ON label_submissions FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+    )
+  );
+```
+
 ## 4. Configure Storage for Audio Files
 
 1. Go to **Storage** in Supabase dashboard
 2. Create a new bucket called `studio-audio-files`
 3. Set it to **Private** (not public)
-4. Add RLS policies:
+4. Create another bucket called `label_demos` (also Private)
+5. Add RLS policies:
 
 ```sql
 -- Users can upload to their own folder
@@ -219,6 +274,34 @@ CREATE POLICY "Admins can view all files"
 ON storage.objects FOR SELECT
 USING (
   bucket_id = 'studio-audio-files' AND
+  EXISTS (
+    SELECT 1 FROM profiles
+    WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+  )
+);
+
+-- LABEL DEMOS BUCKET POLICIES
+-- Users can upload to their own folder in label_demos
+CREATE POLICY "Users can upload label demos"
+ON storage.objects FOR INSERT
+WITH CHECK (
+  bucket_id = 'label_demos' AND
+  (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- Users can view their own demo files
+CREATE POLICY "Users can view own demos"
+ON storage.objects FOR SELECT
+USING (
+  bucket_id = 'label_demos' AND
+  (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- Admins can view all demo files
+CREATE POLICY "Admins can view all demos"
+ON storage.objects FOR SELECT
+USING (
+  bucket_id = 'label_demos' AND
   EXISTS (
     SELECT 1 FROM profiles
     WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
