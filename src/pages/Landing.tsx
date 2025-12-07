@@ -110,7 +110,7 @@ export default function Landing() {
           >
           <button
             onClick={() => handleNavigation("/studio")}
-            className="px-6 py-2 text-white text-sm uppercase tracking-[0.25em] font-medium
+            className="px-6 py-2 text-white uppercase tracking-[0.25em] text-[11px] font-medium
                        border border-white/60 rounded-lg
                        hover:bg-white/10 hover:border-white transition-all duration-300"
             style={{
@@ -128,7 +128,7 @@ export default function Landing() {
 
           <button
             onClick={() => handleNavigation("/artists")}
-            className="px-6 py-2 text-white text-sm uppercase tracking-[0.25em] font-medium
+            className="px-6 py-2 text-white uppercase tracking-[0.25em] text-[11px] font-medium
                        border border-white/60 rounded-lg
                        hover:bg-white/10 hover:border-white transition-all duration-300"
             style={{

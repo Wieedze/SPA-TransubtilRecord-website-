@@ -238,8 +238,8 @@ export default function LabelSubmissions() {
           className="flex items-center justify-between"
         >
           <div>
-            <h1 className="text-4xl font-bold mb-2">Label Submissions</h1>
-            <p className="text-white/60">Review and manage demo submissions</p>
+            <h1 className="text-4xl font-bold mb-2 uppercase tracking-[0.25em]">Label Submissions</h1>
+            <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">Review and manage demo submissions</p>
           </div>
         </motion.div>
 
@@ -251,7 +251,7 @@ export default function LabelSubmissions() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-lg capitalize transition-colors ${
+                className={`px-4 py-2 rounded-lg uppercase tracking-[0.25em] text-[11px] transition-colors ${
                   filter === f
                     ? "bg-brand-500 text-white"
                     : "bg-white/5 text-white/60 hover:bg-white/10"
@@ -265,12 +265,12 @@ export default function LabelSubmissions() {
 
         {/* Submissions List */}
         {loading ? (
-          <div className="text-center py-12 text-white/40">Loading submissions...</div>
+          <div className="text-center py-12 text-white/40 uppercase tracking-[0.25em] text-[11px]">Loading submissions...</div>
         ) : filteredSubmissions.length === 0 ? (
           <div className="text-center py-16 border border-white/10 rounded-2xl">
             <Music className="w-16 h-16 mx-auto mb-4 text-white/40" />
-            <h3 className="text-xl font-semibold mb-2">No submissions</h3>
-            <p className="text-white/60">
+            <h3 className="text-xl font-semibold mb-2 uppercase tracking-[0.25em]">No submissions</h3>
+            <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
               No {filter === "all" ? "" : filter} submissions found
             </p>
           </div>
@@ -292,10 +292,10 @@ export default function LabelSubmissions() {
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <Music className="w-5 h-5 text-brand-500 flex-shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-semibold truncate">
+                          <h3 className="text-lg font-semibold truncate uppercase tracking-[0.25em]">
                             {submission.track_title}
                           </h3>
-                          <p className="text-white/60 text-sm truncate">
+                          <p className="text-white/60 truncate uppercase tracking-[0.25em] text-[11px]">
                             by {submission.artist_name}
                             {submission.genre && ` • ${submission.genre}`}
                           </p>
@@ -304,12 +304,12 @@ export default function LabelSubmissions() {
 
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <div
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs ${getStatusBadge(
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border uppercase tracking-[0.25em] text-[11px] ${getStatusBadge(
                             submission.status
                           )}`}
                         >
                           {getStatusIcon(submission.status)}
-                          <span className="font-medium capitalize">
+                          <span className="font-medium">
                             {submission.status}
                           </span>
                         </div>
@@ -328,7 +328,7 @@ export default function LabelSubmissions() {
                     </div>
 
                     {/* Quick Info - Always Visible */}
-                    <div className="flex items-center gap-4 text-xs text-white/50 mt-2 ml-8">
+                    <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50 mt-2 ml-8">
                       <span>Submitted: {formatDate(submission.created_at)}</span>
                     </div>
                   </div>
@@ -346,15 +346,15 @@ export default function LabelSubmissions() {
                         {/* Full Description */}
                         {submission.description && (
                           <div>
-                            <p className="text-sm font-medium text-white/80 mb-1">Description</p>
-                            <p className="text-white/70 text-sm">
+                            <p className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-1">Description</p>
+                            <p className="text-white/70 uppercase tracking-[0.25em] text-[11px]">
                               {submission.description}
                             </p>
                           </div>
                         )}
 
                         {/* Metadata */}
-                        <div className="flex items-center gap-4 text-xs text-white/50">
+                        <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50">
                           <span>User ID: {submission.user_id.slice(0, 8)}...</span>
                         </div>
 
@@ -363,12 +363,12 @@ export default function LabelSubmissions() {
                     {submission.file_url.includes('soundcloud.com') ? (
                       // SoundCloud link - show link instead of player
                       <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                        <p className="text-sm text-white/70 mb-2">SoundCloud Link:</p>
+                        <p className="uppercase tracking-[0.25em] text-[11px] text-white/70 mb-2">SoundCloud Link:</p>
                         <a
                           href={submission.file_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-brand-300 hover:text-brand-200 underline text-sm break-all"
+                          className="text-brand-300 hover:text-brand-200 underline uppercase tracking-[0.25em] text-[11px] break-all"
                         >
                           {submission.file_url}
                         </a>
@@ -394,8 +394,8 @@ export default function LabelSubmissions() {
                       <div className="flex items-start gap-2">
                         <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500" />
                         <div>
-                          <p className="text-sm font-medium mb-1">Your Feedback</p>
-                          <p className="text-sm text-white/70">{submission.feedback}</p>
+                          <p className="uppercase tracking-[0.25em] text-[11px] font-medium mb-1">Your Feedback</p>
+                          <p className="uppercase tracking-[0.25em] text-[11px] text-white/70">{submission.feedback}</p>
                         </div>
                           </div>
                           </div>
@@ -410,7 +410,7 @@ export default function LabelSubmissions() {
                           processingId === submission.id ||
                           submission.status === "approved"
                         }
-                        className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed"
+                        className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
                       >
                         <CheckCircle className="w-4 h-4" />
                         Approve
@@ -421,7 +421,7 @@ export default function LabelSubmissions() {
                           processingId === submission.id ||
                           submission.status === "rejected"
                         }
-                        className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed"
+                        className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
                       >
                         <XCircle className="w-4 h-4" />
                         Reject
@@ -441,13 +441,13 @@ export default function LabelSubmissions() {
                                 feedback: e.target.value,
                               })
                             }
-                            placeholder="Enter feedback..."
-                            className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white text-sm"
+                            placeholder="ENTER FEEDBACK..."
+                            className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
                           />
                           <button
                             onClick={() => handleAddFeedback(submission.id)}
                             disabled={processingId === submission.id}
-                            className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
+                            className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
                           >
                             Save
                           </button>
@@ -455,7 +455,7 @@ export default function LabelSubmissions() {
                             onClick={() =>
                               setFeedbackForm({ submissionId: null, feedback: "" })
                             }
-                            className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors text-sm"
+                            className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px]"
                           >
                             Cancel
                           </button>
@@ -468,7 +468,7 @@ export default function LabelSubmissions() {
                               feedback: submission.feedback || "",
                             })
                           }
-                          className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors flex items-center gap-2 text-sm"
+                          className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors flex items-center gap-2 uppercase tracking-[0.25em] text-[11px]"
                         >
                           <MessageSquare className="w-4 h-4" />
                           {submission.feedback ? "Edit Feedback" : "Add Feedback"}

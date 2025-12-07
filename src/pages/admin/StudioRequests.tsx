@@ -176,8 +176,8 @@ export default function StudioRequests() {
           className="flex items-center justify-between"
         >
           <div>
-            <h1 className="font-sans text-4xl font-bold mb-2">Studio Requests</h1>
-            <p className="text-white/60">Review and manage mastering/mixing requests</p>
+            <h1 className="font-sans text-4xl font-bold mb-2 uppercase tracking-[0.25em]">Studio Requests</h1>
+            <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">Review and manage mastering/mixing requests</p>
           </div>
         </motion.div>
 
@@ -189,7 +189,7 @@ export default function StudioRequests() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-lg capitalize transition-colors ${
+                className={`px-4 py-2 rounded-lg uppercase tracking-[0.25em] text-[11px] transition-colors ${
                   filter === f
                     ? "bg-brand-500 text-white"
                     : "bg-white/5 text-white/60 hover:bg-white/10"
@@ -203,12 +203,12 @@ export default function StudioRequests() {
 
         {/* Requests List */}
         {loading ? (
-          <div className="text-center py-12 text-white/40">Loading requests...</div>
+          <div className="text-center py-12 text-white/40 uppercase tracking-[0.25em] text-[11px]">Loading requests...</div>
         ) : filteredRequests.length === 0 ? (
           <div className="text-center py-16 border border-white/10 rounded-2xl">
             <Folder className="w-16 h-16 mx-auto mb-4 text-white/40" />
-            <h3 className="text-xl font-semibold mb-2">No requests</h3>
-            <p className="text-white/60">
+            <h3 className="text-xl font-semibold mb-2 uppercase tracking-[0.25em]">No requests</h3>
+            <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
               No {filter === "all" ? "" : filter} requests found
             </p>
           </div>
@@ -230,10 +230,10 @@ export default function StudioRequests() {
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <Folder className="w-5 h-5 text-brand-500 flex-shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-semibold font-sans truncate">
+                          <h3 className="text-lg font-semibold font-sans truncate uppercase tracking-[0.25em]">
                             {request.project_name}
                           </h3>
-                          <p className="text-white/60 capitalize text-sm truncate">
+                          <p className="text-white/60 truncate uppercase tracking-[0.25em] text-[11px]">
                             {request.service_type.replace("-", " + ")} • {request.audio_files.length} file(s)
                           </p>
                         </div>
@@ -241,12 +241,12 @@ export default function StudioRequests() {
 
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <div
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs ${getStatusBadge(
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border uppercase tracking-[0.25em] text-[11px] ${getStatusBadge(
                             request.status
                           )}`}
                         >
                           {getStatusIcon(request.status)}
-                          <span className="font-medium capitalize">
+                          <span className="font-medium">
                             {request.status.replace("_", " ")}
                           </span>
                         </div>
@@ -265,7 +265,7 @@ export default function StudioRequests() {
                     </div>
 
                     {/* Quick Info - Always Visible */}
-                    <div className="flex items-center gap-4 text-xs text-white/50 mt-2 ml-8">
+                    <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50 mt-2 ml-8">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {formatDate(request.created_at)}
@@ -286,22 +286,22 @@ export default function StudioRequests() {
                         {/* Full Description */}
                         {request.description && (
                           <div>
-                            <p className="text-sm font-medium text-white/80 mb-1">Description</p>
-                            <p className="text-white/70 text-sm">
+                            <p className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-1">Description</p>
+                            <p className="text-white/70 uppercase tracking-[0.25em] text-[11px]">
                               {request.description}
                             </p>
                           </div>
                         )}
 
                         {/* Metadata */}
-                        <div className="flex items-center gap-4 text-xs text-white/50">
+                        <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50">
                           <span>User ID: {request.user_id.slice(0, 8)}...</span>
                         </div>
 
                         {/* Audio Files */}
                         {request.audio_files.length > 0 && (
                           <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                      <p className="text-sm font-medium mb-2">Audio Files:</p>
+                      <p className="uppercase tracking-[0.25em] text-[11px] font-medium mb-2">Audio Files:</p>
                       <div className="space-y-1">
                         {request.audio_files.map((file: any, index: number) => {
                           const handleDownload = async () => {
@@ -322,7 +322,7 @@ export default function StudioRequests() {
                           }
 
                           return (
-                            <div key={index} className="flex items-center justify-between text-sm">
+                            <div key={index} className="flex items-center justify-between uppercase tracking-[0.25em] text-[11px]">
                               <span className="text-white/70">{file.name}</span>
                               <button
                                 onClick={handleDownload}
@@ -341,8 +341,8 @@ export default function StudioRequests() {
                         {/* Reference Tracks */}
                         {request.reference_tracks && (
                           <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                            <p className="text-sm font-medium mb-1">Reference Tracks:</p>
-                            <p className="text-sm text-white/70">{request.reference_tracks}</p>
+                            <p className="uppercase tracking-[0.25em] text-[11px] font-medium mb-1">Reference Tracks:</p>
+                            <p className="uppercase tracking-[0.25em] text-[11px] text-white/70">{request.reference_tracks}</p>
                           </div>
                         )}
 
@@ -352,8 +352,8 @@ export default function StudioRequests() {
                             <div className="flex items-start gap-2">
                               <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500" />
                               <div>
-                                <p className="text-sm font-medium mb-1">Your Feedback</p>
-                                <p className="text-sm text-white/70">{request.feedback}</p>
+                                <p className="uppercase tracking-[0.25em] text-[11px] font-medium mb-1">Your Feedback</p>
+                                <p className="uppercase tracking-[0.25em] text-[11px] text-white/70">{request.feedback}</p>
                               </div>
                             </div>
                           </div>
@@ -366,28 +366,28 @@ export default function StudioRequests() {
                     <button
                       onClick={() => handleUpdateStatus(request.id, "pending")}
                       disabled={processingId === request.id || request.status === "pending"}
-                      className="px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 disabled:bg-yellow-500/10 text-yellow-400 disabled:text-yellow-400/50 rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 disabled:bg-yellow-500/10 text-yellow-400 disabled:text-yellow-400/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
                     >
                       Pending
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(request.id, "in_progress")}
                       disabled={processingId === request.id || request.status === "in_progress"}
-                      className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 disabled:bg-blue-500/10 text-blue-400 disabled:text-blue-400/50 rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 disabled:bg-blue-500/10 text-blue-400 disabled:text-blue-400/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
                     >
                       In Progress
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(request.id, "completed")}
                       disabled={processingId === request.id || request.status === "completed"}
-                      className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
                     >
                       Complete
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(request.id, "cancelled")}
                       disabled={processingId === request.id || request.status === "cancelled"}
-                      className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
                     >
                       Cancel
                     </button>
@@ -406,13 +406,13 @@ export default function StudioRequests() {
                                       feedback: e.target.value,
                                     })
                                   }
-                                  placeholder="Enter feedback for the user..."
-                                  className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white text-sm"
+                                  placeholder="ENTER FEEDBACK FOR THE USER..."
+                                  className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
                                 />
                                 <button
                                   onClick={() => handleAddFeedback(request.id)}
                                   disabled={processingId === request.id}
-                                  className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
+                                  className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
                                 >
                                   Save
                                 </button>
@@ -420,7 +420,7 @@ export default function StudioRequests() {
                                   onClick={() =>
                                     setFeedbackForm({ requestId: null, feedback: "" })
                                   }
-                                  className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors text-sm"
+                                  className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px]"
                                 >
                                   Cancel
                                 </button>
@@ -433,7 +433,7 @@ export default function StudioRequests() {
                                     feedback: request.feedback || "",
                                   })
                                 }
-                                className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors flex items-center gap-2 text-sm"
+                                className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors flex items-center gap-2 uppercase tracking-[0.25em] text-[11px]"
                               >
                                 <MessageSquare className="w-4 h-4" />
                                 {request.feedback ? "Edit Feedback" : "Add Feedback"}

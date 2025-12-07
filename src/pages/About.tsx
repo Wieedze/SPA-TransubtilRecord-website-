@@ -75,15 +75,15 @@ export default function About() {
         <h2 className="font-display text-4xl md:text-5xl font-bold tracking-wide text-center mb-8">
         </h2>
 
-        <p className="font-sans text-base text-brand-300/70 leading-relaxed">
+        <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-brand-300/70 leading-relaxed">
           Transubtil Records is a Marseille-based psychedelic-trance label born from a passion for underground sound and collective spirit. What began as a local association dedicated to supporting emerging DJs and producers has evolved into a fully active label shaping the next generation of psytrance.
         </p>
 
-        <p className="font-sans text-base text-brand-300/70 leading-relaxed">
+        <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-brand-300/70 leading-relaxed">
           Our mission goes beyond releasing music: we help artists structure their projects, navigate challenges, and access professional tools — providing a creative home for producers ready to grow.
         </p>
 
-        <p className="font-sans text-base text-brand-300/70 leading-relaxed">
+        <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-brand-300/70 leading-relaxed">
           Specialized in psychedelic trance, darkpsy, forest and night-oriented sounds, Transubtil Records embraces deep grooves, experimental textures and the raw energy of the underground — connecting Marseille's creative pulse to the global psytrance movement.
         </p>
 
@@ -91,7 +91,7 @@ export default function About() {
         <div className="pt-8 text-center">
           <button
             onClick={() => setShowDemoForm(true)}
-            className="inline-flex items-center gap-2 px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-sans font-medium rounded-lg transition-all"
+            className="inline-flex items-center gap-2 px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-sans font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all"
           >
             <Send className="w-5 h-5" />
             Submit Your Demo
@@ -103,7 +103,7 @@ export default function About() {
           <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div className="bg-brand-800 border border-white/20 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="font-display text-2xl font-bold">Submit Your Demo</h3>
+                <h3 className="font-display text-2xl font-bold uppercase tracking-[0.25em]">Submit Your Demo</h3>
                 <button
                   onClick={() => setShowDemoForm(false)}
                   className="p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -112,13 +112,13 @@ export default function About() {
                 </button>
               </div>
 
-              <p className="font-sans text-sm text-brand-300/70 mb-6">
+              <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-brand-300/70 mb-6">
                 Send us your best psychedelic trance productions. We're looking for darkpsy, forest, and night-oriented sounds that push boundaries.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block font-sans text-sm font-medium mb-2">
+                  <label className="block font-sans uppercase tracking-[0.25em] text-[11px] font-medium mb-2">
                     Artist Name *
                   </label>
                   <input
@@ -126,13 +126,13 @@ export default function About() {
                     required
                     value={formData.artistName}
                     onChange={(e) => setFormData({ ...formData, artistName: e.target.value })}
-                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans text-sm"
-                    placeholder="Your artist name"
+                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans uppercase tracking-[0.25em] text-[11px]"
+                    placeholder="YOUR ARTIST NAME"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-sans text-sm font-medium mb-2">
+                  <label className="block font-sans uppercase tracking-[0.25em] text-[11px] font-medium mb-2">
                     Email *
                   </label>
                   <input
@@ -140,13 +140,13 @@ export default function About() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans text-sm"
-                    placeholder="your@email.com"
+                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans uppercase tracking-[0.25em] text-[11px]"
+                    placeholder="YOUR@EMAIL.COM"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-sans text-sm font-medium mb-2">
+                  <label className="block font-sans uppercase tracking-[0.25em] text-[11px] font-medium mb-2">
                     Track Title *
                   </label>
                   <input
@@ -154,13 +154,13 @@ export default function About() {
                     required
                     value={formData.trackTitle}
                     onChange={(e) => setFormData({ ...formData, trackTitle: e.target.value })}
-                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans text-sm"
-                    placeholder="Your track name"
+                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans uppercase tracking-[0.25em] text-[11px]"
+                    placeholder="YOUR TRACK NAME"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-sans text-sm font-medium mb-2">
+                  <label className="block font-sans uppercase tracking-[0.25em] text-[11px] font-medium mb-2">
                     SoundCloud / Private Link *
                   </label>
                   <input
@@ -168,21 +168,21 @@ export default function About() {
                     required
                     value={formData.soundcloudUrl}
                     onChange={(e) => setFormData({ ...formData, soundcloudUrl: e.target.value })}
-                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans text-sm"
-                    placeholder="https://soundcloud.com/..."
+                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans uppercase tracking-[0.25em] text-[11px]"
+                    placeholder="HTTPS://SOUNDCLOUD.COM/..."
                   />
                 </div>
 
                 <div>
-                  <label className="block font-sans text-sm font-medium mb-2">
+                  <label className="block font-sans uppercase tracking-[0.25em] text-[11px] font-medium mb-2">
                     Message (Optional)
                   </label>
                   <textarea
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     rows={4}
-                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans text-sm resize-none"
-                    placeholder="Tell us about your music, influences, or anything else you'd like to share..."
+                    className="w-full px-4 py-2 bg-brand-700/50 border border-white/20 rounded-lg focus:border-white/40 focus:outline-none font-sans uppercase tracking-[0.25em] text-[11px] resize-none"
+                    placeholder="TELL US ABOUT YOUR MUSIC, INFLUENCES, OR ANYTHING ELSE YOU'D LIKE TO SHARE..."
                   />
                 </div>
 
@@ -191,14 +191,14 @@ export default function About() {
                     type="button"
                     onClick={() => setShowDemoForm(false)}
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg font-sans text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-6 py-3 border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg font-sans uppercase tracking-[0.25em] text-[11px] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="flex-1 px-6 py-3 bg-white text-black hover:bg-white/90 rounded-lg font-sans font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-6 py-3 bg-white text-black hover:bg-white/90 rounded-lg font-sans font-medium uppercase tracking-[0.25em] text-[11px] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Submitting..." : "Submit Demo"}
                   </button>

@@ -48,7 +48,7 @@ export default function ArtistProfile() {
         >
           <Link
             to="/artists"
-            className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 uppercase tracking-[0.25em] text-[11px] text-white/60 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Artists
@@ -118,13 +118,13 @@ export default function ArtistProfile() {
                   />
                 </div>
 
-                <p className="text-sm text-white/60 mt-1">{artist.act}</p>
+                <p className="uppercase tracking-[0.25em] text-[11px] text-white/60 mt-1">{artist.act}</p>
               </div>
 
               {/* Location */}
               <div className="flex items-center gap-2 text-white/60">
                 <MapPin className="w-4 h-4" />
-                <span className="text-sm">{artist.country}</span>
+                <span className="uppercase tracking-[0.25em] text-[11px]">{artist.country}</span>
               </div>
 
               {/* Styles */}
@@ -132,7 +132,7 @@ export default function ArtistProfile() {
                 {artist.style.map((style) => (
                   <span
                     key={style}
-                    className="px-3 py-1 rounded-full bg-brand-700/50 text-brand-300 text-xs uppercase tracking-wider border border-brand-300/20"
+                    className="px-3 py-1 rounded-full bg-brand-700/50 text-brand-300 uppercase tracking-[0.25em] text-[11px] border border-brand-300/20"
                   >
                     {style}
                   </span>
@@ -153,8 +153,8 @@ export default function ArtistProfile() {
             transition={{ duration: 0.7, delay: 0.35 }}
             className="space-y-3"
           >
-            <h2 className="text-xl font-semibold">Biography</h2>
-            <p className="text-sm text-white/70 leading-relaxed">
+            <h2 className="text-xl font-semibold uppercase tracking-[0.25em]">Biography</h2>
+            <p className="uppercase tracking-[0.25em] text-[11px] text-white/70 leading-relaxed">
               {artist.description}
             </p>
           </motion.section>
@@ -169,8 +169,8 @@ export default function ArtistProfile() {
             className="space-y-6"
           >
             <div className="space-y-2">
-              <h2 className="text-2xl font-semibold">Latest Tracks</h2>
-              <p className="text-sm text-white/60">
+              <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">Latest Tracks</h2>
+              <p className="uppercase tracking-[0.25em] text-[11px] text-white/60">
                 Listen to the latest releases and mixes from {artist.name}
               </p>
             </div>
@@ -191,7 +191,7 @@ export default function ArtistProfile() {
             transition={{ duration: 0.7, delay: 0.75 }}
             className="space-y-6"
           >
-            <h2 className="text-2xl font-semibold">Live Performances</h2>
+            <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">Live Performances</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {artist.videos.map((videoUrl, index) => (
                 <div
@@ -199,7 +199,7 @@ export default function ArtistProfile() {
                   className="aspect-video bg-brand-700 rounded-xl border border-white/10 overflow-hidden"
                 >
                   {/* TODO: Add YouTube embed when videos are available */}
-                  <div className="w-full h-full flex items-center justify-center text-white/40">
+                  <div className="w-full h-full flex items-center justify-center text-white/40 uppercase tracking-[0.25em] text-[11px]">
                     Video Player
                   </div>
                 </div>
@@ -217,10 +217,10 @@ export default function ArtistProfile() {
             className="space-y-6"
           >
             <div className="space-y-2">
-              <h2 className="text-2xl font-semibold">
+              <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">
                 Releases on Transubtil Records
               </h2>
-              <p className="text-sm text-white/60">
+              <p className="uppercase tracking-[0.25em] text-[11px] text-white/60">
                 {artistReleases.length} release{artistReleases.length > 1 ? "s" : ""} by {artist.name}
               </p>
             </div>
@@ -247,14 +247,14 @@ export default function ArtistProfile() {
                   {/* Info */}
                   <div className="space-y-2">
                     <div>
-                      <h4 className="font-semibold text-sm line-clamp-2">
+                      <h4 className="font-semibold uppercase tracking-[0.25em] text-[11px] line-clamp-2">
                         {release.title}
                       </h4>
-                      <p className="text-xs text-white/60 mt-1">{release.artist}</p>
+                      <p className="uppercase tracking-[0.25em] text-[11px] text-white/60 mt-1">{release.artist}</p>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-white/40 capitalize">{release.type}</span>
+                    <div className="flex items-center justify-between uppercase tracking-[0.25em] text-[11px]">
+                      <span className="text-white/40">{release.type}</span>
                       <span className="text-white/40">{release.releaseDate}</span>
                     </div>
 
@@ -263,7 +263,7 @@ export default function ArtistProfile() {
                       href={release.bandcampUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-4 py-2 text-center border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg text-xs transition-all"
+                      className="flex items-center justify-center gap-2 px-4 py-2 text-center border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg uppercase tracking-[0.25em] text-[11px] transition-all"
                     >
                       <ExternalLink className="w-3 h-3" />
                       View on Bandcamp
@@ -283,8 +283,8 @@ export default function ArtistProfile() {
           className="space-y-6"
         >
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold">Book {artist.name}</h2>
-            <p className="text-sm text-white/60">
+            <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">Book {artist.name}</h2>
+            <p className="uppercase tracking-[0.25em] text-[11px] text-white/60">
               Interested in booking {artist.name} for your event? Fill out the form below
               and we'll get back to you as soon as possible.
             </p>

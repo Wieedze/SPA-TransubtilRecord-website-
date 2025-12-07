@@ -328,24 +328,6 @@ export default function Dashboard() {
       </Helmet>
 
       <div className="mx-auto max-w-6xl space-y-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex items-start justify-between"
-        >
-          <div>
-
-          </div>
-          <button
-            onClick={() => signOut()}
-            className="px-4 py-2 border border-white/20 hover:border-white/40 hover:bg-white/5 text-white font-sans text-sm rounded-lg transition-all flex items-center gap-2"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
-        </motion.div>
 
         {/* Tabs */}
         <div className="border-b border-white/10">
@@ -418,10 +400,7 @@ export default function Dashboard() {
             transition={{ duration: 0.4 }}
             className="space-y-6"
           >
-            <div className="flex items-center justify-between">
-              <p className="text-white/60">
-                Professional mastering and mixing services - Track your studio requests
-              </p>
+            <div className="flex items-center justify-end">
               <Link
                 to="/studio/request"
                 className="px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center gap-2"
@@ -687,44 +666,32 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Studio Projects - Pending */}
               <div className="border border-white/10 rounded-xl p-4 bg-white/5">
-                <div className="flex items-center gap-3 mb-2">
-                  <Clock className="w-5 h-5 text-yellow-400" />
-                  <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60">Pending Studio</h3>
-                </div>
-                <p className="text-3xl font-bold text-white">
+                <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60 mb-2">Pending Studio</h3>
+                <p className="uppercase tracking-[0.25em] text-base font-medium text-white">
                   {studioProjects.filter(p => p.status === "pending").length}
                 </p>
               </div>
 
               {/* Studio Projects - In Progress */}
               <div className="border border-white/10 rounded-xl p-4 bg-white/5">
-                <div className="flex items-center gap-3 mb-2">
-                  <Folder className="w-5 h-5 text-blue-400" />
-                  <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60">In Progress</h3>
-                </div>
-                <p className="text-3xl font-bold text-white">
+                <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60 mb-2">In Progress</h3>
+                <p className="uppercase tracking-[0.25em] text-base font-medium text-white">
                   {studioProjects.filter(p => p.status === "in_progress").length}
                 </p>
               </div>
 
               {/* Studio Projects - Completed */}
               <div className="border border-white/10 rounded-xl p-4 bg-white/5">
-                <div className="flex items-center gap-3 mb-2">
-                  <CheckCircle className="w-5 h-5 text-green-400" />
-                  <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60">Completed</h3>
-                </div>
-                <p className="text-3xl font-bold text-white">
+                <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60 mb-2">Completed</h3>
+                <p className="uppercase tracking-[0.25em] text-base font-medium text-white">
                   {studioProjects.filter(p => p.status === "completed").length}
                 </p>
               </div>
 
               {/* Label Submissions - Total */}
               <div className="border border-white/10 rounded-xl p-4 bg-white/5">
-                <div className="flex items-center gap-3 mb-2">
-                  <Music className="w-5 h-5 text-brand-500" />
-                  <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60">Demos Submitted</h3>
-                </div>
-                <p className="text-3xl font-bold text-white">
+                <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60 mb-2">Demos Submitted</h3>
+                <p className="uppercase tracking-[0.25em] text-base font-medium text-white">
                   {submissions.length}
                 </p>
               </div>

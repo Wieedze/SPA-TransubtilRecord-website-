@@ -102,7 +102,7 @@ export default function StudioRequest() {
         {/* Back Button */}
         <button
           onClick={() => navigate("/studio")}
-          className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 uppercase tracking-[0.25em] text-[11px] text-white/60 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Studio
@@ -115,8 +115,8 @@ export default function StudioRequest() {
           transition={{ duration: 0.6 }}
           className="space-y-3"
         >
-          <h1 className="text-3xl md:text-4xl font-bold">Request Studio Service</h1>
-          <p className="text-white/60">
+          <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-[0.25em]">Request Studio Service</h1>
+          <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
             Fill out the form below to submit your project. We'll review your request and
             get back to you within 24-48 hours.
           </p>
@@ -134,7 +134,7 @@ export default function StudioRequest() {
             <div>
               <label
                 htmlFor="projectName"
-                className="block text-sm font-medium text-white/80 mb-2"
+                className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2"
               >
                 Project Name *
               </label>
@@ -145,8 +145,8 @@ export default function StudioRequest() {
                 value={formData.projectName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
-                placeholder="My Epic Track"
+                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors uppercase tracking-[0.25em] text-[11px]"
+                placeholder="MY EPIC TRACK"
               />
             </div>
 
@@ -154,7 +154,7 @@ export default function StudioRequest() {
             <div>
               <label
                 htmlFor="serviceType"
-                className="block text-sm font-medium text-white/80 mb-2"
+                className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2"
               >
                 Service Type *
               </label>
@@ -164,7 +164,7 @@ export default function StudioRequest() {
                 value={formData.serviceType}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/30 transition-colors cursor-pointer"
+                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/30 transition-colors cursor-pointer uppercase tracking-[0.25em] text-[11px]"
               >
                 <option value="mastering">Mastering</option>
                 <option value="mixing">Mixing</option>
@@ -177,7 +177,7 @@ export default function StudioRequest() {
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-white/80 mb-2"
+                className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2"
               >
                 Project Description *
               </label>
@@ -188,14 +188,14 @@ export default function StudioRequest() {
                 onChange={handleChange}
                 required
                 rows={5}
-                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors resize-none"
-                placeholder="Describe your project, desired sound, target loudness, specific requirements, etc."
+                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors resize-none uppercase tracking-[0.25em] text-[11px]"
+                placeholder="DESCRIBE YOUR PROJECT, DESIRED SOUND, TARGET LOUDNESS, SPECIFIC REQUIREMENTS, ETC."
               />
             </div>
 
             {/* Audio Files Upload */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
+              <label className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2">
                 Audio Files *
               </label>
               <AudioUploader
@@ -204,7 +204,7 @@ export default function StudioRequest() {
                   setFormData({ ...formData, audioFiles: files })
                 }
               />
-              <p className="text-xs text-white/40 mt-2">
+              <p className="uppercase tracking-[0.25em] text-[11px] text-white/40 mt-2">
                 Upload your stems, mixdown, or reference tracks
               </p>
             </div>
@@ -213,7 +213,7 @@ export default function StudioRequest() {
             <div>
               <label
                 htmlFor="referenceTracks"
-                className="block text-sm font-medium text-white/80 mb-2"
+                className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2"
               >
                 Reference Tracks (Optional)
               </label>
@@ -223,15 +223,15 @@ export default function StudioRequest() {
                 name="referenceTracks"
                 value={formData.referenceTracks}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
-                placeholder="SoundCloud or YouTube links"
+                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors uppercase tracking-[0.25em] text-[11px]"
+                placeholder="SOUNDCLOUD OR YOUTUBE LINKS"
               />
             </div>
 
             {/* Error */}
             {error && (
               <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-                <p className="text-sm text-red-400">{error}</p>
+                <p className="uppercase tracking-[0.25em] text-[11px] text-red-400">{error}</p>
               </div>
             )}
 
@@ -239,7 +239,7 @@ export default function StudioRequest() {
             <button
               type="submit"
               disabled={loading || formData.audioFiles.length === 0}
-              className="w-full px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-[0.25em] text-[11px]"
             >
               {loading ? (
                 <span>Submitting...</span>
@@ -251,7 +251,7 @@ export default function StudioRequest() {
               )}
             </button>
 
-            <p className="text-xs text-white/40 text-center">
+            <p className="uppercase tracking-[0.25em] text-[11px] text-white/40 text-center">
               By submitting this form, you agree to our terms of service
             </p>
           </form>

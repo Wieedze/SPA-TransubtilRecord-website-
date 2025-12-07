@@ -73,14 +73,14 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
           <div className="w-16 h-16 mx-auto bg-brand-500/20 rounded-full flex items-center justify-center">
             <Mail className="w-8 h-8 text-brand-300" />
           </div>
-          <h3 className="text-xl font-semibold text-brand-300">Request Sent!</h3>
-          <p className="text-sm text-white/70">
+          <h3 className="text-xl font-semibold text-brand-300 uppercase tracking-[0.25em]">Request Sent!</h3>
+          <p className="uppercase tracking-[0.25em] text-[11px] text-white/70">
             Thank you for your booking request for {artistName}. We'll get back to you
             shortly at the email address you provided.
           </p>
           <button
             onClick={() => setIsSuccess(false)}
-            className="text-sm text-brand-300 hover:text-brand-200 transition-colors"
+            className="uppercase tracking-[0.25em] text-[11px] text-brand-300 hover:text-brand-200 transition-colors"
           >
             Send another request
           </button>
@@ -94,7 +94,7 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
       <div className="space-y-4">
         {/* Artist Name (Read-only) */}
         <div>
-          <label className="block text-sm font-medium text-white/80 mb-2">
+          <label className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2">
             <Music className="w-4 h-4 inline mr-2" />
             Artist
           </label>
@@ -102,13 +102,13 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
             type="text"
             value={artistName}
             disabled
-            className="w-full px-4 py-2 bg-brand-700/20 border border-white/10 rounded-lg text-white/60 cursor-not-allowed"
+            className="w-full px-4 py-2 bg-brand-700/20 border border-white/10 rounded-lg text-white/60 cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
           />
         </div>
 
         {/* Promoter Name */}
         <div>
-          <label htmlFor="promoterName" className="block text-sm font-medium text-white/80 mb-2">
+          <label htmlFor="promoterName" className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2">
             <User className="w-4 h-4 inline mr-2" />
             Your Name *
           </label>
@@ -119,14 +119,14 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
             value={formData.promoterName}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors"
-            placeholder="John Doe"
+            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors uppercase tracking-[0.25em] text-[11px]"
+            placeholder="JOHN DOE"
           />
         </div>
 
         {/* Promoter Email */}
         <div>
-          <label htmlFor="promoterEmail" className="block text-sm font-medium text-white/80 mb-2">
+          <label htmlFor="promoterEmail" className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2">
             <Mail className="w-4 h-4 inline mr-2" />
             Your Email *
           </label>
@@ -137,14 +137,14 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
             value={formData.promoterEmail}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors"
-            placeholder="you@example.com"
+            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors uppercase tracking-[0.25em] text-[11px]"
+            placeholder="YOU@EXAMPLE.COM"
           />
         </div>
 
         {/* Event Name */}
         <div>
-          <label htmlFor="eventName" className="block text-sm font-medium text-white/80 mb-2">
+          <label htmlFor="eventName" className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2">
             Event Name *
           </label>
           <input
@@ -154,14 +154,14 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
             value={formData.eventName}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors"
-            placeholder="Psychedelic Forest Festival"
+            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors uppercase tracking-[0.25em] text-[11px]"
+            placeholder="PSYCHEDELIC FOREST FESTIVAL"
           />
         </div>
 
         {/* Event Date */}
         <div>
-          <label htmlFor="eventDate" className="block text-sm font-medium text-white/80 mb-2">
+          <label htmlFor="eventDate" className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2">
             <Calendar className="w-4 h-4 inline mr-2" />
             Event Date *
           </label>
@@ -172,13 +172,13 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
             value={formData.eventDate}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-brand-300/60 transition-colors"
+            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-brand-300/60 transition-colors uppercase tracking-[0.25em] text-[11px]"
           />
         </div>
 
         {/* Event Location */}
         <div>
-          <label htmlFor="eventLocation" className="block text-sm font-medium text-white/80 mb-2">
+          <label htmlFor="eventLocation" className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2">
             <MapPin className="w-4 h-4 inline mr-2" />
             Event Location *
           </label>
@@ -189,14 +189,14 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
             value={formData.eventLocation}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors"
-            placeholder="City, Country"
+            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors uppercase tracking-[0.25em] text-[11px]"
+            placeholder="CITY, COUNTRY"
           />
         </div>
 
         {/* Message */}
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-white/80 mb-2">
+          <label htmlFor="message" className="block uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-2">
             Additional Details
           </label>
           <textarea
@@ -205,15 +205,15 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
             value={formData.message}
             onChange={handleChange}
             rows={5}
-            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors resize-none"
-            placeholder="Tell us more about your event, expected attendance, venue details, etc."
+            className="w-full px-4 py-2 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-brand-300/60 transition-colors resize-none uppercase tracking-[0.25em] text-[11px]"
+            placeholder="TELL US MORE ABOUT YOUR EVENT, EXPECTED ATTENDANCE, VENUE DETAILS, ETC."
           />
         </div>
       </div>
 
       {error && (
         <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-          <p className="text-sm text-red-400">{error}</p>
+          <p className="uppercase tracking-[0.25em] text-[11px] text-red-400">{error}</p>
         </div>
       )}
 
@@ -221,12 +221,12 @@ export default function BookingForm({ artistId, artistName }: BookingFormProps) 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white font-medium rounded-lg transition-colors disabled:cursor-not-allowed"
+        className="w-full px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white font-medium rounded-lg transition-colors disabled:cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
       >
         {isSubmitting ? "Sending Request..." : "Send Booking Request"}
       </button>
 
-      <p className="text-xs text-white/40 text-center">
+      <p className="uppercase tracking-[0.25em] text-[11px] text-white/40 text-center">
         By submitting this form, you agree to be contacted regarding your booking inquiry.
       </p>
     </form>
