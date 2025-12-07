@@ -50,7 +50,7 @@ export default function Landing() {
         >
         {/* Animated Background SVG */}
         <div className="absolute inset-0 z-0">
-          <AnimatedBackground />
+          <AnimatedBackground isHovered={isHovered} />
         </div>
         {/* Logo and Buttons Container */}
         <div
@@ -67,7 +67,7 @@ export default function Landing() {
             }}
             transition={{
               opacity: { duration: 2 },
-              scale: { duration: 2, ease: "easeInOut" },
+              scale: { duration: 0.8, ease: "easeInOut" },
             }}
             className="mb-8 cursor-pointer relative"
             style={{
@@ -99,7 +99,8 @@ export default function Landing() {
               y: isHovered ? 0 : 20,
             }}
             transition={{
-              duration: 0.3,
+              duration: 0.8,
+              delay: isHovered ? 0.8 : 0,
               ease: "easeOut",
             }}
             className="flex gap-4"

@@ -380,14 +380,14 @@ export default function StudioRequests() {
                     <button
                       onClick={() => handleUpdateStatus(request.id, "completed")}
                       disabled={processingId === request.id || request.status === "completed"}
-                      className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 disabled:bg-green-500/10 text-green-400 disabled:text-green-400/50 rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
                     >
                       Complete
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(request.id, "cancelled")}
                       disabled={processingId === request.id || request.status === "cancelled"}
-                      className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 disabled:bg-red-500/10 text-red-400 disabled:text-red-400/50 rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors text-sm disabled:cursor-not-allowed"
                     >
                       Cancel
                     </button>

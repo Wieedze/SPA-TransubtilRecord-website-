@@ -17,15 +17,18 @@ import {
   Calendar,
   Plus,
   LogOut,
+  UserCircle,
+  Mail,
+  Save,
 } from "lucide-react"
 
-type TabType = "studio" | "demo"
+type TabType = "studio" | "demo" | "account"
 
 export default function Dashboard() {
   const { user, profile, signOut } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState<TabType>(
-    (searchParams.get("tab") as TabType) || "studio"
+    (searchParams.get("tab") as TabType) || "account"
   )
 
   console.log("🎯 Dashboard loaded - Active tab:", activeTab)
@@ -50,12 +53,30 @@ export default function Dashboard() {
     file: null as File | null,
   })
 
+  // Profile editing state
+  const [editingProfile, setEditingProfile] = useState(false)
+  const [profileData, setProfileData] = useState({
+    full_name: profile?.full_name || "",
+    email: user?.email || "",
+  })
+  const [savingProfile, setSavingProfile] = useState(false)
+
   useEffect(() => {
     if (user) {
       loadStudioProjects()
       loadSubmissions()
     }
   }, [user])
+
+  useEffect(() => {
+    // Update profile data when profile changes
+    if (profile) {
+      setProfileData({
+        full_name: profile.full_name || "",
+        email: user?.email || "",
+      })
+    }
+  }, [profile, user])
 
   useEffect(() => {
     // Update URL when tab changes
@@ -185,6 +206,44 @@ export default function Dashboard() {
     }
   }
 
+  // Profile update function
+  const handleSaveProfile = async () => {
+    if (!user) return
+
+    setSavingProfile(true)
+    try {
+      // Update profile (full_name)
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({ full_name: profileData.full_name })
+        .eq("id", user.id)
+
+      if (profileError) throw profileError
+
+      // Update email if changed
+      if (profileData.email !== user.email) {
+        const { error: emailError } = await supabase.auth.updateUser({
+          email: profileData.email,
+        })
+
+        if (emailError) throw emailError
+        alert("Profile updated! Please check your new email for a confirmation link.")
+      } else {
+        alert("Profile updated successfully!")
+      }
+
+      setEditingProfile(false)
+
+      // Refresh the page to get updated profile
+      window.location.reload()
+    } catch (error: any) {
+      console.error("Error updating profile:", error)
+      alert(`Error updating profile: ${error.message}`)
+    } finally {
+      setSavingProfile(false)
+    }
+  }
+
   // Studio Projects helpers (from MyProjects.tsx)
   const getStatusIcon = (status: StudioProject["status"]) => {
     switch (status) {
@@ -277,10 +336,7 @@ export default function Dashboard() {
           className="flex items-start justify-between"
         >
           <div>
-            <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
-            <p className="text-white/60">
-              Welcome back, {profile?.full_name || user.email}
-            </p>
+
           </div>
           <button
             onClick={() => signOut()}
@@ -295,8 +351,27 @@ export default function Dashboard() {
         <div className="border-b border-white/10">
           <div className="flex gap-6">
             <button
+              onClick={() => setActiveTab("account")}
+              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative ${
+                activeTab === "account"
+                  ? "text-white"
+                  : "text-white/50 hover:text-white/80"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <UserCircle className="w-5 h-5" />
+                Account
+              </div>
+              {activeTab === "account" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-500"
+                />
+              )}
+            </button>
+            <button
               onClick={() => setActiveTab("studio")}
-              className={`pb-4 px-2 font-medium transition-colors relative ${
+              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative ${
                 activeTab === "studio"
                   ? "text-white"
                   : "text-white/50 hover:text-white/80"
@@ -315,7 +390,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setActiveTab("demo")}
-              className={`pb-4 px-2 font-medium transition-colors relative ${
+              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative ${
                 activeTab === "demo"
                   ? "text-white"
                   : "text-white/50 hover:text-white/80"
@@ -349,7 +424,7 @@ export default function Dashboard() {
               </p>
               <Link
                 to="/studio/request"
-                className="px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all flex items-center gap-2"
+                className="px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center gap-2"
               >
                 <Plus className="w-5 h-5" />
                 <span className="hidden sm:inline">New Request</span>
@@ -361,13 +436,13 @@ export default function Dashboard() {
             ) : studioProjects.length === 0 ? (
               <div className="text-center py-16 border border-white/10 rounded-2xl">
                 <Folder className="w-16 h-16 mx-auto mb-4 text-white/40" />
-                <h3 className="text-xl font-semibold mb-2">No projects yet</h3>
-                <p className="text-white/60 mb-6">
+                <h3 className="text-xl font-semibold mb-2 uppercase tracking-[0.25em]">No projects yet</h3>
+                <p className="text-white/60 mb-6 uppercase tracking-[0.25em] text-[11px]">
                   Submit your first studio request to get started
                 </p>
                 <Link
                   to="/studio/request"
-                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all"
                 >
                   <Plus className="w-5 h-5" />
                   Create First Request
@@ -387,15 +462,15 @@ export default function Dashboard() {
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                       <div className="flex-1 space-y-3">
                         <div>
-                          <h3 className="text-xl font-semibold">{project.project_name}</h3>
-                          <p className="text-sm text-white/60 capitalize">
+                          <h3 className="text-xl font-semibold uppercase tracking-[0.25em]">{project.project_name}</h3>
+                          <p className="uppercase tracking-[0.25em] text-[11px] text-white/60">
                             {project.service_type.replace("-", " + ")}
                           </p>
                         </div>
-                        <p className="text-sm text-white/70 line-clamp-2">
+                        <p className="uppercase tracking-[0.25em] text-[11px] text-white/70 line-clamp-2">
                           {project.description}
                         </p>
-                        <div className="flex items-center gap-4 text-xs text-white/50">
+                        <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50">
                           <span>{project.audio_files.length} files</span>
                           <span>•</span>
                           <span className="flex items-center gap-1">
@@ -410,8 +485,8 @@ export default function Dashboard() {
                             <div className="flex items-start gap-2">
                               <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500 flex-shrink-0" />
                               <div className="flex-1 min-w-0">
-                                <p className="text-xs font-medium text-brand-300 mb-1">Studio Feedback</p>
-                                <p className="text-sm text-white/80">{project.feedback}</p>
+                                <p className="uppercase tracking-[0.25em] text-[11px] font-medium text-brand-300 mb-1">Studio Feedback</p>
+                                <p className="uppercase tracking-[0.25em] text-[11px] text-white/80">{project.feedback}</p>
                               </div>
                             </div>
                           </div>
@@ -423,7 +498,7 @@ export default function Dashboard() {
                         )}`}
                       >
                         {getStatusIcon(project.status)}
-                        <span className="text-sm font-medium whitespace-nowrap">
+                        <span className="uppercase tracking-[0.25em] text-[11px] font-medium whitespace-nowrap">
                           {getStatusLabel(project.status)}
                         </span>
                       </div>
@@ -447,66 +522,66 @@ export default function Dashboard() {
             <div className="border border-white/10 rounded-xl p-6 bg-white/5">
               <div className="flex items-center gap-3 mb-6">
                 <Upload className="w-6 h-6 text-brand-500" />
-                <h2 className="text-2xl font-semibold">Submit Your Demo</h2>
+                <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">Submit Your Demo</h2>
               </div>
 
               <form onSubmit={handleSubmitDemo} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Track Title *</label>
+                    <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2">Track Title *</label>
                     <input
                       type="text"
                       value={newDemo.track_title}
                       onChange={(e) => setNewDemo({ ...newDemo, track_title: e.target.value })}
                       required
-                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white"
-                      placeholder="Enter track title"
+                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
+                      placeholder="ENTER TRACK TITLE"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Artist Name *</label>
+                    <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2">Artist Name *</label>
                     <input
                       type="text"
                       value={newDemo.artist_name}
                       onChange={(e) => setNewDemo({ ...newDemo, artist_name: e.target.value })}
                       required
-                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white"
-                      placeholder="Enter artist name"
+                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
+                      placeholder="ENTER ARTIST NAME"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Genre</label>
+                  <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2">Genre</label>
                   <input
                     type="text"
                     value={newDemo.genre}
                     onChange={(e) => setNewDemo({ ...newDemo, genre: e.target.value })}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white"
-                    placeholder="e.g., Dark Psy, Forest, Twilight"
+                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
+                    placeholder="E.G., DARK PSY, FOREST, TWILIGHT"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Description</label>
+                  <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2">Description</label>
                   <textarea
                     value={newDemo.description}
                     onChange={(e) => setNewDemo({ ...newDemo, description: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white resize-none"
-                    placeholder="Tell us about your track..."
+                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white resize-none uppercase tracking-[0.25em] text-[11px]"
+                    placeholder="TELL US ABOUT YOUR TRACK..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Audio File *</label>
+                  <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2">Audio File *</label>
                   <input
                     type="file"
                     onChange={handleFileChange}
                     accept="audio/*"
                     required
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white hover:file:bg-brand-600 file:cursor-pointer"
+                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white hover:file:bg-brand-600 file:cursor-pointer file:uppercase file:tracking-[0.25em] file:text-[11px]"
                   />
                   <p className="text-xs text-white/40 mt-2">
                     Accepted formats: MP3, WAV, FLAC. Max size: 50MB
@@ -531,7 +606,7 @@ export default function Dashboard() {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="w-full px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white font-medium rounded-lg transition-colors disabled:cursor-not-allowed"
+                  className="w-full px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors disabled:cursor-not-allowed"
                 >
                   {uploading ? "Uploading..." : "Submit Demo"}
                 </button>
@@ -596,6 +671,194 @@ export default function Dashboard() {
                   ))}
                 </div>
               )}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Account Tab */}
+        {activeTab === "account" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-6"
+          >
+            {/* Statistics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Studio Projects - Pending */}
+              <div className="border border-white/10 rounded-xl p-4 bg-white/5">
+                <div className="flex items-center gap-3 mb-2">
+                  <Clock className="w-5 h-5 text-yellow-400" />
+                  <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60">Pending Studio</h3>
+                </div>
+                <p className="text-3xl font-bold text-white">
+                  {studioProjects.filter(p => p.status === "pending").length}
+                </p>
+              </div>
+
+              {/* Studio Projects - In Progress */}
+              <div className="border border-white/10 rounded-xl p-4 bg-white/5">
+                <div className="flex items-center gap-3 mb-2">
+                  <Folder className="w-5 h-5 text-blue-400" />
+                  <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60">In Progress</h3>
+                </div>
+                <p className="text-3xl font-bold text-white">
+                  {studioProjects.filter(p => p.status === "in_progress").length}
+                </p>
+              </div>
+
+              {/* Studio Projects - Completed */}
+              <div className="border border-white/10 rounded-xl p-4 bg-white/5">
+                <div className="flex items-center gap-3 mb-2">
+                  <CheckCircle className="w-5 h-5 text-green-400" />
+                  <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60">Completed</h3>
+                </div>
+                <p className="text-3xl font-bold text-white">
+                  {studioProjects.filter(p => p.status === "completed").length}
+                </p>
+              </div>
+
+              {/* Label Submissions - Total */}
+              <div className="border border-white/10 rounded-xl p-4 bg-white/5">
+                <div className="flex items-center gap-3 mb-2">
+                  <Music className="w-5 h-5 text-brand-500" />
+                  <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/60">Demos Submitted</h3>
+                </div>
+                <p className="text-3xl font-bold text-white">
+                  {submissions.length}
+                </p>
+              </div>
+            </div>
+
+            {/* Account Settings */}
+            <div className="border border-white/10 rounded-xl p-6 bg-white/5">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <UserCircle className="w-6 h-6 text-brand-500" />
+                </div>
+                {!editingProfile && (
+                  <div className="flex flex-col gap-2 items-end">
+                    <button
+                      onClick={() => setEditingProfile(true)}
+                      className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors"
+                    >
+                      Edit Profile
+                    </button>
+                    <button
+                      onClick={signOut}
+                      className="flex items-center gap-2 px-4 py-2 bg-transparent hover:bg-red-500/30 border border-white/20 text-white uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-6">
+                {/* Full Name */}
+                <div>
+                  <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2 text-white/80">
+                    Full Name
+                  </label>
+                  {editingProfile ? (
+                    <input
+                      type="text"
+                      value={profileData.full_name}
+                      onChange={(e) =>
+                        setProfileData({ ...profileData, full_name: e.target.value })
+                      }
+                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
+                      placeholder="ENTER YOUR FULL NAME"
+                    />
+                  ) : (
+                    <p className="text-white text-lg">
+                      {profile?.full_name || "Not set"}
+                    </p>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2 text-white/80">
+                    Email Address
+                  </label>
+                  {editingProfile ? (
+                    <div className="space-y-2">
+                      <input
+                        type="email"
+                        value={profileData.email}
+                        onChange={(e) =>
+                          setProfileData({ ...profileData, email: e.target.value })
+                        }
+                        className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
+                        placeholder="ENTER YOUR EMAIL"
+                      />
+                      {profileData.email !== user?.email && (
+                        <p className="text-xs text-yellow-400">
+                          ⚠️ Changing your email will require confirmation from your new email address
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-white/60" />
+                      <p className="text-white text-lg">{user?.email}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* User ID (read-only) */}
+                <div>
+                  <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2 text-white/80">
+                    User ID
+                  </label>
+                  <p className="text-white/60 text-sm font-mono">{user?.id}</p>
+                </div>
+
+                {/* Account Created */}
+                <div>
+                  <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2 text-white/80">
+                    Account Created
+                  </label>
+                  <p className="text-white/60">
+                    {user?.created_at
+                      ? new Date(user.created_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
+                      : "Unknown"}
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                {editingProfile && (
+                  <div className="flex gap-3 pt-4 border-t border-white/10">
+                    <button
+                      onClick={handleSaveProfile}
+                      disabled={savingProfile}
+                      className="flex-1 px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      <Save className="w-4 h-4" />
+                      {savingProfile ? "Saving..." : "Save Changes"}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditingProfile(false)
+                        setProfileData({
+                          full_name: profile?.full_name || "",
+                          email: user?.email || "",
+                        })
+                      }}
+                      disabled={savingProfile}
+                      className="px-6 py-3 bg-transparent hover:bg-red-500/30 border border-white/20 text-white uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         )}

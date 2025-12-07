@@ -179,7 +179,7 @@ export default function ProjectDetail() {
         {/* Back Button */}
         <Link
           to="/dashboard?tab=studio"
-          className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 uppercase tracking-[0.25em] text-[11px] text-white/60 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Dashboard
@@ -196,8 +196,8 @@ export default function ProjectDetail() {
             <div className="flex items-start gap-3">
               <Folder className="w-8 h-8 text-brand-500 mt-1" />
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold">{project.project_name}</h1>
-                <p className="text-white/60 capitalize mt-1">
+                <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-[0.25em]">{project.project_name}</h1>
+                <p className="text-white/60 mt-1 uppercase tracking-[0.25em] text-[11px]">
                   {project.service_type.replace("-", " + ")}
                 </p>
               </div>
@@ -208,13 +208,13 @@ export default function ProjectDetail() {
               )}`}
             >
               {getStatusIcon(project.status)}
-              <span className="text-sm font-medium capitalize">
+              <span className="uppercase tracking-[0.25em] text-[11px] font-medium">
                 {project.status.replace("_", " ")}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-sm text-white/50">
+          <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50">
             <span className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
               Submitted: {formatDate(project.created_at)}
@@ -229,8 +229,8 @@ export default function ProjectDetail() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="border border-white/10 rounded-xl p-6 bg-white/5"
         >
-          <h2 className="text-xl font-semibold mb-3">Project Description</h2>
-          <p className="text-white/70">{project.description}</p>
+          <h2 className="text-xl font-semibold mb-3 uppercase tracking-[0.25em]">Project Description</h2>
+          <p className="text-white/70 uppercase tracking-[0.25em] text-[11px]">{project.description}</p>
         </motion.div>
 
         {/* Reference Tracks */}
@@ -241,8 +241,8 @@ export default function ProjectDetail() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="border border-white/10 rounded-xl p-6 bg-white/5"
           >
-            <h2 className="text-xl font-semibold mb-3">Reference Tracks</h2>
-            <p className="text-white/70">{project.reference_tracks}</p>
+            <h2 className="text-xl font-semibold mb-3 uppercase tracking-[0.25em]">Reference Tracks</h2>
+            <p className="text-white/70 uppercase tracking-[0.25em] text-[11px]">{project.reference_tracks}</p>
           </motion.div>
         )}
 
@@ -257,8 +257,8 @@ export default function ProjectDetail() {
             <div className="flex items-start gap-3">
               <MessageSquare className="w-6 h-6 text-brand-500 mt-1" />
               <div>
-                <h2 className="text-xl font-semibold mb-3 text-brand-300">Studio Feedback</h2>
-                <p className="text-white/80">{project.feedback}</p>
+                <h2 className="text-xl font-semibold mb-3 text-brand-300 uppercase tracking-[0.25em]">Studio Feedback</h2>
+                <p className="text-white/80 uppercase tracking-[0.25em] text-[11px]">{project.feedback}</p>
               </div>
             </div>
           </motion.div>
@@ -271,7 +271,7 @@ export default function ProjectDetail() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="border border-white/10 rounded-xl p-6 bg-white/5"
         >
-          <h2 className="text-xl font-semibold mb-4">Audio Files ({project.audio_files.length})</h2>
+          <h2 className="text-xl font-semibold mb-4 uppercase tracking-[0.25em]">Audio Files ({project.audio_files.length})</h2>
           <div className="space-y-2">
             {project.audio_files.map((file, index) => (
               <div
@@ -279,14 +279,14 @@ export default function ProjectDetail() {
                 className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-white/80 truncate">{file.name}</p>
-                  <p className="text-xs text-white/50">
+                  <p className="text-white/80 truncate uppercase tracking-[0.25em] text-[11px]">{file.name}</p>
+                  <p className="uppercase tracking-[0.25em] text-[11px] text-white/50">
                     {(file.size / 1024 / 1024).toFixed(2)} MB • Uploaded {formatDate(file.uploaded_at)}
                   </p>
                 </div>
                 <button
                   onClick={() => handleDownloadFile(file.url)}
-                  className="ml-4 px-4 py-2 bg-brand-500/20 hover:bg-brand-500/30 text-brand-300 rounded-lg transition-colors flex items-center gap-2"
+                  className="ml-4 px-4 py-2 bg-brand-500/20 hover:bg-brand-500/30 text-brand-300 rounded-lg transition-colors flex items-center gap-2 uppercase tracking-[0.25em] text-[11px]"
                 >
                   <Download className="w-4 h-4" />
                   Download
@@ -304,8 +304,8 @@ export default function ProjectDetail() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="border border-white/10 rounded-xl p-6 bg-white/5"
           >
-            <h2 className="text-xl font-semibold mb-4">Upload Additional Files</h2>
-            <p className="text-white/60 text-sm mb-4">
+            <h2 className="text-xl font-semibold mb-4 uppercase tracking-[0.25em]">Upload Additional Files</h2>
+            <p className="text-white/60 mb-4 uppercase tracking-[0.25em] text-[11px]">
               You can upload additional files to this project (revised versions, stems, etc.)
             </p>
 
@@ -315,7 +315,7 @@ export default function ProjectDetail() {
               <button
                 onClick={handleUploadNewFiles}
                 disabled={uploading}
-                className="mt-4 w-full px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white font-medium rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="mt-4 w-full px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {uploading ? (
                   <span>Uploading...</span>

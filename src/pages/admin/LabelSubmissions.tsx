@@ -410,7 +410,7 @@ export default function LabelSubmissions() {
                           processingId === submission.id ||
                           submission.status === "approved"
                         }
-                        className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 disabled:bg-green-500/10 text-green-400 disabled:text-green-400/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed"
+                        className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed"
                       >
                         <CheckCircle className="w-4 h-4" />
                         Approve
@@ -421,7 +421,7 @@ export default function LabelSubmissions() {
                           processingId === submission.id ||
                           submission.status === "rejected"
                         }
-                        className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 disabled:bg-red-500/10 text-red-400 disabled:text-red-400/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed"
+                        className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed"
                       >
                         <XCircle className="w-4 h-4" />
                         Reject
