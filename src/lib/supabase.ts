@@ -60,3 +60,16 @@ export interface NewsletterSubscriber {
   subscribed: boolean
   subscribed_at: string
 }
+
+export interface LabelSubmission {
+  id: string
+  user_id: string
+  track_title: string
+  artist_name: string
+  genre: string | null
+  file_url: string
+  description: string | null
+  status: "pending" | "approved" | "rejected"
+  feedback: string | null
+  created_at: string
+}

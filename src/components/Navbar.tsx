@@ -1,6 +1,7 @@
 import { NavLink, Link } from "react-router-dom"
-import { Music2, User, LogOut } from "lucide-react"
+import { User, LogOut } from "lucide-react"
 import { useAuth } from "../contexts/AuthContext"
+import logoWhite from "../assets/transubtil_logo_white.png"
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -13,13 +14,14 @@ export default function Navbar() {
   const { user, profile, signOut } = useAuth()
 
   return (
-    <header className="border-b border-white/10 bg-black/80 backdrop-blur">
+    <header className="border-b border-white/10 bg-brand-900/80 backdrop-blur">
       <div className="mx-auto max-w-6xl flex items-center justify-between px-4 py-4">
-        <Link to="/" className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <Music2 className="w-6 h-6 text-white/90" />
-          <span className="text-xs uppercase tracking-[0.35em] text-white/80">
-            Transubtil Records
-          </span>
+        <Link to="/" className="inline-flex items-center hover:opacity-80 transition-opacity">
+          <img
+            src={logoWhite}
+            alt="Transubtil Records"
+            className="h-12"
+          />
         </Link>
 
         <div className="flex items-center gap-6">
@@ -41,6 +43,22 @@ export default function Navbar() {
                 {link.label}
               </NavLink>
             ))}
+            {user && (
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  [
+                    "uppercase tracking-[0.25em] text-[11px]",
+                    "transition-colors",
+                    isActive
+                      ? "text-white"
+                      : "text-white/60 hover:text-white",
+                  ].join(" ")
+                }
+              >
+                Dashboard
+              </NavLink>
+            )}
           </nav>
 
           {/* Auth Section */}

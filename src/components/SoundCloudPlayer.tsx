@@ -29,7 +29,7 @@ export default function SoundCloudPlayer({
           const encodedUrl = encodeURIComponent(soundcloudUrl)
           const params = new URLSearchParams({
             url: soundcloudUrl,
-            color: "%23a855f7", // brand-500 color
+            color: "%23808782", // brand-500 color
             auto_play: autoPlay.toString(),
             hide_related: "true",
             show_comments: "false",

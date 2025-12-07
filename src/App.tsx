@@ -7,6 +7,8 @@ import Landing from "./pages/Landing.tsx"
 import Studio from "./pages/Studio.tsx"
 import StudioRequest from "./pages/StudioRequest.tsx"
 import MyProjects from "./pages/MyProjects.tsx"
+import Dashboard from "./pages/Dashboard.tsx"
+import LabelSubmissions from "./pages/admin/LabelSubmissions.tsx"
 import Login from "./pages/Login.tsx"
 import Signup from "./pages/Signup.tsx"
 import Artists from "./pages/Artists.tsx"
@@ -45,6 +47,26 @@ function App() {
               element={
                 <ProtectedRoute>
                   <MyProjects />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Dashboard Route */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin Routes */}
+            <Route
+              path="/admin/submissions"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <LabelSubmissions />
                 </ProtectedRoute>
               }
             />

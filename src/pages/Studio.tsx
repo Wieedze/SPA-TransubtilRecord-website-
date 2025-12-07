@@ -28,9 +28,7 @@ const features = [
   "Specialized in psychedelic trance & night music",
   "High-end analog & digital processing chain",
   "Fast turnaround time",
-  "Unlimited revisions until you're satisfied",
   "Stem mastering available",
-  "Dolby Atmos & spatial audio",
 ]
 
 export default function Studio() {
@@ -134,30 +132,12 @@ export default function Studio() {
             Get in touch with us to discuss your project. We'll work together to bring
             your sonic vision to life.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              to="/studio/request"
-              className="px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all"
-            >
-              Submit Your Project
-            </Link>
-            <a
-              href="mailto:studio@transubtilrecords.com"
-              className="px-8 py-3 border border-white/30 hover:border-white/80 hover:bg-white/5 text-white font-medium rounded-lg transition-all"
-            >
-              Contact Studio
-            </a>
-          </div>
-          <p className="text-xs text-white/40">
-            <Link to="/login" className="hover:text-white/60 underline">
-              Sign in
-            </Link>{" "}
-            or{" "}
-            <Link to="/signup" className="hover:text-white/60 underline">
-              create an account
-            </Link>{" "}
-            to submit your project
-          </p>
+          <a
+            href="mailto:studio@transubtilrecords.com"
+            className="inline-block px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all"
+          >
+            Contact Studio
+          </a>
         </motion.div>
       </section>
     </>
