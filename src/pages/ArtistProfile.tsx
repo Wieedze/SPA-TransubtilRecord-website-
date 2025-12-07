@@ -1,4 +1,5 @@
 import { useParams, Link, Navigate } from "react-router-dom"
+import { useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
 import { ArrowLeft, MapPin, ExternalLink } from "lucide-react"
@@ -14,6 +15,11 @@ export default function ArtistProfile() {
   const { slug } = useParams<{ slug: string }>()
   const artist = slug ? getArtistBySlug(slug) : undefined
   const artistReleases = artist ? getReleasesByArtist(artist.name) : []
+
+  // Scroll to top when component mounts or slug changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [slug])
 
   // If artist not found, redirect to artists page
   if (!artist) {
@@ -35,19 +41,25 @@ export default function ArtistProfile() {
 
       <article className="mx-auto max-w-6xl space-y-8">
         {/* Back Button */}
-        <Link
-          to="/artists"
-          className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors"
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Artists
-        </Link>
+          <Link
+            to="/artists"
+            className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Artists
+          </Link>
+        </motion.div>
 
         {/* Hero Section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
           className="grid md:grid-cols-5 gap-8"
         >
           {/* Image */}
@@ -130,25 +142,30 @@ export default function ArtistProfile() {
               {/* Social Links */}
               <SocialLinks social={artist.social} className="!gap-4" />
             </div>
-
-            {/* Description */}
-            {artist.description && (
-              <div className="space-y-3">
-                <h2 className="text-xl font-semibold">Biography</h2>
-                <p className="text-sm text-white/70 leading-relaxed">
-                  {artist.description}
-                </p>
-              </div>
-            )}
           </div>
         </motion.div>
+
+        {/* Description */}
+        {artist.description && (
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.35 }}
+            className="space-y-3"
+          >
+            <h2 className="text-xl font-semibold">Biography</h2>
+            <p className="text-sm text-white/70 leading-relaxed">
+              {artist.description}
+            </p>
+          </motion.section>
+        )}
 
         {/* SoundCloud Player Section */}
         {artist.social.soundcloud && (
           <motion.section
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.7, delay: 0.55 }}
             className="space-y-6"
           >
             <div className="space-y-2">
@@ -169,9 +186,9 @@ export default function ArtistProfile() {
         {/* Videos Section */}
         {artist.videos && artist.videos.length > 0 && (
           <motion.section
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
+            transition={{ duration: 0.7, delay: 0.75 }}
             className="space-y-6"
           >
             <h2 className="text-2xl font-semibold">Live Performances</h2>
@@ -194,9 +211,9 @@ export default function ArtistProfile() {
         {/* Releases Section */}
         {artistReleases.length > 0 && (
           <motion.section
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.95 }}
             className="space-y-6"
           >
             <div className="space-y-2">
@@ -260,9 +277,9 @@ export default function ArtistProfile() {
 
         {/* Booking Section */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.7, delay: 1.15 }}
           className="space-y-6"
         >
           <div className="space-y-2">

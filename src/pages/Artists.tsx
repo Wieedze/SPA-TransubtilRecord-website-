@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { artists, getAllStyles, getAllCountries } from "../data/artists"
 import ArtistCard from "../components/artists/ArtistCard"
@@ -8,6 +8,11 @@ export default function Artists() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedStyle, setSelectedStyle] = useState("all")
   const [selectedCountry, setSelectedCountry] = useState("all")
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const allStyles = useMemo(() => getAllStyles(), [])
   const allCountries = useMemo(() => getAllCountries(), [])
