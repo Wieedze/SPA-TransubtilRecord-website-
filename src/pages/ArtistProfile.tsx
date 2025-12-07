@@ -88,24 +88,25 @@ export default function ArtistProfile() {
           </div>
 
           {/* Info */}
-          <div className="md:col-span-3 flex flex-col justify-end space-y-6">
-            {/* Decorative Line */}
-            <div className="mb-4">
-              <img
-                src={artistHeaderLine}
-                alt=""
-                className="w-full max-w-md opacity-60"
-                aria-hidden="true"
-              />
-            </div>
-
+          <div className="md:col-span-3 flex flex-col justify-center space-y-6">
             {/* Header */}
             <div className="space-y-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold capitalize">
+                <h1 className="font-display text-4xl md:text-5xl font-bold capitalize">
                   {artist.name}
                 </h1>
-                <p className="text-sm text-white/60 mt-2">{artist.act}</p>
+
+                {/* Decorative Line */}
+                <div className="mt-3">
+                  <img
+                    src={artistHeaderLine}
+                    alt=""
+                    className="w-full max-w-md opacity-60"
+                    aria-hidden="true"
+                  />
+                </div>
+
+                <p className="text-sm text-white/60 mt-1">{artist.act}</p>
               </div>
 
               {/* Location */}

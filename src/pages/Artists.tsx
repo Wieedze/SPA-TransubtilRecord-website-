@@ -40,9 +40,9 @@ export default function Artists() {
 
       <section className="mx-auto max-w-6xl space-y-8">
         {/* Header */}
-        <div className="space-y-3">
-          <h2 className="text-3xl font-semibold tracking-tight">Artists</h2>
-          <p className="text-sm text-white/60 max-w-2xl">
+        <div className="space-y-4 text-center">
+          <h2 className="font-sans text-4xl md:text-5xl font-bold tracking-wide">Artists</h2>
+          <p className="font-sans text-base text-brand-300/70 max-w-3xl mx-auto leading-relaxed">
             A selection of producers and storytellers crafting hypnotic and
             mind-bending sonic experiences. Explore our international roster
             spanning darkpsy, forest, twilight and beyond.

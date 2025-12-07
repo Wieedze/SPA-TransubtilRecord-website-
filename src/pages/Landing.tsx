@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 import logoCircle from "../assets/transubtil_logo_circle.png"
 import backgroundSvg from "../assets/Bkg_pagedegarde.svg"
+import LandingSpinner from "../components/LandingSpinner"
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -70,34 +71,36 @@ export default function Landing() {
           onMouseLeave={() => setIsHovered(false)}
           className="flex flex-col items-center relative z-10"
         >
-          {/* Logo with continuous glow animation */}
+          {/* Logo with fixed glow */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{
               opacity: 1,
               scale: isHovered ? 0.7 : 1,
-              filter: [
-                "drop-shadow(0 0 30px rgba(250, 244, 211, 0.4))",
-                "drop-shadow(0 0 50px rgba(250, 244, 211, 0.6))",
-                "drop-shadow(0 0 30px rgba(250, 244, 211, 0.4))",
-              ],
             }}
             transition={{
-              opacity: { duration: 0.8 },
-              scale: { duration: 0.4, ease: "easeInOut" },
-              filter: {
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-                repeatType: "loop",
-              },
+              opacity: { duration: 2 },
+              scale: { duration: 2, ease: "easeInOut" },
             }}
-            className="mb-8 cursor-pointer"
+            className="mb-8 cursor-pointer relative"
+            style={{
+              filter: "drop-shadow(0 0 60px rgba(250, 244, 211, 0.7))"
+            }}
           >
+            {/* Animated Spinner */}
+            <div className="absolute pointer-events-none" style={{
+              top: '-10%',
+              left: '-10%',
+              width: '120%',
+              height: '120%'
+            }}>
+              <LandingSpinner />
+            </div>
+
             <img
               src={logoCircle}
               alt="Transubtil Records"
-              className="w-96 h-96 md:w-[600px] md:h-[600px]"
+              className="w-64 h-64 md:w-80 md:h-80 relative z-10"
             />
           </motion.div>
 

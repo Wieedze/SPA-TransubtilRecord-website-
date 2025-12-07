@@ -24,13 +24,11 @@ export default function Releases() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="space-y-3"
+          className="space-y-4 text-center"
         >
-          <h1 className="text-3xl md:text-4xl font-bold">Releases</h1>
-          <p className="text-white/60 max-w-2xl">
-            Explore our discography of psychedelic trance. Albums, EPs, and
-            compilations from our international roster. All releases available on
-            Bandcamp.
+          <h1 className="font-sans text-4xl md:text-5xl font-bold tracking-wide">Releases</h1>
+          <p className="font-sans text-base text-brand-300/70 max-w-3xl mx-auto leading-relaxed">
+            Explore the full Transubtil Records discography. Dark psy, forest, twilight releases from international artists.
           </p>
         </motion.div>
 
@@ -43,17 +41,17 @@ export default function Releases() {
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <p className="text-xs text-white/40 uppercase tracking-wider mb-2">
+              <p className="font-sans text-xs text-white/40 uppercase tracking-wider mb-2">
                 Now Playing
               </p>
-              <h2 className="text-2xl font-bold">{selectedRelease.title}</h2>
-              <p className="text-white/60">{selectedRelease.artist}</p>
+              <h2 className="font-display text-2xl font-bold">{selectedRelease.title}</h2>
+              <p className="font-sans text-brand-300/70">{selectedRelease.artist}</p>
             </div>
             <a
               href={selectedRelease.bandcampUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white text-sm rounded-lg transition-all flex items-center gap-2"
+              className="px-6 py-3 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white font-sans text-sm rounded-lg transition-all flex items-center gap-2"
             >
               <ExternalLink className="w-4 h-4" />
               <span className="hidden sm:inline">Buy on Bandcamp</span>
@@ -68,7 +66,7 @@ export default function Releases() {
 
         {/* Releases Grid */}
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold">All Releases</h3>
+          <h3 className="font-display text-2xl font-bold">All Releases</h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {releases.map((release, index) => (
               <motion.div
@@ -102,17 +100,17 @@ export default function Releases() {
                 <div className="space-y-2">
                   <div>
                     {release.catalogNumber && (
-                      <p className="text-xs text-white/40 uppercase tracking-wider mb-1">
+                      <p className="font-sans text-xs text-white/40 uppercase tracking-wider mb-1">
                         {release.catalogNumber}
                       </p>
                     )}
-                    <h4 className="font-semibold text-sm line-clamp-2">
+                    <h4 className="font-display font-semibold text-sm line-clamp-2">
                       {release.title}
                     </h4>
-                    <p className="text-xs text-white/60 mt-1">{release.artist}</p>
+                    <p className="font-sans text-xs text-white/60 mt-1">{release.artist}</p>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center justify-between font-sans text-xs">
                     <span className="text-white/40 capitalize">{release.type}</span>
                     <span className="text-white/40">{release.releaseDate}</span>
                   </div>
@@ -122,7 +120,7 @@ export default function Releases() {
                     href={release.bandcampUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block mt-3 px-4 py-2 text-center border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg text-xs transition-all"
+                    className="block mt-3 px-4 py-2 text-center border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg font-sans text-xs transition-all"
                   >
                     View on Bandcamp
                   </a>
@@ -139,8 +137,8 @@ export default function Releases() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center py-12 border-t border-white/10"
         >
-          <h3 className="text-2xl font-bold mb-4">Support the Label</h3>
-          <p className="text-white/60 mb-6 max-w-xl mx-auto">
+          <h3 className="font-display text-2xl font-bold mb-4">Support the Label</h3>
+          <p className="font-sans text-white/60 mb-6 max-w-xl mx-auto">
             All releases are available on Bandcamp. Your support helps us continue
             releasing cutting-edge psychedelic music.
           </p>
@@ -148,7 +146,7 @@ export default function Releases() {
             href="https://transubtilrec.bandcamp.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all"
+            className="inline-flex items-center gap-2 px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-sans font-medium rounded-lg transition-all"
           >
             <ExternalLink className="w-5 h-5" />
             Visit Bandcamp Store
