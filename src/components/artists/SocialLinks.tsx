@@ -14,6 +14,7 @@ export default function SocialLinks({ social, className = "" }: SocialLinksProps
           href={social.soundcloud}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className="text-white/60 hover:text-brand-300 transition-colors"
           aria-label="SoundCloud"
         >
@@ -25,6 +26,7 @@ export default function SocialLinks({ social, className = "" }: SocialLinksProps
           href={social.instagram}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className="text-white/60 hover:text-brand-300 transition-colors"
           aria-label="Instagram"
         >
@@ -36,6 +38,7 @@ export default function SocialLinks({ social, className = "" }: SocialLinksProps
           href={social.facebook}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className="text-white/60 hover:text-brand-300 transition-colors"
           aria-label="Facebook"
         >

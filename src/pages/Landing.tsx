@@ -3,8 +3,8 @@ import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 import logoCircle from "../assets/transubtil_logo_circle.png"
-import backgroundSvg from "../assets/Bkg_pagedegarde.svg"
 import LandingSpinner from "../components/LandingSpinner"
+import AnimatedBackground from "../components/AnimatedBackground"
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -48,23 +48,10 @@ export default function Landing() {
             ease: "easeInOut",
           }}
         >
-        {/* Background SVG with progressive fade-in */}
-        <motion.div
-          className="absolute inset-0 z-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          transition={{
-            duration: 2,
-            ease: "easeOut",
-            delay: 0.5,
-          }}
-          style={{
-            backgroundImage: `url(${backgroundSvg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        />
+        {/* Animated Background SVG */}
+        <div className="absolute inset-0 z-0">
+          <AnimatedBackground />
+        </div>
         {/* Logo and Buttons Container */}
         <div
           onMouseEnter={() => setIsHovered(true)}

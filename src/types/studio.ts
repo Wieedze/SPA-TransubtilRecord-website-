@@ -3,7 +3,6 @@ export interface StudioRequestForm {
   serviceType: "mixing" | "mastering" | "mix-master" | "production"
   description: string
   referenceTracks: string
-  deadline: string
   audioFiles: File[]
 }
 
@@ -16,7 +15,7 @@ export interface StudioProject {
   status: "pending" | "in_progress" | "completed" | "cancelled"
   audio_files: AudioFile[]
   reference_tracks: string | null
-  deadline: string | null
+  feedback: string | null
   created_at: string
 }
 

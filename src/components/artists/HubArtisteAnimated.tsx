@@ -32,7 +32,7 @@ export default function HubArtisteAnimated() {
       <style>{`
         .hub-layer {
           transform-origin: center;
-          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
       `}</style>
       <svg

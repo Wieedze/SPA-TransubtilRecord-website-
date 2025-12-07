@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
-import { ArrowLeft, Send, Calendar } from "lucide-react"
+import { ArrowLeft, Send } from "lucide-react"
 import { useAuth } from "../contexts/AuthContext"
 import { supabase } from "../lib/supabase"
 import AudioUploader from "../components/studio/AudioUploader"
@@ -19,7 +19,6 @@ export default function StudioRequest() {
     serviceType: "mastering",
     description: "",
     referenceTracks: "",
-    deadline: "",
     audioFiles: [],
   })
 
@@ -72,7 +71,6 @@ export default function StudioRequest() {
         service_type: formData.serviceType,
         description: formData.description,
         reference_tracks: formData.referenceTracks || null,
-        deadline: formData.deadline || null,
         audio_files: uploadedFiles,
         status: "pending",
       })
@@ -227,26 +225,6 @@ export default function StudioRequest() {
                 onChange={handleChange}
                 className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
                 placeholder="SoundCloud or YouTube links"
-              />
-            </div>
-
-            {/* Deadline */}
-            <div>
-              <label
-                htmlFor="deadline"
-                className="block text-sm font-medium text-white/80 mb-2"
-              >
-                <Calendar className="w-4 h-4 inline mr-2" />
-                Deadline (Optional)
-              </label>
-              <input
-                type="date"
-                id="deadline"
-                name="deadline"
-                value={formData.deadline}
-                onChange={handleChange}
-                min={new Date().toISOString().split("T")[0]}
-                className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-white/30 transition-colors"
               />
             </div>
 

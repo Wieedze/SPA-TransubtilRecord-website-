@@ -12,6 +12,8 @@ import {
   MessageSquare,
   Play,
   Filter,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react"
 
 type FilterType = "all" | "pending" | "approved" | "rejected"
@@ -22,6 +24,8 @@ export default function LabelSubmissions() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<FilterType>("all")
   const [processingId, setProcessingId] = useState<string | null>(null)
+  const [audioUrls, setAudioUrls] = useState<Record<string, string>>({})
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
 
   // Feedback form state
   const [feedbackForm, setFeedbackForm] = useState<{
@@ -31,6 +35,18 @@ export default function LabelSubmissions() {
     submissionId: null,
     feedback: "",
   })
+
+  const toggleExpanded = (id: string) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(id)) {
+        newSet.delete(id)
+      } else {
+        newSet.add(id)
+      }
+      return newSet
+    })
+  }
 
   useEffect(() => {
     loadSubmissions()
@@ -51,6 +67,44 @@ export default function LabelSubmissions() {
 
       if (error) throw error
       setSubmissions(data || [])
+
+      // Generate signed URLs for audio files
+      const urls: Record<string, string> = {}
+      for (const submission of data || []) {
+        console.log("🎵 Processing submission:", submission.id)
+        console.log("📁 File URL:", submission.file_url)
+
+        // Skip SoundCloud links
+        if (submission.file_url.includes('soundcloud.com')) {
+          console.log("🎧 SoundCloud link detected")
+          urls[submission.id] = submission.file_url
+          continue
+        }
+
+        // For storage files (whether it's a path or a storage URL), extract the path and generate signed URL
+        let filePath = submission.file_url
+
+        // If it's a full storage URL, extract just the path part
+        if (submission.file_url.includes('supabase.co/storage/v1/object/public/studio-audio-files/')) {
+          filePath = submission.file_url.split('studio-audio-files/')[1]
+          console.log("🔄 Extracted path from URL:", filePath)
+        }
+
+        // Generate signed URL for the file path
+        console.log("🔑 Generating signed URL for:", filePath)
+        const { data: signedData, error: signError } = await supabase.storage
+          .from("studio-audio-files")
+          .createSignedUrl(filePath, 3600)
+
+        if (signError) {
+          console.error("❌ Error generating signed URL:", signError)
+        } else if (signedData) {
+          console.log("✅ Signed URL generated:", signedData.signedUrl)
+          urls[submission.id] = signedData.signedUrl
+        }
+      }
+      console.log("🎯 Final audioUrls:", urls)
+      setAudioUrls(urls)
     } catch (error) {
       console.error("Error loading submissions:", error)
     } finally {
@@ -221,84 +275,134 @@ export default function LabelSubmissions() {
             </p>
           </div>
         ) : (
-          <div className="grid gap-6">
-            {filteredSubmissions.map((submission) => (
-              <motion.div
-                key={submission.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all bg-white/5"
-              >
-                <div className="space-y-4">
-                  {/* Header */}
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-start gap-3 mb-2">
-                        <Music className="w-6 h-6 text-brand-500 mt-1" />
-                        <div>
-                          <h3 className="text-xl font-semibold">
+          <div className="grid gap-4">
+            {filteredSubmissions.map((submission) => {
+              const isExpanded = expandedCards.has(submission.id)
+
+              return (
+                <motion.div
+                  key={submission.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="border border-white/10 rounded-xl hover:border-white/20 transition-all bg-white/5"
+                >
+                  {/* Compact Header - Always Visible */}
+                  <div className="p-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <Music className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-semibold truncate">
                             {submission.track_title}
                           </h3>
-                          <p className="text-white/60">by {submission.artist_name}</p>
-                          {submission.genre && (
-                            <p className="text-white/50 text-sm mt-1">{submission.genre}</p>
-                          )}
+                          <p className="text-white/60 text-sm truncate">
+                            by {submission.artist_name}
+                            {submission.genre && ` • ${submission.genre}`}
+                          </p>
                         </div>
                       </div>
-                      {submission.description && (
-                        <p className="text-white/70 text-sm ml-9">
-                          {submission.description}
-                        </p>
-                      )}
+
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <div
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs ${getStatusBadge(
+                            submission.status
+                          )}`}
+                        >
+                          {getStatusIcon(submission.status)}
+                          <span className="font-medium capitalize">
+                            {submission.status}
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={() => toggleExpanded(submission.id)}
+                          className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                        >
+                          {isExpanded ? (
+                            <ChevronUp className="w-5 h-5" />
+                          ) : (
+                            <ChevronDown className="w-5 h-5" />
+                          )}
+                        </button>
+                      </div>
                     </div>
-                    <div
-                      className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${getStatusBadge(
-                        submission.status
-                      )}`}
-                    >
-                      {getStatusIcon(submission.status)}
-                      <span className="text-sm font-medium capitalize">
-                        {submission.status}
-                      </span>
+
+                    {/* Quick Info - Always Visible */}
+                    <div className="flex items-center gap-4 text-xs text-white/50 mt-2 ml-8">
+                      <span>Submitted: {formatDate(submission.created_at)}</span>
                     </div>
                   </div>
 
-                  {/* Metadata */}
-                  <div className="flex items-center gap-4 text-xs text-white/50 ml-9">
-                    <span>Submitted: {formatDate(submission.created_at)}</span>
-                    <span>•</span>
-                    <span>ID: {submission.user_id.slice(0, 8)}...</span>
-                  </div>
-
-                  {/* Audio Player */}
-                  <div className="ml-9">
-                    <audio
-                      controls
-                      src={submission.file_url}
-                      className="w-full max-w-2xl"
-                      style={{
-                        filter: "invert(0.9) hue-rotate(180deg)",
-                      }}
+                  {/* Expanded Content */}
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="border-t border-white/10"
                     >
-                      Your browser does not support the audio element.
-                    </audio>
+                      <div className="p-6 space-y-4">
+                        {/* Full Description */}
+                        {submission.description && (
+                          <div>
+                            <p className="text-sm font-medium text-white/80 mb-1">Description</p>
+                            <p className="text-white/70 text-sm">
+                              {submission.description}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Metadata */}
+                        <div className="flex items-center gap-4 text-xs text-white/50">
+                          <span>User ID: {submission.user_id.slice(0, 8)}...</span>
+                        </div>
+
+                        {/* Audio Player */}
+                        <div>
+                    {submission.file_url.includes('soundcloud.com') ? (
+                      // SoundCloud link - show link instead of player
+                      <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+                        <p className="text-sm text-white/70 mb-2">SoundCloud Link:</p>
+                        <a
+                          href={submission.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-brand-300 hover:text-brand-200 underline text-sm break-all"
+                        >
+                          {submission.file_url}
+                        </a>
+                      </div>
+                    ) : (
+                      // Uploaded file - use audio player
+                      <audio
+                        controls
+                        src={audioUrls[submission.id] || submission.file_url}
+                        className="w-full max-w-2xl"
+                        style={{
+                          filter: "invert(0.9) hue-rotate(180deg)",
+                        }}
+                      >
+                        Your browser does not support the audio element.
+                      </audio>
+                    )}
                   </div>
 
-                  {/* Existing Feedback */}
-                  {submission.feedback && (
-                    <div className="ml-9 p-4 bg-white/5 rounded-lg border border-white/10">
+                        {/* Existing Feedback */}
+                        {submission.feedback && (
+                          <div className="p-4 bg-white/5 rounded-lg border border-white/10">
                       <div className="flex items-start gap-2">
                         <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500" />
                         <div>
                           <p className="text-sm font-medium mb-1">Your Feedback</p>
                           <p className="text-sm text-white/70">{submission.feedback}</p>
                         </div>
-                      </div>
-                    </div>
-                  )}
+                          </div>
+                          </div>
+                        )}
 
-                  {/* Actions */}
-                  <div className="ml-9 flex items-start gap-4 pt-4 border-t border-white/10">
+                        {/* Actions */}
+                        <div className="flex items-start gap-4 pt-4 border-t border-white/10">
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleApprove(submission.id)}
@@ -371,10 +475,13 @@ export default function LabelSubmissions() {
                         </button>
                       )}
                     </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </motion.div>
+              )
+            })}
           </div>
         )}
       </div>

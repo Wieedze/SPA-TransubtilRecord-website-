@@ -16,16 +16,20 @@ import {
   Folder,
   Calendar,
   Plus,
+  LogOut,
 } from "lucide-react"
 
 type TabType = "studio" | "demo"
 
 export default function Dashboard() {
-  const { user, profile } = useAuth()
+  const { user, profile, signOut } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState<TabType>(
     (searchParams.get("tab") as TabType) || "studio"
   )
+
+  console.log("🎯 Dashboard loaded - Active tab:", activeTab)
+  console.log("🎯 User:", user ? "Connected" : "Not connected")
 
   // Studio Projects State
   const [studioProjects, setStudioProjects] = useState<StudioProject[]>([])
@@ -94,22 +98,43 @@ export default function Dashboard() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setNewDemo({ ...newDemo, file: e.target.files[0] })
+      const file = e.target.files[0]
+      const maxSize = 50 * 1024 * 1024 // 50 MB in bytes
+
+      if (file.size > maxSize) {
+        alert(`File size too large! Maximum size is 50 MB.\nYour file is ${(file.size / 1024 / 1024).toFixed(2)} MB.\n\nPlease compress your file or use a smaller format (MP3 instead of WAV).`)
+        e.target.value = "" // Reset input
+        return
+      }
+
+      setNewDemo({ ...newDemo, file })
     }
   }
 
   const handleSubmitDemo = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!user || !newDemo.file) return
+    console.log("📝 Submit clicked - User:", user ? "✅ Connected" : "❌ Not connected")
+    console.log("📝 Submit clicked - File:", newDemo.file ? `✅ ${newDemo.file.name}` : "❌ No file selected")
+    console.log("📝 Form data:", newDemo)
+
+    if (!user) {
+      alert("You must be logged in to submit a demo!")
+      return
+    }
+
+    if (!newDemo.file) {
+      alert("Please select an audio file!")
+      return
+    }
 
     setUploading(true)
     setUploadProgress(0)
 
     try {
       // Upload file to Supabase Storage
-      const fileName = `${user.id}/${Date.now()}_${newDemo.file.name}`
+      const fileName = `demos/${user.id}/${Date.now()}_${newDemo.file.name}`
       const { data: fileData, error: uploadError } = await supabase.storage
-        .from("label_demos")
+        .from("studio-audio-files")
         .upload(fileName, newDemo.file, {
           onUploadProgress: (progress) => {
             const percent = (progress.loaded / progress.total) * 100
@@ -119,19 +144,15 @@ export default function Dashboard() {
 
       if (uploadError) throw uploadError
 
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from("label_demos")
-        .getPublicUrl(fileName)
-
-      // Insert submission record into database
+      // Insert submission record into database with file path (not URL)
+      // We'll generate signed URLs when needed since bucket is private
       const { error: dbError } = await supabase.from("label_submissions").insert({
         user_id: user.id,
         track_title: newDemo.track_title,
         artist_name: newDemo.artist_name,
         genre: newDemo.genre || null,
         description: newDemo.description || null,
-        file_url: urlData.publicUrl,
+        file_url: fileName, // Store path, not URL, for private bucket
         status: "pending",
       })
 
@@ -154,9 +175,10 @@ export default function Dashboard() {
       await loadSubmissions()
 
       alert("Demo submitted successfully!")
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error uploading demo:", error)
-      alert("Error uploading demo. Please try again.")
+      const errorMessage = error?.message || error?.error?.message || "Unknown error"
+      alert(`Error uploading demo: ${errorMessage}\n\nPlease check the console for more details.`)
     } finally {
       setUploading(false)
       setUploadProgress(0)
@@ -252,11 +274,21 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          className="flex items-start justify-between"
         >
-          <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
-          <p className="text-white/60">
-            Welcome back, {profile?.full_name || user.email}
-          </p>
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
+            <p className="text-white/60">
+              Welcome back, {profile?.full_name || user.email}
+            </p>
+          </div>
+          <button
+            onClick={() => signOut()}
+            className="px-4 py-2 border border-white/20 hover:border-white/40 hover:bg-white/5 text-white font-sans text-sm rounded-lg transition-all flex items-center gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </button>
         </motion.div>
 
         {/* Tabs */}
@@ -272,7 +304,7 @@ export default function Dashboard() {
             >
               <div className="flex items-center gap-2">
                 <Folder className="w-5 h-5" />
-                Studio Projects
+                Studio Mastering
               </div>
               {activeTab === "studio" && (
                 <motion.div
@@ -291,7 +323,7 @@ export default function Dashboard() {
             >
               <div className="flex items-center gap-2">
                 <Music className="w-5 h-5" />
-                Send Demo
+                Label Demos
               </div>
               {activeTab === "demo" && (
                 <motion.div
@@ -313,7 +345,7 @@ export default function Dashboard() {
           >
             <div className="flex items-center justify-between">
               <p className="text-white/60">
-                Track the status of your studio mastering and mixing requests
+                Professional mastering and mixing services - Track your studio requests
               </p>
               <Link
                 to="/studio/request"
@@ -349,7 +381,8 @@ export default function Dashboard() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all"
+                    onClick={() => window.location.href = `/studio/project/${project.id}`}
+                    className="border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all cursor-pointer"
                   >
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                       <div className="flex-1 space-y-3">
@@ -369,13 +402,20 @@ export default function Dashboard() {
                             <Calendar className="w-3 h-3" />
                             {formatDate(project.created_at)}
                           </span>
-                          {project.deadline && (
-                            <>
-                              <span>•</span>
-                              <span>Deadline: {formatDate(project.deadline)}</span>
-                            </>
-                          )}
                         </div>
+
+                        {/* Feedback Display */}
+                        {project.feedback && (
+                          <div className="mt-3 p-3 bg-brand-500/10 border border-brand-500/20 rounded-lg">
+                            <div className="flex items-start gap-2">
+                              <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500 flex-shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-medium text-brand-300 mb-1">Studio Feedback</p>
+                                <p className="text-sm text-white/80">{project.feedback}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${getStatusColor(
@@ -395,7 +435,7 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* Send Demo Tab */}
+        {/* Label Demos Tab */}
         {activeTab === "demo" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -469,7 +509,10 @@ export default function Dashboard() {
                     className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white hover:file:bg-brand-600 file:cursor-pointer"
                   />
                   <p className="text-xs text-white/40 mt-2">
-                    Accepted formats: MP3, WAV, FLAC. Max size: 100MB
+                    Accepted formats: MP3, WAV, FLAC. Max size: 50MB
+                  </p>
+                  <p className="text-xs text-yellow-500/60 mt-1">
+                    💡 Tip: Use MP3 format to keep file size under 50MB
                   </p>
                 </div>
 

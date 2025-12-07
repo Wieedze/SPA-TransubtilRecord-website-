@@ -26,10 +26,6 @@ export default function Releases() {
           transition={{ duration: 0.6 }}
           className="space-y-4 text-center"
         >
-          <h1 className="font-sans text-4xl md:text-5xl font-bold tracking-wide">Releases</h1>
-          <p className="font-sans text-base text-brand-300/70 max-w-3xl mx-auto leading-relaxed">
-            Explore the full Transubtil Records discography. Dark psy, forest, twilight releases from international artists.
-          </p>
         </motion.div>
 
         {/* Featured Player */}

@@ -1,7 +1,8 @@
+import { useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { Link } from "react-router-dom"
-import { motion } from "framer-motion"
-import { Headphones, Radio, Zap, CheckCircle } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Headphones, Radio, Zap, CheckCircle, X, Mail, User, MessageSquare } from "lucide-react"
 
 const services = [
   {
@@ -32,6 +33,48 @@ const features = [
 ]
 
 export default function Studio() {
+  const [showContactModal, setShowContactModal] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmitting(true)
+
+    try {
+      // TODO: Implement actual email service (Resend, SendGrid, or Supabase Edge Function)
+      const emailData = {
+        to: "studio@transubtilrecords.com",
+        subject: `Studio Contact Request from ${formData.name}`,
+        body: `
+Name: ${formData.name}
+Email: ${formData.email}
+
+Message:
+${formData.message}
+        `,
+      }
+
+      console.log("Email to send:", emailData)
+
+      // Simulate sending
+      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      alert("Your message has been sent! We'll get back to you soon.")
+      setShowContactModal(false)
+      setFormData({ name: "", email: "", message: "" })
+    } catch (error) {
+      console.error("Error sending message:", error)
+      alert("Failed to send message. Please try again or email us directly at studio@transubtilrecords.com")
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   return (
     <>
       <Helmet>
@@ -132,14 +175,132 @@ export default function Studio() {
             Get in touch with us to discuss your project. We'll work together to bring
             your sonic vision to life.
           </p>
-          <a
-            href="mailto:studio@transubtilrecords.com"
+          <button
+            onClick={() => setShowContactModal(true)}
             className="inline-block px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all"
           >
             Contact Studio
-          </a>
+          </button>
         </motion.div>
       </section>
+
+      {/* Contact Modal */}
+      <AnimatePresence>
+        {showContactModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowContactModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-brand-800 border border-white/20 rounded-2xl p-6 md:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold mb-2">Contact Studio</h3>
+                  <p className="text-sm text-white/60">
+                    Send us a message and we'll get back to you soon
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowContactModal(false)}
+                  className="text-white/60 hover:text-white transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Name */}
+                <div>
+                  <label
+                    htmlFor="contact-name"
+                    className="block text-sm font-medium text-white/80 mb-2"
+                  >
+                    <User className="w-4 h-4 inline mr-2" />
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
+                    placeholder="Your name"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label
+                    htmlFor="contact-email"
+                    className="block text-sm font-medium text-white/80 mb-2"
+                  >
+                    <Mail className="w-4 h-4 inline mr-2" />
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="contact-email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
+                    placeholder="your@email.com"
+                  />
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label
+                    htmlFor="contact-message"
+                    className="block text-sm font-medium text-white/80 mb-2"
+                  >
+                    <MessageSquare className="w-4 h-4 inline mr-2" />
+                    Message *
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                    rows={5}
+                    className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors resize-none"
+                    placeholder="Tell us about your project..."
+                  />
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowContactModal(false)}
+                    className="flex-1 px-6 py-3 border border-white/20 hover:border-white/40 hover:bg-white/5 text-white rounded-lg transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="flex-1 px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white font-medium rounded-lg transition-all disabled:cursor-not-allowed"
+                  >
+                    {submitting ? "Sending..." : "Send Message"}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

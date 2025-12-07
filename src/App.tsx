@@ -8,7 +8,9 @@ import Studio from "./pages/Studio.tsx"
 import StudioRequest from "./pages/StudioRequest.tsx"
 import MyProjects from "./pages/MyProjects.tsx"
 import Dashboard from "./pages/Dashboard.tsx"
+import ProjectDetail from "./pages/ProjectDetail.tsx"
 import LabelSubmissions from "./pages/admin/LabelSubmissions.tsx"
+import StudioRequests from "./pages/admin/StudioRequests.tsx"
 import Login from "./pages/Login.tsx"
 import Signup from "./pages/Signup.tsx"
 import Artists from "./pages/Artists.tsx"
@@ -61,12 +63,30 @@ function App() {
               }
             />
 
+            {/* Project Detail Route */}
+            <Route
+              path="/studio/project/:projectId"
+              element={
+                <ProtectedRoute>
+                  <ProjectDetail />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Admin Routes */}
             <Route
               path="/admin/submissions"
               element={
                 <ProtectedRoute requireAdmin>
                   <LabelSubmissions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/studio-requests"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <StudioRequests />
                 </ProtectedRoute>
               }
             />

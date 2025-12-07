@@ -191,8 +191,15 @@ CREATE TRIGGER on_auth_user_created
 ```
 
 ### Create Label Submissions Table
+
+**⚠️ IMPORTANT:** Exécutez le fichier de migration `supabase/migrations/create_label_submissions.sql`
+
+Pour créer cette table, ouvrez le fichier `supabase/migrations/create_label_submissions.sql` et exécutez son contenu dans **Supabase Dashboard → SQL Editor**.
+
+Ou copiez-collez le SQL ci-dessous :
+
 ```sql
--- Run the migration file: supabase/migrations/20241207_create_label_submissions.sql
+-- Run the migration file: supabase/migrations/create_label_submissions.sql
 -- Or copy-paste the content from that file
 
 CREATE TABLE IF NOT EXISTS label_submissions (
