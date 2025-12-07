@@ -7,6 +7,8 @@ import { getReleasesByArtist } from "../data/releases"
 import SocialLinks from "../components/artists/SocialLinks"
 import BookingForm from "../components/BookingForm"
 import SoundCloudPlayer from "../components/SoundCloudPlayer"
+import HubArtisteAnimated from "../components/artists/HubArtisteAnimated"
+import artistHeaderLine from "../assets/artist_header_line.svg"
 
 export default function ArtistProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -50,20 +52,53 @@ export default function ArtistProfile() {
         >
           {/* Image */}
           <div className="md:col-span-2">
-            <div className="aspect-square rounded-2xl overflow-hidden bg-brand-700 border border-white/10">
-              <img
-                src={artist.image_url}
-                alt={artist.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/placeholder.webp"
+            <div className="relative mx-auto" style={{ aspectRatio: '306 / 307', maxWidth: '400px' }}>
+              {/* SVG ClipPath Definition */}
+              <svg width="0" height="0" style={{ position: 'absolute' }}>
+                <defs>
+                  <clipPath id="hub-circle-clip" clipPathUnits="objectBoundingBox">
+                    {/* Circle scaled to 0-1 range for objectBoundingBox */}
+                    <circle cx="0.5" cy="0.5" r="0.42" />
+                  </clipPath>
+                </defs>
+              </svg>
+
+              {/* Animated Hub SVG Frame */}
+              <div className="absolute inset-0 w-full h-full z-10 opacity-60">
+                <HubArtisteAnimated />
+              </div>
+
+              {/* Artist Image - clipped to exact circular area */}
+              <div
+                className="absolute w-full h-full"
+                style={{
+                  clipPath: 'url(#hub-circle-clip)'
                 }}
-              />
+              >
+                <img
+                  src={artist.image_url}
+                  alt={artist.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/placeholder.webp"
+                  }}
+                />
+              </div>
             </div>
           </div>
 
           {/* Info */}
-          <div className="md:col-span-3 space-y-6">
+          <div className="md:col-span-3 flex flex-col justify-end space-y-6">
+            {/* Decorative Line */}
+            <div className="mb-4">
+              <img
+                src={artistHeaderLine}
+                alt=""
+                className="w-full max-w-md opacity-60"
+                aria-hidden="true"
+              />
+            </div>
+
             {/* Header */}
             <div className="space-y-4">
               <div>
