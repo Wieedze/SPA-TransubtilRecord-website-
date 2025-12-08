@@ -131,7 +131,7 @@ export default function Navbar() {
                     <NavLink
                       to="/admin/submissions"
                       className={({ isActive }) =>
-                        `block px-4 py-2 text-sm transition-colors ${
+                        `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
                           isActive
                             ? "bg-brand-500 text-white"
                             : "text-white/80 hover:bg-white/5 hover:text-white"
@@ -143,7 +143,7 @@ export default function Navbar() {
                     <NavLink
                       to="/admin/studio-requests"
                       className={({ isActive }) =>
-                        `block px-4 py-2 text-sm transition-colors ${
+                        `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
                           isActive
                             ? "bg-brand-500 text-white"
                             : "text-white/80 hover:bg-white/5 hover:text-white"
