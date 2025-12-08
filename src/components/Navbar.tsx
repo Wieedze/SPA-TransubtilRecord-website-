@@ -36,7 +36,7 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   [
                     "uppercase tracking-[0.25em] text-[11px] relative",
-                    "transition-all duration-100 px-4 py-2",
+                    "px-4 py-2",
                     isActive
                       ? "text-white"
                       : "text-white/60 hover:text-white",
@@ -44,14 +44,18 @@ export default function Navbar() {
                 }
                 style={{
                   filter: 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))',
+                  transition: 'filter 0s, filter 0.6s ease-out'
                 }}
                 onMouseDown={(e) => {
-                  e.currentTarget.style.filter = 'drop-shadow(0 0 15px rgba(250, 244, 211, 1))';
+                  e.currentTarget.style.transition = 'filter 0s';
+                  e.currentTarget.style.filter = 'drop-shadow(0 0 20px rgba(250, 244, 211, 1)) drop-shadow(0 0 10px rgba(250, 244, 211, 1))';
                 }}
                 onMouseUp={(e) => {
+                  e.currentTarget.style.transition = 'filter 0.6s ease-out';
                   e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))';
                 }}
                 onMouseLeave={(e) => {
+                  e.currentTarget.style.transition = 'filter 0.6s ease-out';
                   e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))';
                 }}
               >
@@ -63,7 +67,7 @@ export default function Navbar() {
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 0.4 }}
                           exit={{ opacity: 0 }}
-                          transition={{ duration: 0.5 }}
+                          transition={{ duration: 0.5, exit: { duration: 1.2, ease: "easeOut" } }}
                           className="absolute inset-0 w-full h-full pointer-events-none"
                           viewBox="0 0 243 103"
                           fill="none"
@@ -89,7 +93,7 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   [
                     "uppercase tracking-[0.25em] text-[11px] relative",
-                    "transition-all duration-100 px-4 py-2",
+                    "px-4 py-2",
                     isActive
                       ? "text-white"
                       : "text-white/60 hover:text-white",
@@ -97,14 +101,18 @@ export default function Navbar() {
                 }
                 style={{
                   filter: 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))',
+                  transition: 'filter 0s, filter 0.6s ease-out'
                 }}
                 onMouseDown={(e) => {
-                  e.currentTarget.style.filter = 'drop-shadow(0 0 15px rgba(250, 244, 211, 1))';
+                  e.currentTarget.style.transition = 'filter 0s';
+                  e.currentTarget.style.filter = 'drop-shadow(0 0 20px rgba(250, 244, 211, 1)) drop-shadow(0 0 10px rgba(250, 244, 211, 1))';
                 }}
                 onMouseUp={(e) => {
+                  e.currentTarget.style.transition = 'filter 0.6s ease-out';
                   e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))';
                 }}
                 onMouseLeave={(e) => {
+                  e.currentTarget.style.transition = 'filter 0.6s ease-out';
                   e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))';
                 }}
               >
@@ -116,7 +124,7 @@ export default function Navbar() {
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 0.4 }}
                           exit={{ opacity: 0 }}
-                          transition={{ duration: 0.5 }}
+                          transition={{ duration: 0.5, exit: { duration: 1.2, ease: "easeOut" } }}
                           className="absolute inset-0 w-full h-full pointer-events-none"
                           viewBox="0 0 243 103"
                           fill="none"
