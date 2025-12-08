@@ -154,16 +154,14 @@ export default function Dashboard() {
     try {
       // Upload file to Supabase Storage
       const fileName = `demos/${user.id}/${Date.now()}_${newDemo.file.name}`
-      const { data: fileData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("studio-audio-files")
-        .upload(fileName, newDemo.file, {
-          onUploadProgress: (progress) => {
-            const percent = (progress.loaded / progress.total) * 100
-            setUploadProgress(Math.round(percent))
-          },
-        })
+        .upload(fileName, newDemo.file)
 
       if (uploadError) throw uploadError
+
+      // Simulate progress completion
+      setUploadProgress(100)
 
       // Insert submission record into database with file path (not URL)
       // We'll generate signed URLs when needed since bucket is private
@@ -330,19 +328,19 @@ export default function Dashboard() {
       <div className="mx-auto max-w-6xl space-y-8">
 
         {/* Tabs */}
-        <div className="border-b border-white/10">
-          <div className="flex gap-6">
+        <div className="border-b border-white/10 overflow-x-auto">
+          <div className="flex gap-3 md:gap-6 min-w-max">
             <button
               onClick={() => setActiveTab("account")}
-              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative ${
+              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
                 activeTab === "account"
                   ? "text-white"
                   : "text-white/50 hover:text-white/80"
               }`}
             >
               <div className="flex items-center gap-2">
-                <UserCircle className="w-5 h-5" />
-                Account
+                <UserCircle className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden sm:inline">Account</span>
               </div>
               {activeTab === "account" && (
                 <motion.div
@@ -353,15 +351,16 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setActiveTab("studio")}
-              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative ${
+              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
                 activeTab === "studio"
                   ? "text-white"
                   : "text-white/50 hover:text-white/80"
               }`}
             >
               <div className="flex items-center gap-2">
-                <Folder className="w-5 h-5" />
-                Studio Mastering
+                <Folder className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden sm:inline">Studio</span>
+                <span className="sm:hidden">Studio</span>
               </div>
               {activeTab === "studio" && (
                 <motion.div
@@ -372,15 +371,16 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setActiveTab("demo")}
-              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative ${
+              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
                 activeTab === "demo"
                   ? "text-white"
                   : "text-white/50 hover:text-white/80"
               }`}
             >
               <div className="flex items-center gap-2">
-                <Music className="w-5 h-5" />
-                Label Demos
+                <Music className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden sm:inline">Demos</span>
+                <span className="sm:hidden">Demos</span>
               </div>
               {activeTab === "demo" && (
                 <motion.div
@@ -403,10 +403,10 @@ export default function Dashboard() {
             <div className="flex items-center justify-end">
               <Link
                 to="/studio/request"
-                className="px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center gap-2"
+                className="w-full sm:w-auto px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center justify-center gap-2"
               >
                 <Plus className="w-5 h-5" />
-                <span className="hidden sm:inline">New Request</span>
+                <span>New Request</span>
               </Link>
             </div>
 
@@ -607,11 +607,11 @@ export default function Dashboard() {
                   {submissions.map((submission) => (
                     <div
                       key={submission.id}
-                      className="border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all"
+                      className="border border-white/10 rounded-xl p-4 sm:p-6 hover:border-white/20 transition-all"
                     >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold mb-1 uppercase tracking-[0.25em]">{submission.track_title}</h3>
+                      <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                        <div className="flex-1 w-full">
+                          <h3 className="text-base sm:text-lg font-semibold mb-1 uppercase tracking-[0.25em] break-words">{submission.track_title}</h3>
                           <p className="text-white/60 mb-1 uppercase tracking-[0.25em] text-[11px]">by {submission.artist_name}</p>
                           {submission.genre && (
                             <p className="text-white/50 mb-3 uppercase tracking-[0.25em] text-[11px]">{submission.genre}</p>
@@ -621,26 +621,26 @@ export default function Dashboard() {
                             <span className="uppercase tracking-[0.25em] text-[11px]">{getSubmissionStatusText(submission.status)}</span>
                           </div>
                           {submission.feedback && (
-                            <div className="mt-4 p-4 bg-white/5 rounded-lg border border-white/10">
+                            <div className="mt-4 p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10">
                               <div className="flex items-start gap-2">
-                                <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500" />
-                                <div>
+                                <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500 flex-shrink-0" />
+                                <div className="min-w-0 flex-1">
                                   <p className="font-medium mb-1 uppercase tracking-[0.25em] text-[11px]">Feedback from Label</p>
-                                  <p className="text-white/70 uppercase tracking-[0.25em] text-[11px]">{submission.feedback}</p>
+                                  <p className="text-white/70 uppercase tracking-[0.25em] text-[11px] break-words">{submission.feedback}</p>
                                 </div>
                               </div>
                             </div>
                           )}
                         </div>
-                        <div className="text-right">
-                          <p className="text-white/40 mb-2 uppercase tracking-[0.25em] text-[11px]">
+                        <div className="flex sm:flex-col items-center sm:items-end gap-2 sm:gap-0 w-full sm:w-auto justify-between sm:justify-start">
+                          <p className="text-white/40 sm:mb-2 uppercase tracking-[0.25em] text-[11px] whitespace-nowrap">
                             {formatDate(submission.created_at)}
                           </p>
                           <a
                             href={submission.file_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-brand-300 hover:text-brand-200 underline uppercase tracking-[0.25em] text-[11px]"
+                            className="text-brand-300 hover:text-brand-200 underline uppercase tracking-[0.25em] text-[11px] whitespace-nowrap"
                           >
                             Download
                           </a>
@@ -721,22 +721,22 @@ export default function Dashboard() {
                 <path d="M703.059 320.069C701.561 321.214 700.069 322.364 698.571 323.508C698.48 336.155 698.382 348.801 698.291 361.452C687.725 369.933 677.16 378.418 666.594 386.899H631.25C629.533 388.312 627.822 389.726 626.105 391.139H670.425C681.301 382.35 692.183 373.561 703.059 364.777V320.069Z" stroke="white" strokeWidth="1.5" strokeMiterlimit="10"/>
               </svg>
 
-              <div className="border border-white/10 rounded-xl p-6 bg-white/5 relative z-10">
-              <div className="flex items-center justify-between mb-6">
+              <div className="border border-white/10 rounded-xl p-4 sm:p-6 bg-white/5 relative z-10">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <div className="flex items-center gap-3">
                   <UserCircle className="w-6 h-6 text-brand-500" />
                 </div>
                 {!editingProfile && (
-                  <div className="flex flex-col gap-2 items-end">
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                     <button
                       onClick={() => setEditingProfile(true)}
-                      className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors"
+                      className="w-full sm:w-auto px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors"
                     >
                       Edit Profile
                     </button>
                     <button
                       onClick={signOut}
-                      className="flex items-center gap-2 px-4 py-2 bg-transparent hover:bg-red-500/30 border border-white/20 text-white uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors"
+                      className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-transparent hover:bg-red-500/30 border border-white/20 text-white uppercase tracking-[0.25em] text-[11px] rounded-lg transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
                       Sign Out

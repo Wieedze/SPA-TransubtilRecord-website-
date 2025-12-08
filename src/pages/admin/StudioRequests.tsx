@@ -202,14 +202,14 @@ export default function StudioRequests() {
         </motion.div>
 
         {/* Filters */}
-        <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-white/60" />
-          <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <Filter className="w-5 h-5 text-white/60 hidden sm:block" />
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             {(["all", "pending", "in_progress", "completed", "cancelled"] as FilterType[]).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-lg uppercase tracking-[0.25em] text-[11px] transition-colors ${
+                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg uppercase tracking-[0.25em] text-[11px] transition-colors whitespace-nowrap ${
                   filter === f
                     ? "bg-brand-500 text-white"
                     : "bg-white/5 text-white/60 hover:bg-white/10"
@@ -245,12 +245,12 @@ export default function StudioRequests() {
                   className="border border-white/10 rounded-xl hover:border-white/20 transition-all bg-white/5"
                 >
                   {/* Compact Header - Always Visible */}
-                  <div className="p-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <Folder className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                  <div className="p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                      <div className="flex items-center gap-3 flex-1 min-w-0 w-full">
+                        <Folder className="w-4 h-4 sm:w-5 sm:h-5 text-brand-500 flex-shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-semibold font-sans truncate uppercase tracking-[0.25em]">
+                          <h3 className="text-base sm:text-lg font-semibold font-sans truncate uppercase tracking-[0.25em]">
                             {request.project_name}
                           </h3>
                           <p className="text-white/60 truncate uppercase tracking-[0.25em] text-[11px]">
@@ -259,7 +259,7 @@ export default function StudioRequests() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start flex-shrink-0">
                         <div
                           className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border uppercase tracking-[0.25em] text-[11px] ${getStatusBadge(
                             request.status
@@ -285,7 +285,7 @@ export default function StudioRequests() {
                     </div>
 
                     {/* Quick Info - Always Visible */}
-                    <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50 mt-2 ml-8">
+                    <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50 mt-2 ml-0 sm:ml-8">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {formatDate(request.created_at)}
@@ -302,12 +302,12 @@ export default function StudioRequests() {
                       transition={{ duration: 0.2 }}
                       className="border-t border-white/10"
                     >
-                      <div className="p-6 space-y-4">
+                      <div className="p-4 sm:p-6 space-y-4">
                         {/* Full Description */}
                         {request.description && (
                           <div>
                             <p className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-1">Description</p>
-                            <p className="text-white/70 uppercase tracking-[0.25em] text-[11px]">
+                            <p className="text-white/70 uppercase tracking-[0.25em] text-[11px] break-words">
                               {request.description}
                             </p>
                           </div>
@@ -315,12 +315,12 @@ export default function StudioRequests() {
 
                         {/* Metadata */}
                         <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50">
-                          <span>Email: {(request as any).userEmail || request.user_id.slice(0, 8) + '...'}</span>
+                          <span className="break-all">Email: {(request as any).userEmail || request.user_id.slice(0, 8) + '...'}</span>
                         </div>
 
                         {/* Audio Files */}
                         {request.audio_files.length > 0 && (
-                          <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+                          <div className="p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10">
                       <p className="uppercase tracking-[0.25em] text-[11px] font-medium mb-2">Audio Files:</p>
                       <div className="space-y-1">
                         {request.audio_files.map((file: any, index: number) => {
@@ -342,11 +342,11 @@ export default function StudioRequests() {
                           }
 
                           return (
-                            <div key={index} className="flex items-center justify-between uppercase tracking-[0.25em] text-[11px]">
-                              <span className="text-white/70">{file.name}</span>
+                            <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 uppercase tracking-[0.25em] text-[11px]">
+                              <span className="text-white/70 break-all flex-1">{file.name}</span>
                               <button
                                 onClick={handleDownload}
-                                className="text-brand-300 hover:text-brand-200 flex items-center gap-1"
+                                className="text-brand-300 hover:text-brand-200 flex items-center gap-1 whitespace-nowrap"
                               >
                                 <Download className="w-3 h-3" />
                                 Download
@@ -360,20 +360,20 @@ export default function StudioRequests() {
 
                         {/* Reference Tracks */}
                         {request.reference_tracks && (
-                          <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+                          <div className="p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10">
                             <p className="uppercase tracking-[0.25em] text-[11px] font-medium mb-1">Reference Tracks:</p>
-                            <p className="uppercase tracking-[0.25em] text-[11px] text-white/70">{request.reference_tracks}</p>
+                            <p className="uppercase tracking-[0.25em] text-[11px] text-white/70 break-words">{request.reference_tracks}</p>
                           </div>
                         )}
 
                         {/* Existing Feedback */}
                         {request.feedback && (
-                          <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+                          <div className="p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10">
                             <div className="flex items-start gap-2">
-                              <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500" />
-                              <div>
+                              <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500 flex-shrink-0" />
+                              <div className="min-w-0 flex-1">
                                 <p className="uppercase tracking-[0.25em] text-[11px] font-medium mb-1">Your Feedback</p>
-                                <p className="uppercase tracking-[0.25em] text-[11px] text-white/70">{request.feedback}</p>
+                                <p className="uppercase tracking-[0.25em] text-[11px] text-white/70 break-words">{request.feedback}</p>
                               </div>
                             </div>
                           </div>
@@ -382,39 +382,39 @@ export default function StudioRequests() {
                         {/* Actions */}
                         <div className="flex flex-col gap-4 pt-4 border-t border-white/10">
                           {/* Status Buttons */}
-                          <div className="flex gap-2">
+                          <div className="grid grid-cols-2 sm:flex gap-2">
                     <button
                       onClick={() => handleUpdateStatus(request.id, "pending")}
                       disabled={processingId === request.id || request.status === "pending"}
-                      className="px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 disabled:bg-yellow-500/10 text-yellow-400 disabled:text-yellow-400/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 disabled:bg-yellow-500/10 text-yellow-400 disabled:text-yellow-400/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed whitespace-nowrap"
                     >
                       Pending
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(request.id, "in_progress")}
                       disabled={processingId === request.id || request.status === "in_progress"}
-                      className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 disabled:bg-blue-500/10 text-blue-400 disabled:text-blue-400/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 disabled:bg-blue-500/10 text-blue-400 disabled:text-blue-400/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed whitespace-nowrap"
                     >
                       In Progress
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(request.id, "completed")}
                       disabled={processingId === request.id || request.status === "completed"}
-                      className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed whitespace-nowrap"
                     >
                       Complete
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(request.id, "cancelled")}
                       disabled={processingId === request.id || request.status === "cancelled"}
-                      className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed whitespace-nowrap"
                     >
                       Cancel
                     </button>
                           </div>
 
                           {/* Feedback Form */}
-                          <div className="flex gap-2">
+                          <div className="flex flex-col sm:flex-row gap-2">
                             {feedbackForm.requestId === request.id ? (
                               <>
                                 <input
@@ -429,21 +429,23 @@ export default function StudioRequests() {
                                   placeholder="ENTER FEEDBACK FOR THE USER..."
                                   className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
                                 />
-                                <button
-                                  onClick={() => handleAddFeedback(request.id)}
-                                  disabled={processingId === request.id}
-                                  className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
-                                >
-                                  Save
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    setFeedbackForm({ requestId: null, feedback: "" })
-                                  }
-                                  className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px]"
-                                >
-                                  Cancel
-                                </button>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => handleAddFeedback(request.id)}
+                                    disabled={processingId === request.id}
+                                    className="flex-1 sm:flex-none px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed whitespace-nowrap"
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      setFeedbackForm({ requestId: null, feedback: "" })
+                                    }
+                                    className="flex-1 sm:flex-none px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] whitespace-nowrap"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
                               </>
                             ) : (
                               <button
@@ -453,7 +455,7 @@ export default function StudioRequests() {
                                     feedback: request.feedback || "",
                                   })
                                 }
-                                className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors flex items-center gap-2 uppercase tracking-[0.25em] text-[11px]"
+                                className="w-full sm:w-auto px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors flex items-center justify-center gap-2 uppercase tracking-[0.25em] text-[11px]"
                               >
                                 <MessageSquare className="w-4 h-4" />
                                 {request.feedback ? "Edit Feedback" : "Add Feedback"}

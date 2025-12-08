@@ -235,23 +235,23 @@ export default function LabelSubmissions() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-between"
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
         >
           <div>
-            <h1 className="text-4xl font-bold mb-2 uppercase tracking-[0.25em]">Label Submissions</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 uppercase tracking-[0.25em]">Label Submissions</h1>
             <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">Review and manage demo submissions</p>
           </div>
         </motion.div>
 
         {/* Filters */}
-        <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-white/60" />
-          <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <Filter className="w-5 h-5 text-white/60 hidden sm:block" />
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             {(["all", "pending", "approved", "rejected"] as FilterType[]).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-lg uppercase tracking-[0.25em] text-[11px] transition-colors ${
+                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg uppercase tracking-[0.25em] text-[11px] transition-colors ${
                   filter === f
                     ? "bg-brand-500 text-white"
                     : "bg-white/5 text-white/60 hover:bg-white/10"
@@ -287,12 +287,12 @@ export default function LabelSubmissions() {
                   className="border border-white/10 rounded-xl hover:border-white/20 transition-all bg-white/5"
                 >
                   {/* Compact Header - Always Visible */}
-                  <div className="p-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <Music className="w-5 h-5 text-brand-500 flex-shrink-0" />
+                  <div className="p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                      <div className="flex items-center gap-3 flex-1 min-w-0 w-full">
+                        <Music className="w-4 h-4 sm:w-5 sm:h-5 text-brand-500 flex-shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-semibold truncate uppercase tracking-[0.25em]">
+                          <h3 className="text-base sm:text-lg font-semibold truncate uppercase tracking-[0.25em]">
                             {submission.track_title}
                           </h3>
                           <p className="text-white/60 truncate uppercase tracking-[0.25em] text-[11px]">
@@ -302,7 +302,7 @@ export default function LabelSubmissions() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start flex-shrink-0">
                         <div
                           className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border uppercase tracking-[0.25em] text-[11px] ${getStatusBadge(
                             submission.status
@@ -328,8 +328,8 @@ export default function LabelSubmissions() {
                     </div>
 
                     {/* Quick Info - Always Visible */}
-                    <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50 mt-2 ml-8">
-                      <span>Submitted: {formatDate(submission.created_at)}</span>
+                    <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50 mt-2 ml-0 sm:ml-8">
+                      <span className="break-all">Submitted: {formatDate(submission.created_at)}</span>
                     </div>
                   </div>
 
@@ -402,15 +402,15 @@ export default function LabelSubmissions() {
                         )}
 
                         {/* Actions */}
-                        <div className="flex items-start gap-4 pt-4 border-t border-white/10">
-                    <div className="flex gap-2">
+                        <div className="flex flex-col gap-4 pt-4 border-t border-white/10">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <button
                         onClick={() => handleApprove(submission.id)}
                         disabled={
                           processingId === submission.id ||
                           submission.status === "approved"
                         }
-                        className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
+                        className="w-full sm:w-auto px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
                       >
                         <CheckCircle className="w-4 h-4" />
                         Approve
@@ -421,7 +421,7 @@ export default function LabelSubmissions() {
                           processingId === submission.id ||
                           submission.status === "rejected"
                         }
-                        className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center gap-2 disabled:cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
+                        className="w-full sm:w-auto px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
                       >
                         <XCircle className="w-4 h-4" />
                         Reject
@@ -429,7 +429,7 @@ export default function LabelSubmissions() {
                     </div>
 
                     {/* Feedback Form */}
-                    <div className="flex-1 flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       {feedbackForm.submissionId === submission.id ? (
                         <>
                           <input
@@ -444,21 +444,23 @@ export default function LabelSubmissions() {
                             placeholder="ENTER FEEDBACK..."
                             className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px]"
                           />
-                          <button
-                            onClick={() => handleAddFeedback(submission.id)}
-                            disabled={processingId === submission.id}
-                            className="px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={() =>
-                              setFeedbackForm({ submissionId: null, feedback: "" })
-                            }
-                            className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px]"
-                          >
-                            Cancel
-                          </button>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleAddFeedback(submission.id)}
+                              disabled={processingId === submission.id}
+                              className="flex-1 sm:flex-none px-4 py-2 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-700 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() =>
+                                setFeedbackForm({ submissionId: null, feedback: "" })
+                              }
+                              className="flex-1 sm:flex-none px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px]"
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </>
                       ) : (
                         <button
@@ -468,7 +470,7 @@ export default function LabelSubmissions() {
                               feedback: submission.feedback || "",
                             })
                           }
-                          className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors flex items-center gap-2 uppercase tracking-[0.25em] text-[11px]"
+                          className="w-full sm:w-auto px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors flex items-center justify-center gap-2 uppercase tracking-[0.25em] text-[11px]"
                         >
                           <MessageSquare className="w-4 h-4" />
                           {submission.feedback ? "Edit Feedback" : "Add Feedback"}

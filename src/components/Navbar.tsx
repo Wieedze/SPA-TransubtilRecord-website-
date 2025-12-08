@@ -1,9 +1,10 @@
 import { useState } from "react"
 import { NavLink, Link } from "react-router-dom"
-import { User, ChevronDown } from "lucide-react"
+import { User, ChevronDown, Menu } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "../contexts/AuthContext"
 import logoWhite from "../assets/transubtil_logo_white.png"
+import MobileMenuModal from "./MobileMenuModal"
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -13,17 +14,18 @@ const navLinks = [
 ]
 
 export default function Navbar() {
-  const { user, profile } = useAuth()
+  const { user, profile, signOut } = useAuth()
   const [showAdminMenu, setShowAdminMenu] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="border-b border-white/10 bg-brand-900/80 backdrop-blur">
+    <header className="border-b border-white/10 bg-brand-900/80 backdrop-blur relative z-40">
       <div className="mx-auto max-w-6xl flex items-center justify-between px-4 py-4">
         <Link to="/" className="inline-flex items-center hover:opacity-80 transition-opacity">
           <img
             src={logoWhite}
             alt="Transubtil Records"
-            className="h-12"
+            className="h-10 md:h-12"
           />
         </Link>
 
@@ -159,7 +161,7 @@ export default function Navbar() {
 
                 {showAdminMenu && (
                   <div className="absolute top-full left-0 pt-2 w-48 z-50">
-                    <div className="bg-brand-800 border border-white/10 rounded-lg shadow-lg overflow-hidden">
+                    <div className="bg-brand-900 border border-white/10 rounded-lg shadow-lg overflow-hidden">
                     <NavLink
                       to="/admin/submissions"
                       className={({ isActive }) =>
@@ -191,33 +193,55 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* Auth Section */}
-          {user ? (
-            <Link
-              to="/dashboard"
-              className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors"
-            >
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline">{profile?.full_name || user.email}</span>
-            </Link>
-          ) : (
-            <div className="flex items-center gap-3">
+          {/* Auth Section - Desktop */}
+          <div className="hidden md:flex">
+            {user ? (
               <Link
-                to="/login"
-                className="px-4 py-2 text-white/80 hover:text-white text-xs uppercase tracking-wider transition-colors"
+                to="/dashboard"
+                className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors"
               >
-                Login
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">{profile?.full_name || user.email}</span>
               </Link>
-              <Link
-                to="/signup"
-                className="px-4 py-2 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white text-xs uppercase tracking-wider rounded-lg transition-all"
-              >
-                Sign Up
-              </Link>
-            </div>
-          )}
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/login"
+                  className="px-4 py-2 text-white/80 hover:text-white text-xs uppercase tracking-wider transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white text-xs uppercase tracking-wider rounded-lg transition-all"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Burger Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-white hover:text-white/80 transition-colors"
+            aria-label="Toggle menu"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Modal */}
+      <MobileMenuModal
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        user={user}
+        profile={profile}
+        signOut={signOut}
+        navLinks={navLinks}
+        isAdmin={profile?.role === "admin"}
+      />
     </header>
   )
 }
