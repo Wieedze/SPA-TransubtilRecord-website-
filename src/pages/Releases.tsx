@@ -1,12 +1,26 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
-import { ExternalLink } from "lucide-react"
+import { ExternalLink, Search } from "lucide-react"
 import { releases } from "../data/releases"
 import BandcampPlayer from "../components/BandcampPlayer"
 
 export default function Releases() {
   const [selectedRelease, setSelectedRelease] = useState(releases[0])
+  const [searchQuery, setSearchQuery] = useState("")
+
+  // Filter releases based on search query
+  const filteredReleases = useMemo(() => {
+    if (!searchQuery.trim()) return releases
+
+    const query = searchQuery.toLowerCase()
+    return releases.filter(
+      (release) =>
+        release.title.toLowerCase().includes(query) ||
+        release.artist.toLowerCase().includes(query) ||
+        release.catalogNumber?.toLowerCase().includes(query)
+    )
+  }, [searchQuery])
 
   return (
     <>
@@ -62,9 +76,25 @@ export default function Releases() {
 
         {/* Releases Grid */}
         <div className="space-y-4">
-          <h3 className="font-display text-2xl font-bold uppercase tracking-[0.25em]">All Releases</h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {releases.map((release, index) => (
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <h3 className="font-display text-2xl font-bold uppercase tracking-[0.25em]">All Releases</h3>
+
+            {/* Search Bar */}
+            <div className="relative w-full sm:w-auto sm:min-w-[300px]">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="SEARCH RELEASES..."
+                className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white placeholder:text-white/40 uppercase tracking-[0.25em] text-[11px] transition-colors"
+              />
+            </div>
+          </div>
+
+          {filteredReleases.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredReleases.map((release, index) => (
               <motion.div
                 key={release.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -124,6 +154,13 @@ export default function Releases() {
               </motion.div>
             ))}
           </div>
+          ) : (
+            <div className="text-center py-12 border border-white/10 rounded-xl bg-white/5">
+              <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
+                No releases found matching "{searchQuery}"
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Bandcamp CTA */}
