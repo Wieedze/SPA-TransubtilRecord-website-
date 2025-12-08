@@ -36,12 +36,24 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   [
                     "uppercase tracking-[0.25em] text-[11px] relative",
-                    "transition-colors px-4 py-2",
+                    "transition-all duration-100 px-4 py-2",
                     isActive
                       ? "text-white"
                       : "text-white/60 hover:text-white",
                   ].join(" ")
                 }
+                style={{
+                  filter: 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))',
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.filter = 'drop-shadow(0 0 15px rgba(250, 244, 211, 1))';
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))';
+                }}
               >
                 {({ isActive }) => (
                   <>
@@ -77,12 +89,24 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   [
                     "uppercase tracking-[0.25em] text-[11px] relative",
-                    "transition-colors px-4 py-2",
+                    "transition-all duration-100 px-4 py-2",
                     isActive
                       ? "text-white"
                       : "text-white/60 hover:text-white",
                   ].join(" ")
                 }
+                style={{
+                  filter: 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))',
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.filter = 'drop-shadow(0 0 15px rgba(250, 244, 211, 1))';
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.filter = 'drop-shadow(0 0 0px rgba(250, 244, 211, 0))';
+                }}
               >
                 {({ isActive }) => (
                   <>

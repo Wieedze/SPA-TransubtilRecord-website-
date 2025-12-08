@@ -64,7 +64,27 @@ export default function StudioRequests() {
       const { data, error } = await query
 
       if (error) throw error
-      setRequests(data || [])
+
+      // Fetch emails separately for each request
+      if (data) {
+        const requestsWithEmails = await Promise.all(
+          data.map(async (request) => {
+            const { data: profile } = await supabase
+              .from("profiles")
+              .select("email")
+              .eq("id", request.user_id)
+              .single()
+
+            return {
+              ...request,
+              userEmail: profile?.email || null
+            }
+          })
+        )
+        setRequests(requestsWithEmails as any)
+      } else {
+        setRequests([])
+      }
     } catch (error) {
       console.error("Error loading requests:", error)
     } finally {
@@ -295,7 +315,7 @@ export default function StudioRequests() {
 
                         {/* Metadata */}
                         <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50">
-                          <span>User ID: {request.user_id.slice(0, 8)}...</span>
+                          <span>Email: {(request as any).userEmail || request.user_id.slice(0, 8) + '...'}</span>
                         </div>
 
                         {/* Audio Files */}

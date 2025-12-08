@@ -1,23 +1,58 @@
-export default function LandingSpinner() {
+import { useEffect, useRef } from 'react';
+
+type LandingSpinnerProps = {
+  isHovered?: boolean;
+}
+
+export default function LandingSpinner({ isHovered = false }: LandingSpinnerProps) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const rotationRef = useRef(0);
+  const rafRef = useRef<number>();
+  const lastTimeRef = useRef(Date.now());
+
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+
+    const animate = () => {
+      const now = Date.now();
+      const delta = (now - lastTimeRef.current) / 1000; // en secondes
+      lastTimeRef.current = now;
+
+      // Vitesse en degrés par seconde
+      const normalSpeed = 360 / 20; // 18 deg/s (20 secondes par rotation)
+      const fastSpeed = 360 / 8;    // 45 deg/s (8 secondes par rotation)
+
+      const targetSpeed = isHovered ? fastSpeed : normalSpeed;
+
+      // Ajouter la rotation
+      rotationRef.current += targetSpeed * delta;
+      rotationRef.current = rotationRef.current % 360;
+
+      svg.style.transform = `rotate(${rotationRef.current}deg)`;
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [isHovered]);
+
   return (
-    <>
-      <style>{`
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 20s linear infinite;
-        }
-      `}</style>
-      <svg
-        className="animate-spin-slow absolute inset-0 w-full h-full"
-        width="306"
-        height="307"
-        viewBox="0 0 306 307"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+    <svg
+      ref={svgRef}
+      className="absolute inset-0 w-full h-full"
+      width="306"
+      height="307"
+      viewBox="0 0 306 307"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g clipPath="url(#clip0_6_66)">
         <path d="M62.5494 63.4266C65.8103 66.7397 71.0207 66.8535 74.4696 63.7694C95.4421 45.0729 122.937 33.7065 152.982 33.7065C183.026 33.7065 210.502 45.0729 231.494 63.7694C234.961 66.8535 240.171 66.7397 243.432 63.4266C246.956 59.8283 246.862 53.9071 243.095 50.5562C219.03 29.0609 187.487 16 153.001 16C118.514 16 86.9707 29.0609 62.9055 50.5562C59.1571 53.9071 59.0259 59.8283 62.5682 63.4266" fill="white"/>
         <path d="M243.404 244.554C240.142 241.293 234.938 241.142 231.45 244.177C210.409 262.424 182.975 273.489 152.997 273.489C123.018 273.489 95.5846 262.424 74.5425 244.177C71.0545 241.142 65.8505 241.293 62.5888 244.554C59.0063 248.117 59.1572 254.017 62.947 257.315C87.0809 278.276 118.568 291 152.997 291C187.425 291 218.912 278.276 243.046 257.315C246.855 253.997 246.987 248.117 243.404 244.554Z" fill="white"/>
@@ -33,6 +68,5 @@ export default function LandingSpinner() {
         </clipPath>
       </defs>
     </svg>
-    </>
   )
 }

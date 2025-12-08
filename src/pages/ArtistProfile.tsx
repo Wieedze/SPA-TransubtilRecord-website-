@@ -65,7 +65,14 @@ export default function ArtistProfile() {
         >
           {/* Image */}
           <div className="md:col-span-2">
-            <div className="relative mx-auto" style={{ aspectRatio: '306 / 307', maxWidth: '400px' }}>
+            <div
+              className="relative mx-auto"
+              style={{
+                aspectRatio: '306 / 307',
+                maxWidth: '400px',
+                filter: 'drop-shadow(0 0 25px rgba(250, 244, 211, 0.6)) drop-shadow(0 0 35px rgba(250, 244, 211, 0.4))'
+              }}
+            >
               {/* SVG ClipPath Definition */}
               <svg width="0" height="0" style={{ position: 'absolute' }}>
                 <defs>
@@ -133,7 +140,15 @@ export default function ArtistProfile() {
               {/* Location */}
               <div className="flex items-center gap-2 text-white/60">
                 <MapPin className="w-4 h-4" />
-                <span className="uppercase tracking-[0.25em] text-[11px]">{artist.country}</span>
+                <span className="uppercase tracking-[0.25em] text-[11px]">
+                  <DecryptedText
+                    text={artist.country}
+                    animateOn="view"
+                    speed={180}
+                    maxIterations={15}
+                    revealDirection="center"
+                  />
+                </span>
               </div>
 
               {/* Styles */}
@@ -143,7 +158,13 @@ export default function ArtistProfile() {
                     key={style}
                     className="px-3 py-1 rounded-full bg-brand-700/50 text-brand-300 uppercase tracking-[0.25em] text-[11px] border border-brand-300/20"
                   >
-                    {style}
+                    <DecryptedText
+                      text={style}
+                      animateOn="view"
+                      speed={180}
+                      maxIterations={15}
+                      revealDirection="center"
+                    />
                   </span>
                 ))}
               </div>
@@ -166,8 +187,8 @@ export default function ArtistProfile() {
               <DecryptedText
                 text="Biography"
                 animateOn="view"
-                speed={120}
-                maxIterations={10}
+                speed={60}
+                maxIterations={5}
                 revealDirection="center"
               />
             </h2>
@@ -190,8 +211,8 @@ export default function ArtistProfile() {
                 <DecryptedText
                   text="Latest Tracks"
                   animateOn="view"
-                  speed={120}
-                  maxIterations={10}
+                  speed={60}
+                  maxIterations={5}
                   revealDirection="center"
                 />
               </h2>
@@ -243,7 +264,13 @@ export default function ArtistProfile() {
           >
             <div className="space-y-2">
               <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">
-                Releases on Transubtil Records
+                <DecryptedText
+                  text="Releases on Transubtil Records"
+                  animateOn="view"
+                  speed={60}
+                  maxIterations={5}
+                  revealDirection="center"
+                />
               </h2>
               <p className="uppercase tracking-[0.25em] text-[11px] text-white/60">
                 {artistReleases.length} release{artistReleases.length > 1 ? "s" : ""} by {artist.name}
@@ -308,7 +335,15 @@ export default function ArtistProfile() {
           className="space-y-6"
         >
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">Book {artist.name}</h2>
+            <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">
+              <DecryptedText
+                text={`Book ${artist.name}`}
+                animateOn="view"
+                speed={60}
+                maxIterations={5}
+                revealDirection="center"
+              />
+            </h2>
             <p className="uppercase tracking-[0.25em] text-[11px] text-white/60">
               Interested in booking {artist.name} for your event? Fill out the form below
               and we'll get back to you as soon as possible.

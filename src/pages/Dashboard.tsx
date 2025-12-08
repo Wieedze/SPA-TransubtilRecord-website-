@@ -698,7 +698,30 @@ export default function Dashboard() {
             </div>
 
             {/* Account Settings */}
-            <div className="border border-white/10 rounded-xl p-6 bg-white/5">
+            <div className="relative">
+              {/* SVG Card Border */}
+              <svg
+                className="absolute pointer-events-none"
+                viewBox="0 0 725 419"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="none"
+                style={{
+                  opacity: 0.3,
+                  top: '-8%',
+                  left: '-3%',
+                  width: '106%',
+                  height: '116%'
+                }}
+              >
+                <path d="M703.065 27.7661H22.2576V391.139H703.065V27.7661Z" stroke="white" strokeWidth="1.5" strokeMiterlimit="10"/>
+                <path d="M703.059 92.2368C706.378 94.5312 709.691 96.8205 713.009 99.1149V268.076C709.691 267.921 706.378 267.772 703.059 267.618V92.2368Z" stroke="white" strokeWidth="1.5" strokeMiterlimit="10"/>
+                <path d="M717.053 269.011C714.027 266.583 711 264.159 707.973 261.73C708.004 251.184 708.034 240.633 708.065 230.087C705.994 228.28 703.918 226.469 701.847 224.662C701.853 260.137 701.866 295.618 701.872 331.093C701.872 331.645 701.872 332.198 701.878 332.75C701.847 343.272 701.817 353.793 701.786 364.309C691.002 372.944 680.217 381.579 669.432 390.214C642.973 390.189 616.507 390.164 590.048 390.139C594.164 393.374 598.275 396.609 602.392 399.844C634.928 399.869 667.471 399.894 700.008 399.919C703.656 397.017 707.304 394.111 710.951 391.209C711.043 371.321 711.134 351.439 711.225 331.551C713.168 329.953 715.11 328.356 717.059 326.758V269.011H717.053Z" fill="white"/>
+                <path d="M710.86 330.272H702.067V333.367H710.86V330.272Z" fill="white"/>
+                <path d="M703.059 320.069C701.561 321.214 700.069 322.364 698.571 323.508C698.48 336.155 698.382 348.801 698.291 361.452C687.725 369.933 677.16 378.418 666.594 386.899H631.25C629.533 388.312 627.822 389.726 626.105 391.139H670.425C681.301 382.35 692.183 373.561 703.059 364.777V320.069Z" stroke="white" strokeWidth="1.5" strokeMiterlimit="10"/>
+              </svg>
+
+              <div className="border border-white/10 rounded-xl p-6 bg-white/5 relative z-10">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <UserCircle className="w-6 h-6 text-brand-500" />
@@ -722,7 +745,7 @@ export default function Dashboard() {
                 )}
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-6 relative z-10">
                 {/* Full Name */}
                 <div>
                   <label className="block uppercase tracking-[0.25em] text-[11px] font-medium mb-2 text-white/80">
@@ -825,6 +848,7 @@ export default function Dashboard() {
                     </button>
                   </div>
                 )}
+              </div>
               </div>
             </div>
           </motion.div>

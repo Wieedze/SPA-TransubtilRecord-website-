@@ -53,6 +53,7 @@ export default function Landing() {
         <div className="absolute inset-0 z-0">
           <AnimatedBackground isHovered={isHovered} />
         </div>
+
         {/* Logo and Buttons Container */}
         <div
           onMouseEnter={() => setIsHovered(true)}
@@ -82,7 +83,7 @@ export default function Landing() {
               width: '120%',
               height: '120%'
             }}>
-              <LandingSpinner />
+              <LandingSpinner isHovered={isHovered} />
             </div>
 
             <img

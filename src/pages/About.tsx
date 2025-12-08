@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { Send, X } from "lucide-react"
+import { X } from "lucide-react"
 
 export default function About() {
   const [showDemoForm, setShowDemoForm] = useState(false)
@@ -91,9 +91,18 @@ export default function About() {
         <div className="pt-8 text-center">
           <button
             onClick={() => setShowDemoForm(true)}
-            className="inline-flex items-center gap-2 px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-sans font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all"
+            className="inline-flex items-center gap-3 px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-sans font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all duration-300"
+            style={{
+              boxShadow: "0 0 20px rgba(255, 255, 255, 0.15)",
+              border: "1px solid rgba(255, 255, 255, 0.2)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = "0 0 30px rgba(255, 255, 255, 0.3)"
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "0 0 20px rgba(255, 255, 255, 0.15)"
+            }}
           >
-            <Send className="w-5 h-5" />
             Submit Your Demo
           </button>
         </div>
