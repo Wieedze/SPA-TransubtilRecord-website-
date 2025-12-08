@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import logoCircle from "../assets/transubtil_logo_circle.png"
 import LandingSpinner from "../components/LandingSpinner"
 import AnimatedBackground from "../components/AnimatedBackground"
+import DecryptedText from "../components/DecryptedText"
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -123,7 +124,7 @@ export default function Landing() {
               e.currentTarget.style.boxShadow = "0 0 15px rgba(255, 255, 255, 0.2)"
             }}
           >
-            Studio
+            <DecryptedText text="Studio" speed={90} maxIterations={5} />
           </button>
 
           <button
@@ -141,7 +142,7 @@ export default function Landing() {
               e.currentTarget.style.boxShadow = "0 0 15px rgba(255, 255, 255, 0.2)"
             }}
           >
-            Label
+            <DecryptedText text="Label" speed={90} maxIterations={5} />
           </button>
         </motion.div>
         </div>

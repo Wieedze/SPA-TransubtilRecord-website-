@@ -10,6 +10,7 @@ import BookingForm from "../components/BookingForm"
 import SoundCloudPlayer from "../components/SoundCloudPlayer"
 import HubArtisteAnimated from "../components/artists/HubArtisteAnimated"
 import artistHeaderLine from "../assets/artist_header_line.svg"
+import DecryptedText from "../components/DecryptedText"
 
 export default function ArtistProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -118,7 +119,15 @@ export default function ArtistProfile() {
                   />
                 </div>
 
-                <p className="uppercase tracking-[0.25em] text-[11px] text-white/60 mt-1">{artist.act}</p>
+                <p className="uppercase tracking-[0.25em] text-[11px] text-white/60 mt-1">
+                  <DecryptedText
+                    text={artist.act}
+                    animateOn="view"
+                    speed={120}
+                    maxIterations={10}
+                    revealDirection="center"
+                  />
+                </p>
               </div>
 
               {/* Location */}
@@ -153,7 +162,15 @@ export default function ArtistProfile() {
             transition={{ duration: 0.7, delay: 0.35 }}
             className="space-y-3"
           >
-            <h2 className="text-xl font-semibold uppercase tracking-[0.25em]">Biography</h2>
+            <h2 className="text-xl font-semibold uppercase tracking-[0.25em]">
+              <DecryptedText
+                text="Biography"
+                animateOn="view"
+                speed={120}
+                maxIterations={10}
+                revealDirection="center"
+              />
+            </h2>
             <p className="uppercase tracking-[0.25em] text-[11px] text-white/70 leading-relaxed">
               {artist.description}
             </p>
@@ -169,7 +186,15 @@ export default function ArtistProfile() {
             className="space-y-6"
           >
             <div className="space-y-2">
-              <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">Latest Tracks</h2>
+              <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">
+                <DecryptedText
+                  text="Latest Tracks"
+                  animateOn="view"
+                  speed={120}
+                  maxIterations={10}
+                  revealDirection="center"
+                />
+              </h2>
               <p className="uppercase tracking-[0.25em] text-[11px] text-white/60">
                 Listen to the latest releases and mixes from {artist.name}
               </p>
