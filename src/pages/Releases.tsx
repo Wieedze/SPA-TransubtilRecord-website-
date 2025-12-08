@@ -47,21 +47,21 @@ export default function Releases() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="border border-white/10 rounded-2xl p-6 md:p-8 bg-brand-700/10"
+          className="border border-white/10 rounded-xl p-4 md:p-6 bg-brand-700/10"
         >
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
             <div>
-              <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-white/40 mb-2">
+              <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-white/40 mb-1">
                 Now Playing
               </p>
-              <h2 className="font-display text-2xl font-bold capitalize tracking-wide">{selectedRelease.title}</h2>
+              <h2 className="font-display text-xl font-bold capitalize tracking-wide">{selectedRelease.title}</h2>
               <p className="font-sans text-brand-300/70 uppercase tracking-[0.25em] text-[11px]">{selectedRelease.artist}</p>
             </div>
             <a
               href={selectedRelease.bandcampUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white font-sans uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center gap-2"
+              className="w-full sm:w-auto px-4 py-2 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white font-sans uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center justify-center gap-2"
             >
               <ExternalLink className="w-4 h-4" />
               <span className="hidden sm:inline">Buy on Bandcamp</span>
