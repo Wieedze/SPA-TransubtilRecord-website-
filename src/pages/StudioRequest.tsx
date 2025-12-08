@@ -189,7 +189,7 @@ export default function StudioRequest() {
                 required
                 rows={5}
                 className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors resize-none uppercase tracking-[0.25em] text-[11px]"
-                placeholder="DESCRIBE YOUR PROJECT, DESIRED SOUND, TARGET LOUDNESS, SPECIFIC REQUIREMENTS, ETC."
+                placeholder="DESCRIBE YOUR PROJECT"
               />
             </div>
 

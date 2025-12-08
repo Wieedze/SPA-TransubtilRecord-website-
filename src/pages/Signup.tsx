@@ -55,7 +55,7 @@ export default function Signup() {
       setLoading(false)
       // Redirect after 2 seconds
       setTimeout(() => {
-        navigate("/login")
+        navigate("/dashboard")
       }, 2000)
     }
   }
@@ -79,11 +79,11 @@ export default function Signup() {
             <div>
               <h2 className="text-2xl font-bold mb-2">Account Created!</h2>
               <p className="text-white/60">
-                Please check your email to verify your account before signing in.
+                Welcome to Transubtil Records!
               </p>
             </div>
             <p className="text-sm text-white/40">
-              Redirecting to login page...
+              Redirecting to dashboard...
             </p>
           </motion.div>
         </div>

@@ -594,13 +594,13 @@ export default function Dashboard() {
 
             {/* Submitted Demos */}
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Your Submissions</h2>
+              <h2 className="text-2xl font-semibold mb-4 uppercase tracking-[0.25em]">Your Submissions</h2>
               {loadingSubmissions ? (
-                <div className="text-center py-12 text-white/40">Loading...</div>
+                <div className="text-center py-12 text-white/40 uppercase tracking-[0.25em] text-[11px]">Loading...</div>
               ) : submissions.length === 0 ? (
                 <div className="border border-white/10 rounded-xl p-12 text-center">
                   <Music className="w-12 h-12 mx-auto mb-4 text-white/20" />
-                  <p className="text-white/40">No demos submitted yet</p>
+                  <p className="text-white/40 uppercase tracking-[0.25em] text-[11px]">No demos submitted yet</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -611,36 +611,36 @@ export default function Dashboard() {
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold mb-1">{submission.track_title}</h3>
-                          <p className="text-white/60 text-sm mb-1">by {submission.artist_name}</p>
+                          <h3 className="text-lg font-semibold mb-1 uppercase tracking-[0.25em]">{submission.track_title}</h3>
+                          <p className="text-white/60 mb-1 uppercase tracking-[0.25em] text-[11px]">by {submission.artist_name}</p>
                           {submission.genre && (
-                            <p className="text-white/50 text-xs mb-3">{submission.genre}</p>
+                            <p className="text-white/50 mb-3 uppercase tracking-[0.25em] text-[11px]">{submission.genre}</p>
                           )}
                           <div className="flex items-center gap-2 mb-3">
                             {getSubmissionStatusIcon(submission.status)}
-                            <span className="text-sm">{getSubmissionStatusText(submission.status)}</span>
+                            <span className="uppercase tracking-[0.25em] text-[11px]">{getSubmissionStatusText(submission.status)}</span>
                           </div>
                           {submission.feedback && (
                             <div className="mt-4 p-4 bg-white/5 rounded-lg border border-white/10">
                               <div className="flex items-start gap-2">
                                 <MessageSquare className="w-4 h-4 mt-0.5 text-brand-500" />
                                 <div>
-                                  <p className="text-sm font-medium mb-1">Feedback from Label</p>
-                                  <p className="text-sm text-white/70">{submission.feedback}</p>
+                                  <p className="font-medium mb-1 uppercase tracking-[0.25em] text-[11px]">Feedback from Label</p>
+                                  <p className="text-white/70 uppercase tracking-[0.25em] text-[11px]">{submission.feedback}</p>
                                 </div>
                               </div>
                             </div>
                           )}
                         </div>
                         <div className="text-right">
-                          <p className="text-xs text-white/40 mb-2">
+                          <p className="text-white/40 mb-2 uppercase tracking-[0.25em] text-[11px]">
                             {formatDate(submission.created_at)}
                           </p>
                           <a
                             href={submission.file_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm text-brand-300 hover:text-brand-200 underline"
+                            className="text-brand-300 hover:text-brand-200 underline uppercase tracking-[0.25em] text-[11px]"
                           >
                             Download
                           </a>

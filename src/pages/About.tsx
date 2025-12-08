@@ -122,7 +122,7 @@ export default function About() {
               </div>
 
               <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-brand-300/70 mb-6">
-                Send us your best psychedelic trance productions. We're looking for darkpsy, forest, and night-oriented sounds that push boundaries.
+                Send us your best productions. We're looking for darkpsy, forest, and night-oriented sounds that push boundaries.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
