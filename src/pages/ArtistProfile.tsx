@@ -70,7 +70,7 @@ export default function ArtistProfile() {
               style={{
                 aspectRatio: '306 / 307',
                 maxWidth: '400px',
-                filter: 'drop-shadow(0 0 25px rgba(250, 244, 211, 0.6)) drop-shadow(0 0 35px rgba(250, 244, 211, 0.4))'
+                filter: 'drop-shadow(0 0 20px rgba(250, 244, 211, 0.4)) drop-shadow(0 0 30px rgba(250, 244, 211, 0.3))'
               }}
             >
               {/* SVG ClipPath Definition */}
