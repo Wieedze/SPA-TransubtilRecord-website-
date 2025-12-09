@@ -84,7 +84,7 @@ export default function ArtistProfile() {
               </svg>
 
               {/* Animated Hub SVG Frame */}
-              <div className="absolute inset-0 w-full h-full z-10 opacity-60">
+              <div className="absolute inset-0 w-full h-full z-10 opacity-90">
                 <HubArtisteAnimated />
               </div>
 
