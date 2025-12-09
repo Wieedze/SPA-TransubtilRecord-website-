@@ -15,7 +15,10 @@ const artistsData = [
       facebook: "https://www.facebook.com/Thehorridspsy",
     },
     country: "France",
-    image_url: "/images/the-horrids.png",
+    image_url: "/images/the-horrids.jpg",
+    videos: [
+      "https://soundcloud.com/thehorrids/sets/example-album"
+    ],
   },
   {
     id: 2,
@@ -61,7 +64,7 @@ const artistsData = [
       facebook: "https://www.facebook.com/share/1D5G5KEBah/?mibextid=wwXIfr",
     },
     country: "Portugal",
-    image_url: "/images/balku.png",
+    image_url: "/images/balku.jpg",
   },
   {
     id: 5,
@@ -75,7 +78,7 @@ const artistsData = [
       facebook: "https://www.facebook.com/DjLaMarquise",
     },
     country: "France",
-    image_url: "/images/lamarquise.png",
+    image_url: "/images/lamarquise.jpg",
   },
   {
     id: 6,
@@ -120,7 +123,7 @@ const artistsData = [
       facebook: "https://www.facebook.com/Kanaloa666",
     },
     country: "England",
-    image_url: "/images/kanaloa.webp",
+    image_url: "/images/kanaloa.jpg",
   },
   {
     id: 9,
@@ -135,7 +138,7 @@ const artistsData = [
       facebook: "https://soundcloud.com/mekanorms",
     },
     country: "France",
-    image_url: "/images/mekanorms.png",
+    image_url: "/images/mekanorms.jpg",
   },
   {
     id: 10,
@@ -150,7 +153,7 @@ const artistsData = [
       facebook: "https://www.facebook.com/share/18A2jTy5UN/",
     },
     country: "Australia",
-    image_url: "/images/jive.png",
+    image_url: "/images/jive.jpg",
   },
   {
     id: 11,
@@ -165,7 +168,7 @@ const artistsData = [
       facebook: "https://www.facebook.com/Xipetotecs",
     },
     country: "Japan",
-    image_url: "/images/xipetotecs.png",
+    image_url: "/images/xipetotecs.jpg",
   },
   {
     id: 12,
@@ -177,20 +180,151 @@ const artistsData = [
       instagram: "https://www.instagram.com/showurata_dj_lazzzy/",
     },
     country: "Japan",
-    image_url: "/images/placeholder.webp",
+    image_url: "/images/djlazzzy.jpg",
   },
   {
     id: 13,
     name: "Pakkun",
     act: "Dj Set",
-    description: "",
+    description: "Pakkun alias Vincent has always been passionate about music, playing drums and bass guitar at a young age. Discovering electronic music through techno and d'n'b, he soon became in love with Psytrance. Learning the art of djing with the Transubtil crew led him to integrate the label at the end of 2019 and play in Japan in summer 2022. Constantly evolving, his sets range from groovy psytrance to darkpsy. Now working a lot on the production side, he's eager to show you his own vision of psytrance on his first releases. He released his first compilation 'Chaos Simulator' containing his first release with Dr Fractal, more coming this year.",
     style: ["Forest", "Darkpsy"],
     social: {
       soundcloud: "https://soundcloud.com/pakkun-psy",
       instagram: "https://www.instagram.com/vincspakkun",
     },
     country: "France",
+    image_url: "/images/pakkun.jpg",
+  },
+  {
+    id: 14,
+    name: "Agop",
+    act: "Dj Set",
+    description: "AGOP is a DJ, producer and sound engineer who grew up within alternative artistic communities and was exposed to electronic music from an early age. This environment sparked a lasting fascination for psychedelic sounds, leading him to start DJing as a teenager. His first steps behind the decks took place at private parties — a formative playground where he refined his technique and developed his connection with a passionate crowd. Today, his project explores the many facets of the psytrance spectrum, blending groove, energy and hypnotic atmospheres. As a professional sound technician, he also holds a strong interest in the technical side of music, working on live sound for bands as well as several electronic and psytrance festivals. In 2025, he played at Hadra Trance Festival and joined Transubtil Records.",
+    style: ["Twilight", "Forest"],
+    social: {
+      soundcloud: "https://soundcloud.com/agop_psychedelic",
+      instagram: "https://www.instagram.com/agop_transubtil",
+      facebook: "https://www.facebook.com/profile.php?id=100092196862973",
+    },
+    country: "France",
+    image_url: "/images/agop.jpg",
+  },
+  {
+    id: 15,
+    name: "Fiorenza",
+    act: "Dj Set",
+    description: "Integrating the feminine underground scene of the Cerrado, Fiorenza transforms nocturnal sound into a powerful expression of feeling. Moving between 155 and 170 BPM, her sets traverse the textures of Forest and Dark, crafting a psychedelic sonic journey with heavy basslines and immersive atmospheres.",
+    style: ["Forest", "Darkpsy"],
+    social: {
+      soundcloud: "https://soundcloud.com/fiorenzadj",
+      instagram: "https://www.instagram.com/fiorenzacadore/",
+      facebook: "https://www.facebook.com/fiorenzacadore",
+    },
+    country: "Brazil",
+    image_url: "/images/fiorenza.jpg",
+  },
+  {
+    id: 16,
+    name: "Heavy Fawn",
+    act: "Dj Set",
+    description: "Heavy Fawn is the Nightpsy DJ project of Hugo, originally from Marseille, France. He discovered the world of psytrance and free parties in 2009, where he instantly fell in love with the music. In 2017, he met Tantra Music, began collaborating with them as a DJ and organizer, and together they made some of the best darkpsy festivals in southern France. In 2020, he joined the French label Transubtil Records and played in Mexico and Costa Rica. He later joined the Brazilian label Resina Records in 2024, from which he had drawn major inspiration for years. His first VA is set to be released in early 2026, a collaboration between Resina and Transubtil Records featuring only exclusive tracks. His goal is to create DJ sets that are neither forest, nor dark, nor twilight, nor hightech, but a perfect blend that is purely psychedelic.",
+    style: ["Darkpsy", "Forest", "Twilight"],
+    social: {
+      soundcloud: "https://soundcloud.com/heavyfawn",
+      instagram: "https://www.instagram.com/heavy_fawn/",
+      facebook: "https://www.facebook.com/HeavyFawn/",
+    },
+    country: "France",
+    image_url: "/images/heavyfawn.jpg",
+  },
+  {
+    id: 17,
+    name: "Rajax",
+    act: "Dj Set",
+    description: "Since 2013, William really dived into the psytrance world, quickly a passion borned and his project RAJAX was born. His debut on stage was in 2015 with the Outrance association. In 2017, he joined the Senoï Project association, In March 2019, supported by this association, he launched his first compilation titled 'GENOME'. In 2023, he joined the growing label Transubtil Records, and starts delivering darker and faster DJ sets, yet his love for the groove remains intact. Each of his performances is unique and makes a strong impact on the dancefloors, confirming his place in the psytrance scene and creating unforgettable moments for the audience.",
+    style: ["Darkpsy", "Twilight"],
+    social: {
+      soundcloud: "https://soundcloud.com/rajax-outrance",
+      instagram: "https://www.instagram.com/rajax_outrance",
+      facebook: "https://www.facebook.com/Rajaxsenoi",
+    },
+    country: "France",
+    image_url: "/images/rajax.jpg",
+  },
+  {
+    id: 18,
+    name: "Wild Track",
+    act: "Dj Set",
+    description: "Wild Track is a Moroccan DJ, formerly known as DJ Gender Fluid. He is always crafting tailored DJ sets based on the vibe of the dancefloor, staying fully tuned in to its energy. Groovy and psychedelic, his mixes become the ideal soundtrack for active meditation, trance, and free-form dance. Immersed in the global psytrance scene as a festival traveler and party organizer long before stepping behind the decks, he developed an endless curiosity for digging the most powerful, groovy, and mind-shifting tracks. His mission: channel that same magic he once felt in the crowd and deliver it back to the dancefloor. Deeply engaged in music, he is also the founder of Yaz Records and Universitek, an educational organization dedicated to sharing knowledge and nurturing creativity within the musical community.",
+    style: ["Twilight", "Forest"],
+    social: {
+      soundcloud: "https://soundcloud.com/wild_track",
+      instagram: "https://www.instagram.com/dj.wildtrack/",
+    },
+    country: "Morocco",
+    image_url: "/images/wildtrack.jpeg",
+  },
+  {
+    id: 19,
+    name: "Yagsa",
+    act: "Dj Set",
+    description: "Yagsa started mixing in 2010 after his discovery of trance in Hadra Festival. In 2014 he joined the Transubil association and started performing in big dancefloors. Now in the Transubtil Records Label, he released a compilation in collaboration with Mekanorms 'Transsiberian'. Come and discover his universe with forest and psychedelic atmospheres.",
+    style: ["Forest", "Twilight"],
+    social: {
+      soundcloud: "https://soundcloud.com/yagsa",
+    },
+    country: "France",
+    image_url: "/images/yagsa.jpg",
+  },
+  {
+    id: 20,
+    name: "Anachronorium",
+    act: "Live Act",
+    description: "Anchronorium is the DarkPsy project of Portuguese producer Rafyx, exploring high-intensity soundscapes built on dissonant textures, immersive atmospheres, and fast, driving rhythms. His music blends detailed sound design with a cinematic sense of darkness, creating deep mental journeys and powerful nighttime energy on the dancefloor. With a signature style marked by high BPMs, hypnotic storytelling and dense psychedelic layers, Anchronorium delivers a modern and impactful interpretation of the dark psychedelic spectrum. The project continues to evolve with new releases and performances, establishing a strong and distinctive presence within contemporary DarkPsy.",
+    style: ["Darkpsy", "Hitech"],
+    social: {},
+    country: "Portugal",
+    image_url: "/images/anachronorium.jpg",
+  },
+  {
+    id: 21,
+    name: "Veheme",
+    act: "Live Act",
+    description: "",
+    style: ["Darkpsy"],
+    social: {
+      soundcloud: "https://soundcloud.com/veheme",
+    },
+    country: "France",
     image_url: "/images/placeholder.webp",
+  },
+  {
+    id: 22,
+    name: "Warp Drive",
+    act: "Live Act",
+    description: "Tim aka Warp Drive is a psytrance project hailing from the sunny shores of Sydney, Australia. Bootstrapped in the late 2010's following many sleepless nights in the woods, it is a mince of cultural influences packed into a night psy skin. Bon appétit!",
+    style: ["Twilight", "Darkpsy"],
+    social: {
+      soundcloud: "https://soundcloud.com/transubtil",
+      instagram: "https://www.instagram.com/engagethewarpdrive/",
+      facebook: "https://www.facebook.com/Transubtilrec",
+    },
+    country: "Australia",
+    image_url: "/images/warpdrive.jpg",
+  },
+  {
+    id: 23,
+    name: "Zeo",
+    act: "Live Set",
+    description: "Candice aka Zeo started mixing Pystrance in 2016. Reasoning influences Dark, Forest but also very Groovy. It was in 2018 that she embarked on music production. Keeping the aim of making his audience travel through his emotions, his influences and his musical perception. What she likes about this style is its side, both dark but colorful, hypnotic, absorbing but also very energetic. That we can live introspectively or on the contrary, hyper communicative and synergistic. After a few years of preparation for her Live, today she is finally ready to reveal the plots of her little universe.",
+    style: ["Darkpsy", "Forest"],
+    social: {
+      soundcloud: "https://soundcloud.com/zeopsyrecord",
+      instagram: "https://www.instagram.com/zeo_zeeoo/",
+      facebook: "https://www.facebook.com/zeo.psyrec/",
+    },
+    country: "France",
+    image_url: "/images/zeo.jpg",
   },
 ]
 
@@ -198,7 +332,7 @@ const artistsData = [
 export const artists: Artist[] = artistsData.map((artist) => ({
   ...artist,
   slug: slugify(artist.name),
-  videos: [],
+  videos: artist.videos || [],
 }))
 
 // Helper functions

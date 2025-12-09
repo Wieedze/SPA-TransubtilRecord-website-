@@ -57,14 +57,14 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
             <img
               src={artist.image_url}
               alt={artist.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 mix-blend-luminosity group-hover:mix-blend-normal"
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               onError={(e) => {
                 // Fallback if image doesn't exist
                 e.currentTarget.src = "/images/placeholder.webp"
               }}
             />
             {/* Gradient over image */}
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/20 to-transparent" />
           </div>
 
           {/* Content */}
