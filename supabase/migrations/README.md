@@ -48,6 +48,37 @@ SELECT * FROM label_submissions LIMIT 1;
 SELECT * FROM pg_policies WHERE tablename = 'label_submissions';
 ```
 
+### `notifications.sql`
+**Statut:** ⏳ À exécuter
+
+Crée le système de notifications pour les administrateurs.
+
+**Fonctionnalités:**
+- Table `notifications` avec colonnes: user_id, type, title, message, link, read, created_at
+- Row Level Security (RLS) activé
+- Policies pour que les utilisateurs ne voient que leurs notifications
+- Fonctions automatiques pour notifier les admins
+- Triggers qui créent automatiquement des notifications quand:
+  - Une nouvelle soumission label est créée
+  - Une nouvelle demande studio est créée
+- Notifications en temps réel via Supabase Realtime
+
+**Requis pour:**
+- Navbar → Cloche de notifications (visible uniquement pour admin)
+- Notifications automatiques pour les nouvelles soumissions
+
+**Comment vérifier après exécution:**
+```sql
+-- Vérifier que la table existe
+SELECT * FROM notifications LIMIT 1;
+
+-- Vérifier les triggers
+SELECT * FROM pg_trigger WHERE tgname LIKE '%notification%';
+
+-- Vérifier les fonctions
+SELECT * FROM pg_proc WHERE proname LIKE '%notify_admins%';
+```
+
 ## Notes importantes
 
 - ⚠️ Ces migrations doivent être exécutées **manuellement** dans Supabase Dashboard

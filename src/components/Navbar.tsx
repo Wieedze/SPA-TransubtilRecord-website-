@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "../contexts/AuthContext"
 import logoWhite from "../assets/transubtil_logo_white.png"
 import MobileMenuModal from "./MobileMenuModal"
+import NotificationBell from "./NotificationBell"
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -194,7 +195,12 @@ export default function Navbar() {
           </nav>
 
           {/* Auth Section - Desktop */}
-          <div className="hidden md:flex">
+          <div className="hidden md:flex items-center gap-4">
+            {/* Notification Bell - Only for admin */}
+            {user && profile?.role === "admin" && (
+              <NotificationBell userId={user.id} />
+            )}
+
             {user ? (
               <Link
                 to="/dashboard"
