@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Link, useSearchParams } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 import { supabase } from "../lib/supabase"
+import { uploadFile } from "../lib/upload-service"
 import type { StudioProject } from "../types/studio"
 import type { LabelSubmission } from "../lib/supabase"
 import {
@@ -20,6 +21,7 @@ import {
   UserCircle,
   Mail,
   Save,
+  Trash2,
 } from "lucide-react"
 
 type TabType = "studio" | "demo" | "account"
@@ -117,13 +119,64 @@ export default function Dashboard() {
     }
   }
 
+  const handleDeleteStudioProject = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this studio project?")) {
+      return
+    }
+
+    try {
+      const { error } = await supabase
+        .from("studio_requests")
+        .delete()
+        .eq("id", id)
+
+      if (error) throw error
+      await loadStudioProjects()
+      alert("Studio project deleted successfully!")
+    } catch (error) {
+      console.error("Error deleting studio project:", error)
+      alert("Error deleting studio project")
+    }
+  }
+
+  const handleDeleteSubmission = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this demo submission?")) {
+      return
+    }
+
+    try {
+      const { error } = await supabase
+        .from("label_submissions")
+        .delete()
+        .eq("id", id)
+
+      if (error) throw error
+      await loadSubmissions()
+      alert("Demo submission deleted successfully!")
+    } catch (error) {
+      console.error("Error deleting demo submission:", error)
+      alert("Error deleting demo submission")
+    }
+  }
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
-      const maxSize = 50 * 1024 * 1024 // 50 MB in bytes
+      const maxSize = 250 * 1024 * 1024 // 250 MB max for demos (WAV/AIFF)
+
+      // Vérifier le type de fichier (WAV ou AIFF uniquement)
+      const allowedTypes = ['audio/wav', 'audio/x-wav', 'audio/aiff', 'audio/x-aiff']
+      const fileExtension = file.name.toLowerCase().split('.').pop()
+      const isAllowedType = allowedTypes.includes(file.type) || ['wav', 'aiff'].includes(fileExtension || '')
+
+      if (!isAllowedType) {
+        alert('Invalid file format! Only WAV and AIFF files are allowed for demo submissions.')
+        e.target.value = "" // Reset input
+        return
+      }
 
       if (file.size > maxSize) {
-        alert(`File size too large! Maximum size is 50 MB.\nYour file is ${(file.size / 1024 / 1024).toFixed(2)} MB.\n\nPlease compress your file or use a smaller format (MP3 instead of WAV).`)
+        alert(`File size too large! Maximum size is 250 MB.\nYour file is ${(file.size / 1024 / 1024).toFixed(2)} MB.`)
         e.target.value = "" // Reset input
         return
       }
@@ -152,26 +205,23 @@ export default function Dashboard() {
     setUploadProgress(0)
 
     try {
-      // Upload file to Supabase Storage
-      const fileName = `demos/${user.id}/${Date.now()}_${newDemo.file.name}`
-      const { error: uploadError } = await supabase.storage
-        .from("studio-audio-files")
-        .upload(fileName, newDemo.file)
+      // Upload file to o2switch via notre API
+      const fileUrl = await uploadFile(
+        newDemo.file,
+        'label-submissions',
+        (progress) => setUploadProgress(progress.percentage)
+      )
 
-      if (uploadError) throw uploadError
+      console.log("✅ File uploaded successfully:", fileUrl)
 
-      // Simulate progress completion
-      setUploadProgress(100)
-
-      // Insert submission record into database with file path (not URL)
-      // We'll generate signed URLs when needed since bucket is private
+      // Insert submission record into database with the o2switch URL
       const { error: dbError } = await supabase.from("label_submissions").insert({
         user_id: user.id,
         track_title: newDemo.track_title,
         artist_name: newDemo.artist_name,
         genre: newDemo.genre || null,
         description: newDemo.description || null,
-        file_url: fileName, // Store path, not URL, for private bucket
+        file_url: fileUrl, // URL vers o2switch
         status: "pending",
       })
 
@@ -196,8 +246,16 @@ export default function Dashboard() {
       alert("Demo submitted successfully!")
     } catch (error: any) {
       console.error("Error uploading demo:", error)
-      const errorMessage = error?.message || error?.error?.message || "Unknown error"
-      alert(`Error uploading demo: ${errorMessage}\n\nPlease check the console for more details.`)
+      const errorMessage = error?.message || "Upload failed"
+
+      // Gérer les erreurs spécifiques
+      if (errorMessage.includes('quota exceeded')) {
+        alert('You have reached the maximum of 3 active demo submissions.\n\nPlease wait for your pending demos to be reviewed before submitting more.')
+      } else if (errorMessage.includes('Invalid file format')) {
+        alert('Invalid file format! Only WAV and AIFF files are allowed for demo submissions.')
+      } else {
+        alert(`Error uploading demo: ${errorMessage}`)
+      }
     } finally {
       setUploading(false)
       setUploadProgress(0)
@@ -471,15 +529,27 @@ export default function Dashboard() {
                           </div>
                         )}
                       </div>
-                      <div
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${getStatusColor(
-                          project.status
-                        )}`}
-                      >
-                        {getStatusIcon(project.status)}
-                        <span className="uppercase tracking-[0.25em] text-[11px] font-medium whitespace-nowrap">
-                          {getStatusLabel(project.status)}
-                        </span>
+                      <div className="flex flex-col gap-2">
+                        <div
+                          className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${getStatusColor(
+                            project.status
+                          )}`}
+                        >
+                          {getStatusIcon(project.status)}
+                          <span className="uppercase tracking-[0.25em] text-[11px] font-medium whitespace-nowrap">
+                            {getStatusLabel(project.status)}
+                          </span>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDeleteStudioProject(project.id)
+                          }}
+                          className="px-3 py-1.5 bg-transparent hover:bg-red-600/40 border border-red-500/30 text-red-400 hover:text-red-300 rounded-lg transition-colors flex items-center justify-center gap-2 uppercase tracking-[0.25em] text-[10px]"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          Delete
+                        </button>
                       </div>
                     </div>
                   </motion.div>
@@ -562,11 +632,8 @@ export default function Dashboard() {
                     required
                     className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white uppercase tracking-[0.25em] text-[11px] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white hover:file:bg-brand-600 file:cursor-pointer file:uppercase file:tracking-[0.25em] file:text-[11px]"
                   />
-                  <p className="text-xs text-white/40 mt-2">
-                    Accepted formats: MP3, WAV, FLAC. Max size: 50MB
-                  </p>
                   <p className="text-xs text-yellow-500/60 mt-1">
-                    💡 Tip: Use MP3 format to keep file size under 50MB
+                    💡 Accepted formats: WAV, AIFF only. Max size: 250MB
                   </p>
                 </div>
 
@@ -632,18 +699,27 @@ export default function Dashboard() {
                             </div>
                           )}
                         </div>
-                        <div className="flex sm:flex-col items-center sm:items-end gap-2 sm:gap-0 w-full sm:w-auto justify-between sm:justify-start">
+                        <div className="flex sm:flex-col items-center sm:items-end gap-2 w-full sm:w-auto justify-between sm:justify-start">
                           <p className="text-white/40 sm:mb-2 uppercase tracking-[0.25em] text-[11px] whitespace-nowrap">
                             {formatDate(submission.created_at)}
                           </p>
-                          <a
-                            href={submission.file_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-brand-300 hover:text-brand-200 underline uppercase tracking-[0.25em] text-[11px] whitespace-nowrap"
-                          >
-                            Download
-                          </a>
+                          <div className="flex gap-2">
+                            <a
+                              href={submission.file_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-brand-300 hover:text-brand-200 underline uppercase tracking-[0.25em] text-[11px] whitespace-nowrap"
+                            >
+                              Download
+                            </a>
+                            <button
+                              onClick={() => handleDeleteSubmission(submission.id)}
+                              className="px-2 py-1 bg-transparent hover:bg-red-600/40 border border-red-500/30 text-red-400 hover:text-red-300 rounded transition-colors flex items-center gap-1 uppercase tracking-[0.25em] text-[10px]"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                              Delete
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard.tsx"
 import ProjectDetail from "./pages/ProjectDetail.tsx"
 import LabelSubmissions from "./pages/admin/LabelSubmissions.tsx"
 import StudioRequests from "./pages/admin/StudioRequests.tsx"
+import UserManagement from "./pages/admin/UserManagement.tsx"
 import Login from "./pages/Login.tsx"
 import Signup from "./pages/Signup.tsx"
 import Artists from "./pages/Artists.tsx"
@@ -87,6 +88,14 @@ function App() {
               element={
                 <ProtectedRoute requireAdmin>
                   <StudioRequests />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <UserManagement />
                 </ProtectedRoute>
               }
             />

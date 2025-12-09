@@ -43,10 +43,12 @@ export default function AudioUploader({
       return `${file.name}: Invalid file type. Only WAV, MP3, FLAC, and AIFF are allowed.`
     }
 
-    // Check file size
-    const maxSizeBytes = maxSizeMB * 1024 * 1024
-    if (file.size > maxSizeBytes) {
-      return `${file.name}: File too large. Maximum size is ${maxSizeMB}MB.`
+    // Check file size (skip if maxSizeMB is Infinity)
+    if (maxSizeMB !== Infinity) {
+      const maxSizeBytes = maxSizeMB * 1024 * 1024
+      if (file.size > maxSizeBytes) {
+        return `${file.name}: File too large. Maximum size is ${maxSizeMB}MB.`
+      }
     }
 
     return null
@@ -127,7 +129,7 @@ export default function AudioUploader({
           Drag & drop audio files here, or click to browse
         </p>
         <p className="text-sm text-white/40">
-          WAV, MP3, FLAC, AIFF • Max {maxSizeMB}MB per file • {maxFiles} files max
+          WAV, MP3, FLAC, AIFF{maxSizeMB !== Infinity ? (maxSizeMB >= 1000 ? ` • Max ${maxSizeMB / 1000}GB ` : ` • Max ${maxSizeMB}MB `) : ' • No size limit'} •
         </p>
 
         <input

@@ -38,10 +38,12 @@ export const uploadFile = async (
     if (onProgress) {
       xhr.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable) {
+          // Limiter à 95% pour montrer qu'on attend la réponse du serveur (upload SFTP)
+          const uploadPercentage = Math.round((e.loaded / e.total) * 95);
           onProgress({
             loaded: e.loaded,
             total: e.total,
-            percentage: Math.round((e.loaded / e.total) * 100),
+            percentage: uploadPercentage,
           });
         }
       });
@@ -53,6 +55,14 @@ export const uploadFile = async (
         try {
           const data: UploadResponse = JSON.parse(xhr.responseText);
           if (data.success && data.url) {
+            // Mettre à 100% maintenant que tout est terminé
+            if (onProgress) {
+              onProgress({
+                loaded: 1,
+                total: 1,
+                percentage: 100,
+              });
+            }
             resolve(data.url);
           } else {
             reject(new Error(data.error || 'Upload failed'));

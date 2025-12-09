@@ -1,10 +1,11 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
-import { ArrowLeft, Send } from "lucide-react"
+import { ArrowLeft, Send, AlertCircle } from "lucide-react"
 import { useAuth } from "../contexts/AuthContext"
 import { supabase } from "../lib/supabase"
+import { uploadFile } from "../lib/upload-service"
 import AudioUploader from "../components/studio/AudioUploader"
 import type { StudioRequestForm } from "../types/studio"
 
@@ -13,6 +14,8 @@ export default function StudioRequest() {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [hasAccess, setHasAccess] = useState<boolean | null>(null)
+  const [checkingAccess, setCheckingAccess] = useState(true)
 
   const [formData, setFormData] = useState<StudioRequestForm>({
     projectName: "",
@@ -21,6 +24,34 @@ export default function StudioRequest() {
     referenceTracks: "",
     audioFiles: [],
   })
+
+  // Vérifier l'accès studio au chargement
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!user) {
+        setCheckingAccess(false)
+        return
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('has_studio_access')
+          .eq('id', user.id)
+          .single()
+
+        if (error) throw error
+        setHasAccess(data?.has_studio_access === true)
+      } catch (err) {
+        console.error('Error checking studio access:', err)
+        setHasAccess(false)
+      } finally {
+        setCheckingAccess(false)
+      }
+    }
+
+    checkAccess()
+  }, [user])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -43,23 +74,15 @@ export default function StudioRequest() {
         return
       }
 
-      // Upload audio files to Supabase Storage
+      // Upload audio files to o2switch via notre API
       const uploadedFiles = []
       for (const file of formData.audioFiles) {
-        const filePath = `${user.id}/${Date.now()}_${file.name}`
-        const { data, error: uploadError } = await supabase.storage
-          .from("studio-audio-files")
-          .upload(filePath, file)
-
-        if (uploadError) {
-          console.error("Upload error:", uploadError)
-          throw new Error(`Failed to upload ${file.name}`)
-        }
+        const fileUrl = await uploadFile(file, 'studio-requests')
 
         uploadedFiles.push({
           name: file.name,
           size: file.size,
-          url: data.path,
+          url: fileUrl,
           uploaded_at: new Date().toISOString(),
         })
       }
@@ -80,13 +103,16 @@ export default function StudioRequest() {
         throw new Error("Failed to submit request")
       }
 
-      // TODO: Send email notification to admin via Edge Function
-      // For now, just navigate to success page
-
       navigate("/studio/my-projects")
-    } catch (err) {
+    } catch (err: any) {
       console.error("Submission error:", err)
-      setError(err instanceof Error ? err.message : "Failed to submit request")
+      const errorMessage = err?.message || "Failed to submit request"
+
+      if (errorMessage.includes('Access denied')) {
+        setError('Studio requests are only available to authorized clients. Please contact us to request access.')
+      } else {
+        setError(errorMessage)
+      }
     } finally {
       setLoading(false)
     }
@@ -118,18 +144,48 @@ export default function StudioRequest() {
           <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-[0.25em]">Request Studio Service</h1>
           <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
             Fill out the form below to submit your project. We'll review your request and
-            get back to you within 24-48 hours.
+            get back to you .
           </p>
         </motion.div>
 
-        {/* Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="border border-white/10 rounded-2xl p-6 md:p-8 bg-brand-700/10"
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Access Denied Message */}
+        {!checkingAccess && !hasAccess && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="border border-yellow-500/30 rounded-2xl p-6 md:p-8 bg-yellow-500/5"
+          >
+            <div className="flex items-start gap-4">
+              <AlertCircle className="w-6 h-6 text-yellow-400 shrink-0 mt-1" />
+              <div className="space-y-3">
+                <h2 className="text-xl font-bold uppercase tracking-[0.25em] text-white">
+                  Studio Access Required
+                </h2>
+                <p className="text-white/70 text-sm leading-relaxed">
+                  Studio requests are reserved for authorized clients who have an active agreement with us.
+                </p>
+                <p className="text-white/70 text-sm leading-relaxed">
+                  If you're interested in our studio services, please contact us at{" "}
+                  <a href="mailto:studio@transubtilrecord.com" className="text-white underline hover:text-white/80 transition-colors">
+                    studio@transubtilrecord.com
+                  </a>{" "}
+                  to discuss your project and request access.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Form - Only show if user has access */}
+        {!checkingAccess && hasAccess && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="border border-white/10 rounded-2xl p-6 md:p-8 bg-brand-700/10"
+          >
+            <form onSubmit={handleSubmit} className="space-y-6">
             {/* Project Name */}
             <div>
               <label
@@ -146,7 +202,7 @@ export default function StudioRequest() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors uppercase tracking-[0.25em] text-[11px]"
-                placeholder="MY EPIC TRACK"
+                placeholder="PROJECT NAME"
               />
             </div>
 
@@ -203,6 +259,8 @@ export default function StudioRequest() {
                 onFilesChange={(files) =>
                   setFormData({ ...formData, audioFiles: files })
                 }
+                maxFiles={20}
+                maxSizeMB={50000}
               />
               <p className="uppercase tracking-[0.25em] text-[11px] text-white/40 mt-2">
                 Upload your stems, mixdown, or reference tracks
@@ -256,6 +314,7 @@ export default function StudioRequest() {
             </p>
           </form>
         </motion.div>
+        )}
       </section>
     </>
   )

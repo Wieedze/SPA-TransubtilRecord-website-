@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronUp,
   MessageSquare,
+  Trash2,
 } from "lucide-react"
 
 type FilterType = "all" | "pending" | "in_progress" | "completed" | "cancelled"
@@ -130,6 +131,29 @@ export default function StudioRequests() {
     } catch (error) {
       console.error("Error saving feedback:", error)
       alert("Error saving feedback")
+    } finally {
+      setProcessingId(null)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this studio request? This action cannot be undone.")) {
+      return
+    }
+
+    setProcessingId(id)
+    try {
+      const { error } = await supabase
+        .from("studio_requests")
+        .delete()
+        .eq("id", id)
+
+      if (error) throw error
+      await loadRequests()
+      alert("Studio request deleted successfully!")
+    } catch (error) {
+      console.error("Error deleting request:", error)
+      alert("Error deleting request")
     } finally {
       setProcessingId(null)
     }
@@ -410,6 +434,14 @@ export default function StudioRequests() {
                       className="px-4 py-2 bg-transparent hover:bg-red-500/30 disabled:bg-transparent border border-white/20 disabled:border-white/10 text-white disabled:text-white/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed whitespace-nowrap"
                     >
                       Cancel
+                    </button>
+                    <button
+                      onClick={() => handleDelete(request.id)}
+                      disabled={processingId === request.id}
+                      className="px-4 py-2 bg-transparent hover:bg-red-600/40 disabled:bg-transparent border border-red-500/30 disabled:border-red-500/10 text-red-400 disabled:text-red-400/50 rounded-lg transition-colors uppercase tracking-[0.25em] text-[11px] disabled:cursor-not-allowed whitespace-nowrap flex items-center gap-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete
                     </button>
                           </div>
 

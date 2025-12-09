@@ -14,6 +14,7 @@ import {
   Filter,
   ChevronDown,
   ChevronUp,
+  Trash2,
 } from "lucide-react"
 
 type FilterType = "all" | "pending" | "approved" | "rejected"
@@ -66,11 +67,26 @@ export default function LabelSubmissions() {
       const { data, error } = await query
 
       if (error) throw error
-      setSubmissions(data || [])
+
+      // Enrichir avec les noms des profils
+      const userIds = [...new Set(data?.map(s => s.user_id) || [])]
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('id, full_name')
+        .in('id', userIds)
+
+      const profilesMap = new Map(profilesData?.map(p => [p.id, p]) || [])
+
+      const enrichedData = data?.map(submission => ({
+        ...submission,
+        profiles: profilesMap.get(submission.user_id)
+      })) || []
+
+      setSubmissions(enrichedData)
 
       // Generate signed URLs for audio files
       const urls: Record<string, string> = {}
-      for (const submission of data || []) {
+      for (const submission of enrichedData || []) {
         console.log("🎵 Processing submission:", submission.id)
         console.log("📁 File URL:", submission.file_url)
 
@@ -81,7 +97,14 @@ export default function LabelSubmissions() {
           continue
         }
 
-        // For storage files (whether it's a path or a storage URL), extract the path and generate signed URL
+        // Check if it's an o2switch URL (direct access - any path on transubtil-record.org)
+        if (submission.file_url.includes('transubtil-record.org')) {
+          console.log("🌐 o2switch URL detected, using directly")
+          urls[submission.id] = submission.file_url
+          continue
+        }
+
+        // For old Supabase storage files, extract the path and generate signed URL
         let filePath = submission.file_url
 
         // If it's a full storage URL, extract just the path part
@@ -175,6 +198,29 @@ export default function LabelSubmissions() {
     } catch (error) {
       console.error("Error adding feedback:", error)
       alert("Error adding feedback")
+    } finally {
+      setProcessingId(null)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this submission? This action cannot be undone.")) {
+      return
+    }
+
+    setProcessingId(id)
+    try {
+      const { error } = await supabase
+        .from("label_submissions")
+        .delete()
+        .eq("id", id)
+
+      if (error) throw error
+      await loadSubmissions()
+      alert("Submission deleted successfully!")
+    } catch (error) {
+      console.error("Error deleting submission:", error)
+      alert("Error deleting submission")
     } finally {
       setProcessingId(null)
     }
@@ -355,7 +401,7 @@ export default function LabelSubmissions() {
 
                         {/* Metadata */}
                         <div className="flex items-center gap-4 uppercase tracking-[0.25em] text-[11px] text-white/50">
-                          <span>User ID: {submission.user_id.slice(0, 8)}...</span>
+                          <span>Submitted by: {submission.profiles?.full_name || 'Unknown User'}</span>
                         </div>
 
                         {/* Audio Player */}
@@ -425,6 +471,14 @@ export default function LabelSubmissions() {
                       >
                         <XCircle className="w-4 h-4" />
                         Reject
+                      </button>
+                      <button
+                        onClick={() => handleDelete(submission.id)}
+                        disabled={processingId === submission.id}
+                        className="w-full sm:w-auto px-4 py-2 bg-transparent hover:bg-red-600/40 disabled:bg-transparent border border-red-500/30 disabled:border-red-500/10 text-red-400 disabled:text-red-400/50 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:cursor-not-allowed uppercase tracking-[0.25em] text-[11px]"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
                       </button>
                     </div>
 

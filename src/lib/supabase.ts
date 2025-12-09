@@ -20,6 +20,7 @@ export interface Profile {
   role: "client" | "artist" | "admin"
   full_name: string | null
   company: string | null
+  has_studio_access: boolean
   created_at: string
 }
 
@@ -72,6 +73,9 @@ export interface LabelSubmission {
   status: "pending" | "approved" | "rejected"
   feedback: string | null
   created_at: string
+  profiles?: {
+    full_name: string | null
+  }
 }
 
 export interface Notification {

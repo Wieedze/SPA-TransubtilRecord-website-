@@ -3,10 +3,16 @@ import multer from 'multer';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { fileTypeFromBuffer } from 'file-type';
-import { O2SwitchStorage } from '../src/lib/sftp';
-import { supabase } from '../src/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
+import { O2SwitchStorage } from '../src/lib/sftp.js';
 
 dotenv.config({ path: '.env.local' });
+
+// Initialize Supabase client for server
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL!,
+  process.env.VITE_SUPABASE_ANON_KEY!
+);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -141,12 +147,16 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
 
     // 4. Générer un nom unique
     const uniqueFilename = generateUniqueFilename(req.file.originalname);
+    console.log(`📤 Starting upload: ${uniqueFilename} (${(buffer.length / 1024 / 1024).toFixed(2)} MB)`);
 
-    // 5. Upload vers o2switch via SFTP
-    const storage = new O2SwitchStorage();
+    // 5. Upload vers o2switch via SFTP (utilise singleton pour réutiliser la connexion)
+    const storage = O2SwitchStorage.getInstance();
+    console.log('🔌 Connecting to SFTP...');
     await storage.connect();
+    console.log('✅ SFTP connected, uploading file...');
     const fileUrl = await storage.uploadFile(buffer, uniqueFilename, type);
-    await storage.disconnect();
+    console.log('✅ File uploaded successfully');
+    // Ne pas déconnecter - la connexion sera réutilisée pour les prochains uploads
 
     // 6. Retourner l'URL
     res.json({
@@ -155,7 +165,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       filename: uniqueFilename,
     });
   } catch (error) {
-    console.error('Upload error:', error);
+    console.error('❌ Upload error:', error);
     res.status(500).json({
       error: error instanceof Error ? error.message : 'Upload failed',
     });
@@ -167,8 +177,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 Upload server running on http://localhost:${PORT}`);
   console.log(`📁 SFTP Host: ${process.env.O2SWITCH_SFTP_HOST}`);
   console.log(`📍 Base Path: ${process.env.O2SWITCH_BASE_PATH}`);
 });
+
+// Increase timeout for large file uploads (10 minutes)
+server.timeout = 600000;
+server.keepAliveTimeout = 600000;
