@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import { fileTypeFromBuffer } from 'file-type';
 import { createClient } from '@supabase/supabase-js';
 import { O2SwitchStorage } from '../src/lib/sftp.js';
+import adminStorageRouter from './admin-storage.js';
+import shareRouter from './share-routes.js';
 
 dotenv.config({ path: '.env.local' });
 
@@ -27,7 +29,15 @@ app.use(cors({
   origin: process.env.VITE_APP_URL || 'http://localhost:5173',
   credentials: true,
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10gb' })); // Support large files for admin storage
+
+// Admin Storage routes (replaces NextCloud)
+app.use('/api/nextcloud', adminStorageRouter); // Keep old route for backwards compatibility
+app.use('/api/admin-storage', adminStorageRouter); // New route name
+
+// File Sharing routes (public and admin)
+app.use('/api/share', shareRouter); // Admin routes: /api/share/create, /api/share/list, etc.
+app.use('/api/shared', shareRouter); // Public routes: /api/shared/:token, /api/shared/:token/download
 
 // Multer configuration pour gérer les fichiers volumineux
 const upload = multer({
@@ -149,14 +159,11 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     const uniqueFilename = generateUniqueFilename(req.file.originalname);
     console.log(`📤 Starting upload: ${uniqueFilename} (${(buffer.length / 1024 / 1024).toFixed(2)} MB)`);
 
-    // 5. Upload vers o2switch via SFTP (utilise singleton pour réutiliser la connexion)
+    // 5. Upload vers o2switch via SFTP (singleton réutilise la connexion)
     const storage = O2SwitchStorage.getInstance();
-    console.log('🔌 Connecting to SFTP...');
     await storage.connect();
-    console.log('✅ SFTP connected, uploading file...');
     const fileUrl = await storage.uploadFile(buffer, uniqueFilename, type);
     console.log('✅ File uploaded successfully');
-    // Ne pas déconnecter - la connexion sera réutilisée pour les prochains uploads
 
     // 6. Retourner l'URL
     res.json({

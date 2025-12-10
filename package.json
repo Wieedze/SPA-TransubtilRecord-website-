@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.83.0",
+    "@types/bcrypt": "^6.0.0",
     "axios": "^1.7.0",
     "basic-ftp": "^5.0.5",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",

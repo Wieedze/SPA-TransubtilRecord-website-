@@ -199,6 +199,18 @@ export default function Navbar() {
                     >
                       User Management
                     </NavLink>
+                    <NavLink
+                      to="/admin/my-drive"
+                      className={({ isActive }) =>
+                        `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
+                          isActive
+                            ? "bg-brand-500 text-white"
+                            : "text-white/80 hover:bg-white/5 hover:text-white"
+                        }`
+                      }
+                    >
+                      MyDrive
+                    </NavLink>
                     </div>
                   </div>
                 )}

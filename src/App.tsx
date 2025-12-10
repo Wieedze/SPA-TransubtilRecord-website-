@@ -12,6 +12,8 @@ import ProjectDetail from "./pages/ProjectDetail.tsx"
 import LabelSubmissions from "./pages/admin/LabelSubmissions.tsx"
 import StudioRequests from "./pages/admin/StudioRequests.tsx"
 import UserManagement from "./pages/admin/UserManagement.tsx"
+import MyDrive from "./pages/admin/MyDrive.tsx"
+import SharedDownload from "./pages/SharedDownload.tsx"
 import Login from "./pages/Login.tsx"
 import Signup from "./pages/Signup.tsx"
 import Artists from "./pages/Artists.tsx"
@@ -27,6 +29,9 @@ function App() {
         <Routes>
           {/* Landing page without Layout (fullscreen) */}
           <Route path="/" element={<Landing />} />
+
+          {/* Public shared file download page (no layout) */}
+          <Route path="/shared/:token" element={<SharedDownload />} />
 
           {/* Auth pages without Layout */}
           <Route path="/login" element={<Login />} />
@@ -96,6 +101,14 @@ function App() {
               element={
                 <ProtectedRoute requireAdmin>
                   <UserManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/my-drive"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <MyDrive />
                 </ProtectedRoute>
               }
             />
