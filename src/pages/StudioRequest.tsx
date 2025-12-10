@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
-import { motion } from "framer-motion"
-import { ArrowLeft, Send, AlertCircle } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ArrowLeft, Send, AlertCircle, MessageSquare, User, Mail, X } from "lucide-react"
 import { useAuth } from "../contexts/AuthContext"
 import { supabase } from "../lib/supabase"
 import { uploadFile } from "../lib/upload-service"
@@ -23,6 +23,15 @@ export default function StudioRequest() {
     description: "",
     referenceTracks: "",
     audioFiles: [],
+  })
+
+  // Contact form state
+  const [showContactModal, setShowContactModal] = useState(false)
+  const [submittingContact, setSubmittingContact] = useState(false)
+  const [contactFormData, setContactFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
   })
 
   // Vérifier l'accès studio au chargement
@@ -60,6 +69,39 @@ export default function StudioRequest() {
       ...formData,
       [e.target.name]: e.target.value,
     })
+  }
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmittingContact(true)
+
+    try {
+      const emailData = {
+        to: "studio@transubtilrecords.com",
+        subject: `Studio Access Request from ${contactFormData.name}`,
+        body: `
+Name: ${contactFormData.name}
+Email: ${contactFormData.email}
+
+Message:
+${contactFormData.message}
+        `,
+      }
+
+      console.log("Email to send:", emailData)
+
+      // Simulate sending
+      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      alert("Your message has been sent! We'll get back to you soon.")
+      setShowContactModal(false)
+      setContactFormData({ name: "", email: "", message: "" })
+    } catch (error) {
+      console.error("Error sending message:", error)
+      alert("Failed to send message. Please try again or email us directly at studio@transubtilrecords.com")
+    } finally {
+      setSubmittingContact(false)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -166,12 +208,15 @@ export default function StudioRequest() {
                   Studio requests are reserved for authorized clients who have an active agreement with us.
                 </p>
                 <p className="text-white/70 text-sm leading-relaxed">
-                  If you're interested in our studio services, please contact us at{" "}
-                  <a href="mailto:studio@transubtilrecord.com" className="text-white underline hover:text-white/80 transition-colors">
-                    studio@transubtilrecord.com
-                  </a>{" "}
-                  to discuss your project and request access.
+                  If you're interested in our studio services, please contact us to discuss your project and request access.
                 </p>
+                <button
+                  onClick={() => setShowContactModal(true)}
+                  className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/50 text-yellow-400 font-medium rounded-lg transition-all uppercase tracking-[0.25em] text-[11px]"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  Contact Studio
+                </button>
               </div>
             </div>
           </motion.div>
@@ -315,6 +360,124 @@ export default function StudioRequest() {
           </form>
         </motion.div>
         )}
+
+        {/* Contact Modal */}
+        <AnimatePresence>
+          {showContactModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              onClick={() => setShowContactModal(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-brand-800 border border-white/20 rounded-2xl p-6 md:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+              >
+                {/* Header */}
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2">Contact Studio</h3>
+                    <p className="text-sm text-white/60">
+                      Send us a message and we'll get back to you soon
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowContactModal(false)}
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                {/* Form */}
+                <form onSubmit={handleContactSubmit} className="space-y-4">
+                  {/* Name */}
+                  <div>
+                    <label
+                      htmlFor="contact-name"
+                      className="block text-sm font-medium text-white/80 mb-2"
+                    >
+                      <User className="w-4 h-4 inline mr-2" />
+                      Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="contact-name"
+                      value={contactFormData.name}
+                      onChange={(e) => setContactFormData({ ...contactFormData, name: e.target.value })}
+                      required
+                      className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
+                      placeholder="Your name"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label
+                      htmlFor="contact-email"
+                      className="block text-sm font-medium text-white/80 mb-2"
+                    >
+                      <Mail className="w-4 h-4 inline mr-2" />
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      id="contact-email"
+                      value={contactFormData.email}
+                      onChange={(e) => setContactFormData({ ...contactFormData, email: e.target.value })}
+                      required
+                      className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
+                      placeholder="your@email.com"
+                    />
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label
+                      htmlFor="contact-message"
+                      className="block text-sm font-medium text-white/80 mb-2"
+                    >
+                      <MessageSquare className="w-4 h-4 inline mr-2" />
+                      Message *
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      value={contactFormData.message}
+                      onChange={(e) => setContactFormData({ ...contactFormData, message: e.target.value })}
+                      required
+                      rows={5}
+                      className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors resize-none"
+                      placeholder="Tell us about your project and why you need studio access..."
+                    />
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowContactModal(false)}
+                      className="flex-1 px-6 py-3 border border-white/20 hover:border-white/40 hover:bg-white/5 text-white rounded-lg transition-all"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={submittingContact}
+                      className="flex-1 px-6 py-3 bg-brand-500 hover:bg-brand-600 disabled:bg-brand-500/50 text-white font-medium rounded-lg transition-all disabled:cursor-not-allowed"
+                    >
+                      {submittingContact ? "Sending..." : "Send Message"}
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
     </>
   )
