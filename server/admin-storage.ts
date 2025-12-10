@@ -130,6 +130,69 @@ router.post('/upload', upload.single('file'), async (req: Request, res: Response
   }
 });
 
+// Stream a file (for video/audio playback)
+router.get('/stream', async (req: Request, res: Response) => {
+  try {
+    // For GET requests from media tags, accept token from query parameter
+    const token = req.query.token as string || req.headers.authorization?.substring(7);
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized - No token' });
+    }
+
+    // Verify user with token
+    const user = await verifyAdminUser(`Bearer ${token}`);
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+    }
+
+    // Extract path from query parameter
+    const path = req.query.path as string;
+
+    console.log('🎵 Stream request:', { path });
+
+    if (!path || path === '/') {
+      console.error('❌ Invalid path:', { path });
+      return res.status(400).json({ error: 'Path is required' });
+    }
+
+    console.log('⏳ Starting stream from SFTP...');
+
+    // Download the file (will be optimized later for true streaming)
+    const data = await storage.downloadAdminFile(path);
+
+    console.log('✅ Stream ready, size:', data.length, 'bytes');
+
+    // Detect mime type from extension
+    const filename = path.split('/').pop() || 'file';
+    const ext = filename.toLowerCase().split('.').pop() || '';
+
+    let mimeType = 'application/octet-stream';
+    if (['mp3', 'm4a', 'aac'].includes(ext)) mimeType = 'audio/mpeg';
+    else if (['wav'].includes(ext)) mimeType = 'audio/wav';
+    else if (['ogg'].includes(ext)) mimeType = 'audio/ogg';
+    else if (['mp4'].includes(ext)) mimeType = 'video/mp4';
+    else if (['webm'].includes(ext)) mimeType = 'video/webm';
+    else if (['png'].includes(ext)) mimeType = 'image/png';
+    else if (['jpg', 'jpeg'].includes(ext)) mimeType = 'image/jpeg';
+    else if (['gif'].includes(ext)) mimeType = 'image/gif';
+    else if (['webp'].includes(ext)) mimeType = 'image/webp';
+
+    // Set headers for streaming
+    res.setHeader('Content-Type', mimeType);
+    res.setHeader('Content-Length', data.length);
+    res.setHeader('Accept-Ranges', 'bytes');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+
+    res.send(data);
+  } catch (error) {
+    console.error('Admin storage stream error:', error);
+    res.status(500).json({
+      error: error instanceof Error ? error.message : 'Failed to stream file',
+    });
+  }
+});
+
 // Download a file
 router.post('/download', async (req: Request, res: Response) => {
   try {
@@ -140,11 +203,16 @@ router.post('/download', async (req: Request, res: Response) => {
 
     const { path } = req.body;
 
+    console.log('📥 Download request:', { path, bodyType: typeof path, body: req.body });
+
     if (!path || typeof path !== 'string') {
+      console.error('❌ Invalid path:', { path, type: typeof path });
       return res.status(400).json({ error: 'Path is required' });
     }
 
+    console.log('⏳ Starting download from SFTP...');
     const data = await storage.downloadAdminFile(path);
+    console.log('✅ Download complete, size:', data.length, 'bytes');
 
     // Set appropriate headers
     const filename = path.split('/').pop() || 'download';

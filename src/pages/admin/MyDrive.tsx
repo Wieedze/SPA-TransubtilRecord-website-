@@ -12,15 +12,34 @@ import type { NextCloudFile } from '../../types/nextcloud';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 // Helper Functions
+const isImageFile = (file: NextCloudFile) => {
+  const mime = file.mime?.toLowerCase() || '';
+  const ext = file.basename?.toLowerCase().split('.').pop() || '';
+  return mime.startsWith('image/') || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(ext);
+};
+
+const isVideoFile = (file: NextCloudFile) => {
+  const mime = file.mime?.toLowerCase() || '';
+  const ext = file.basename?.toLowerCase().split('.').pop() || '';
+  return mime.startsWith('video/') || ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'].includes(ext);
+};
+
+const isAudioFile = (file: NextCloudFile) => {
+  const mime = file.mime?.toLowerCase() || '';
+  const ext = file.basename?.toLowerCase().split('.').pop() || '';
+  return mime.startsWith('audio/') || ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'].includes(ext);
+};
+
 const getFileIcon = (file: NextCloudFile, large = false) => {
   const sizeClass = large ? 'w-12 h-12' : 'w-5 h-5';
 
   if (file.type === 'directory') return <Folder className={`${sizeClass} text-brand-300`} />;
 
+  if (isImageFile(file)) return <ImageIcon className={`${sizeClass} text-blue-400`} />;
+  if (isAudioFile(file)) return <Music className={`${sizeClass} text-purple-400`} />;
+  if (isVideoFile(file)) return <Video className={`${sizeClass} text-red-400`} />;
+
   const mime = file.mime?.toLowerCase() || '';
-  if (mime.startsWith('image/')) return <ImageIcon className={`${sizeClass} text-blue-400`} />;
-  if (mime.startsWith('audio/')) return <Music className={`${sizeClass} text-purple-400`} />;
-  if (mime.startsWith('video/')) return <Video className={`${sizeClass} text-red-400`} />;
   if (mime.includes('text') || mime.includes('pdf')) return <FileText className={`${sizeClass} text-green-400`} />;
 
   return <File className={`${sizeClass} text-gray-400`} />;
@@ -56,7 +75,7 @@ export default function MyDrive() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [fileToShare, setFileToShare] = useState<NextCloudFile | null>(null);
   const [previewFile, setPreviewFile] = useState<NextCloudFile | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState<'name' | 'size' | 'date'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -374,7 +393,7 @@ export default function MyDrive() {
                     onClick={() => {
                       if (file.type === 'directory') {
                         setCurrentPath(file.filename);
-                      } else if (file.mime?.startsWith('image/') || file.mime?.startsWith('video/') || file.mime?.startsWith('audio/')) {
+                      } else if (isImageFile(file) || isVideoFile(file) || isAudioFile(file)) {
                         setPreviewFile(file);
                       }
                     }}
@@ -427,28 +446,36 @@ export default function MyDrive() {
                 key={file.filename}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="group relative bg-brand-900/50 border border-white/10 rounded-lg p-4 hover:bg-white/5 transition-all hover:scale-105"
+                className="group relative bg-brand-900/50 border border-white/10 rounded-lg overflow-hidden hover:bg-white/5 transition-all hover:scale-105"
               >
-                {/* File Icon */}
+                {/* File Preview/Icon */}
                 <button
                   onClick={() => {
                     if (file.type === 'directory') {
                       setCurrentPath(file.filename);
-                    } else if (file.mime?.startsWith('image/') || file.mime?.startsWith('video/') || file.mime?.startsWith('audio/')) {
+                    } else if (isImageFile(file) || isVideoFile(file) || isAudioFile(file)) {
                       setPreviewFile(file);
                     }
                   }}
                   className="w-full"
                 >
-                  <div className="flex justify-center mb-3">
-                    <div className="text-brand-300">
-                      {getFileIcon(file, true)}
+                  {/* Thumbnail for images */}
+                  {isImageFile(file) ? (
+                    <FileThumbnail file={file} session={session} />
+                  ) : (
+                    <div className="flex justify-center items-center h-32 bg-brand-900/30">
+                      <div className="text-brand-300">
+                        {getFileIcon(file, true)}
+                      </div>
                     </div>
+                  )}
+
+                  <div className="p-3">
+                    <p className="font-medium text-sm truncate text-center">{file.basename}</p>
+                    <p className="text-xs text-white/40 text-center mt-1">
+                      {file.type === 'file' && formatFileSize(file.size)}
+                    </p>
                   </div>
-                  <p className="font-medium text-sm truncate text-center">{file.basename}</p>
-                  <p className="text-xs text-white/40 text-center mt-1">
-                    {file.type === 'file' && formatFileSize(file.size)}
-                  </p>
                 </button>
 
                 {/* Actions (overlay on hover) */}
@@ -525,6 +552,33 @@ export default function MyDrive() {
           session={session}
         />
       )}
+    </div>
+  );
+}
+
+// File Thumbnail Component
+function FileThumbnail({ file, session }: { file: NextCloudFile; session: any }) {
+  const [error, setError] = useState(false);
+
+  // Use streaming URL directly
+  const thumbnailUrl = `${API_URL}/api/admin-storage/stream?path=${encodeURIComponent(file.filename)}&token=${session?.access_token}`;
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-32 bg-brand-900/30">
+        <ImageIcon className="w-12 h-12 text-blue-400/50" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-32 bg-brand-900/30 flex items-center justify-center overflow-hidden">
+      <img
+        src={thumbnailUrl}
+        alt={file.basename}
+        className="w-full h-full object-cover"
+        onError={() => setError(true)}
+      />
     </div>
   );
 }
@@ -627,8 +681,8 @@ function FilePreviewModal({ file, onClose, session }: { file: NextCloudFile; onC
   const [isMuted, setIsMuted] = useState(false);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
-  const fileUrl = `${API_URL}/api/admin-storage/download`;
-  const mime = file.mime?.toLowerCase() || '';
+  // Use streaming URL directly instead of blob
+  const streamUrl = `${API_URL}/api/admin-storage/stream?path=${encodeURIComponent(file.filename)}&token=${session?.access_token}`;
 
   useEffect(() => {
     // Cleanup audio when modal closes
@@ -641,22 +695,9 @@ function FilePreviewModal({ file, onClose, session }: { file: NextCloudFile; onC
   }, [audioElement]);
 
   const handleAudioPlay = async () => {
-    if (!audioElement) {
+    if (!audioElement && streamUrl) {
       const audio = new Audio();
-
-      // Fetch the file with authorization
-      const response = await fetch(fileUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify({ path: file.filename }),
-      });
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      audio.src = url;
+      audio.src = streamUrl;
       audio.muted = isMuted;
 
       setAudioElement(audio);
@@ -666,7 +707,7 @@ function FilePreviewModal({ file, onClose, session }: { file: NextCloudFile; onC
       audio.onended = () => setIsPlaying(false);
 
       audio.play();
-    } else {
+    } else if (audioElement) {
       if (isPlaying) {
         audioElement.pause();
       } else {
@@ -711,25 +752,25 @@ function FilePreviewModal({ file, onClose, session }: { file: NextCloudFile; onC
 
         {/* Content */}
         <div className="bg-brand-900/50 rounded-lg overflow-hidden">
-          {mime.startsWith('image/') && (
+          {isImageFile(file) && (
             <img
-              src={`${fileUrl}?path=${encodeURIComponent(file.filename)}`}
+              src={streamUrl}
               alt={file.basename}
               className="w-full max-h-[70vh] object-contain"
             />
           )}
 
-          {mime.startsWith('video/') && (
+          {isVideoFile(file) && (
             <video
               controls
               className="w-full max-h-[70vh]"
-              src={`${fileUrl}?path=${encodeURIComponent(file.filename)}`}
+              src={streamUrl}
             >
               Your browser does not support the video tag.
             </video>
           )}
 
-          {mime.startsWith('audio/') && (
+          {isAudioFile(file) && (
             <div className="p-12 flex flex-col items-center justify-center gap-6">
               {/* Audio Visualizer */}
               <div className="relative">
@@ -758,7 +799,8 @@ function FilePreviewModal({ file, onClose, session }: { file: NextCloudFile; onC
 
                 <button
                   onClick={handleAudioPlay}
-                  className="p-6 bg-brand-500 hover:bg-brand-600 rounded-full transition-colors"
+                  disabled={!streamUrl}
+                  className="p-6 bg-brand-500 hover:bg-brand-600 rounded-full transition-colors disabled:opacity-50"
                 >
                   {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
                 </button>
