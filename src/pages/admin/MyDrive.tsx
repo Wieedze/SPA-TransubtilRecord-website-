@@ -3,12 +3,46 @@ import { motion } from 'framer-motion';
 import {
   Upload, FolderPlus, Search, Home, ChevronRight,
   File, Folder, Image as ImageIcon, Music, Video, FileText,
-  Download, Trash2, RefreshCw, Loader2, Share2, Copy, Check
+  Download, Trash2, RefreshCw, Loader2, Share2, Copy, Check,
+  Grid3x3, List, ArrowUpDown, X, Play, Pause, Volume2, VolumeX
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import type { NextCloudFile } from '../../types/nextcloud';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+// Helper Functions
+const getFileIcon = (file: NextCloudFile, large = false) => {
+  const sizeClass = large ? 'w-12 h-12' : 'w-5 h-5';
+
+  if (file.type === 'directory') return <Folder className={`${sizeClass} text-brand-300`} />;
+
+  const mime = file.mime?.toLowerCase() || '';
+  if (mime.startsWith('image/')) return <ImageIcon className={`${sizeClass} text-blue-400`} />;
+  if (mime.startsWith('audio/')) return <Music className={`${sizeClass} text-purple-400`} />;
+  if (mime.startsWith('video/')) return <Video className={`${sizeClass} text-red-400`} />;
+  if (mime.includes('text') || mime.includes('pdf')) return <FileText className={`${sizeClass} text-green-400`} />;
+
+  return <File className={`${sizeClass} text-gray-400`} />;
+};
+
+const formatFileSize = (bytes: number) => {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+};
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
 
 export default function MyDrive() {
   const { session } = useAuth();
@@ -22,6 +56,9 @@ export default function MyDrive() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [fileToShare, setFileToShare] = useState<NextCloudFile | null>(null);
   const [previewFile, setPreviewFile] = useState<NextCloudFile | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+  const [sortBy, setSortBy] = useState<'name' | 'size' | 'date'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     loadFiles(currentPath);
@@ -153,41 +190,32 @@ export default function MyDrive() {
     }
   };
 
-  const getFileIcon = (file: NextCloudFile) => {
-    if (file.type === 'directory') return <Folder className="w-5 h-5 text-brand-300" />;
-
-    const mime = file.mime?.toLowerCase() || '';
-    if (mime.startsWith('image/')) return <ImageIcon className="w-5 h-5 text-blue-400" />;
-    if (mime.startsWith('audio/')) return <Music className="w-5 h-5 text-purple-400" />;
-    if (mime.startsWith('video/')) return <Video className="w-5 h-5 text-red-400" />;
-    if (mime.includes('text') || mime.includes('pdf')) return <FileText className="w-5 h-5 text-green-400" />;
-
-    return <File className="w-5 h-5 text-gray-400" />;
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   const pathParts = currentPath.split('/').filter(Boolean);
 
-  const filteredFiles = files.filter(file =>
-    file.basename?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredFiles = files
+    .filter(file =>
+      file.basename?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      // Toujours mettre les dossiers en premier
+      if (a.type === 'directory' && b.type !== 'directory') return -1;
+      if (a.type !== 'directory' && b.type === 'directory') return 1;
+
+      let comparison = 0;
+      switch (sortBy) {
+        case 'name':
+          comparison = (a.basename || '').localeCompare(b.basename || '');
+          break;
+        case 'size':
+          comparison = (a.size || 0) - (b.size || 0);
+          break;
+        case 'date':
+          comparison = new Date(a.lastmod || 0).getTime() - new Date(b.lastmod || 0).getTime();
+          break;
+      }
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -228,6 +256,55 @@ export default function MyDrive() {
         </div>
       </motion.div>
 
+      {/* View Controls & Sort */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex items-center justify-between gap-4"
+      >
+        {/* View Mode Toggle */}
+        <div className="flex items-center gap-2 bg-brand-800/50 border border-white/10 rounded-lg p-1">
+          <button
+            onClick={() => setViewMode('list')}
+            className={`p-2 rounded transition-colors ${
+              viewMode === 'list' ? 'bg-brand-500 text-white' : 'text-white/60 hover:text-white'
+            }`}
+            title="Vue liste"
+          >
+            <List className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`p-2 rounded transition-colors ${
+              viewMode === 'grid' ? 'bg-brand-500 text-white' : 'text-white/60 hover:text-white'
+            }`}
+            title="Vue grille"
+          >
+            <Grid3x3 className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Sort Controls */}
+        <div className="flex items-center gap-2">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as 'name' | 'size' | 'date')}
+            className="px-3 py-2 bg-white border border-white/10 rounded-lg text-sm text-black"
+          >
+            <option value="name">Nom</option>
+            <option value="size">Taille</option>
+            <option value="date">Date</option>
+          </select>
+          <button
+            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+            className="p-2 bg-brand-800/50 border border-white/10 rounded-lg hover:bg-brand-700 transition-colors"
+            title={sortOrder === 'asc' ? 'Croissant' : 'Décroissant'}
+          >
+            <ArrowUpDown className={`w-4 h-4 transition-transform ${sortOrder === 'desc' ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+      </motion.div>
+
       {/* Breadcrumb */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -255,13 +332,13 @@ export default function MyDrive() {
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search files..."
-          className="w-full pl-10 pr-4 py-2 bg-brand-800 border border-white/10 rounded-lg text-sm uppercase tracking-wider placeholder:text-white/40 focus:outline-none focus:border-brand-500"
+          className="w-full pl-10 pr-4 py-2 bg-white border border-white/10 rounded-lg text-sm uppercase tracking-wider text-black placeholder:text-black/50 focus:outline-none focus:border-brand-500"
         />
       </div>
 
@@ -281,7 +358,7 @@ export default function MyDrive() {
           </div>
         ) : filteredFiles.length === 0 ? (
           <div className="p-8 text-center text-white/60">No files found</div>
-        ) : (
+        ) : viewMode === 'list' ? (
           <div className="divide-y divide-white/10">
             {filteredFiles.map((file) => (
               <div
@@ -297,7 +374,7 @@ export default function MyDrive() {
                     onClick={() => {
                       if (file.type === 'directory') {
                         setCurrentPath(file.filename);
-                      } else if (file.mime?.startsWith('image/')) {
+                      } else if (file.mime?.startsWith('image/') || file.mime?.startsWith('video/') || file.mime?.startsWith('audio/')) {
                         setPreviewFile(file);
                       }
                     }}
@@ -343,6 +420,71 @@ export default function MyDrive() {
               </div>
             ))}
           </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+            {filteredFiles.map((file) => (
+              <motion.div
+                key={file.filename}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="group relative bg-brand-900/50 border border-white/10 rounded-lg p-4 hover:bg-white/5 transition-all hover:scale-105"
+              >
+                {/* File Icon */}
+                <button
+                  onClick={() => {
+                    if (file.type === 'directory') {
+                      setCurrentPath(file.filename);
+                    } else if (file.mime?.startsWith('image/') || file.mime?.startsWith('video/') || file.mime?.startsWith('audio/')) {
+                      setPreviewFile(file);
+                    }
+                  }}
+                  className="w-full"
+                >
+                  <div className="flex justify-center mb-3">
+                    <div className="text-brand-300">
+                      {getFileIcon(file, true)}
+                    </div>
+                  </div>
+                  <p className="font-medium text-sm truncate text-center">{file.basename}</p>
+                  <p className="text-xs text-white/40 text-center mt-1">
+                    {file.type === 'file' && formatFileSize(file.size)}
+                  </p>
+                </button>
+
+                {/* Actions (overlay on hover) */}
+                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {file.type === 'file' && (
+                    <>
+                      <button
+                        onClick={() => handleDownload(file)}
+                        className="p-1.5 bg-brand-900 hover:bg-brand-700 rounded transition-colors"
+                        title="Download"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setFileToShare(file);
+                          setShowShareModal(true);
+                        }}
+                        className="p-1.5 bg-brand-900 hover:bg-brand-700 rounded transition-colors"
+                        title="Share"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                      </button>
+                    </>
+                  )}
+                  <button
+                    onClick={() => handleDelete(file)}
+                    className="p-1.5 bg-brand-900 hover:bg-red-500 rounded transition-colors"
+                    title="Delete"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         )}
       </motion.div>
 
@@ -376,8 +518,8 @@ export default function MyDrive() {
       )}
 
       {/* Preview Modal */}
-      {previewFile && previewFile.mime?.startsWith('image/') && (
-        <ImagePreviewModal
+      {previewFile && (
+        <FilePreviewModal
           file={previewFile}
           onClose={() => setPreviewFile(null)}
           session={session}
@@ -456,7 +598,7 @@ function CreateFolderModal({ onClose, onCreate }: { onClose: () => void; onCreat
           value={folderName}
           onChange={(e) => setFolderName(e.target.value)}
           placeholder="Folder name"
-          className="w-full px-4 py-2 bg-brand-800 border border-white/10 rounded-lg mb-4 uppercase tracking-wider placeholder:text-white/40 focus:outline-none focus:border-brand-500"
+          className="w-full px-4 py-2 bg-white border border-white/10 rounded-lg mb-4 uppercase tracking-wider text-black placeholder:text-black/50 focus:outline-none focus:border-brand-500"
         />
 
         <div className="flex gap-3">
@@ -479,29 +621,165 @@ function CreateFolderModal({ onClose, onCreate }: { onClose: () => void; onCreat
   );
 }
 
-// Image Preview Modal Component
-function ImagePreviewModal({ file, onClose, session }: { file: NextCloudFile; onClose: () => void; session: any }) {
-  const imageUrl = `${API_URL}/api/nextcloud/download?path=${encodeURIComponent(file.filename)}`;
+// File Preview Modal Component (Images, Videos, Audio)
+function FilePreviewModal({ file, onClose, session }: { file: NextCloudFile; onClose: () => void; session: any }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+
+  const fileUrl = `${API_URL}/api/admin-storage/download`;
+  const mime = file.mime?.toLowerCase() || '';
+
+  useEffect(() => {
+    // Cleanup audio when modal closes
+    return () => {
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.src = '';
+      }
+    };
+  }, [audioElement]);
+
+  const handleAudioPlay = async () => {
+    if (!audioElement) {
+      const audio = new Audio();
+
+      // Fetch the file with authorization
+      const response = await fetch(fileUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify({ path: file.filename }),
+      });
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      audio.src = url;
+      audio.muted = isMuted;
+
+      setAudioElement(audio);
+
+      audio.onplay = () => setIsPlaying(true);
+      audio.onpause = () => setIsPlaying(false);
+      audio.onended = () => setIsPlaying(false);
+
+      audio.play();
+    } else {
+      if (isPlaying) {
+        audioElement.pause();
+      } else {
+        audioElement.play();
+      }
+    }
+  };
+
+  const toggleMute = () => {
+    if (audioElement) {
+      audioElement.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4" onClick={onClose}>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="max-w-4xl max-h-[90vh] relative"
+        className="max-w-4xl w-full relative"
         onClick={(e) => e.stopPropagation()}
       >
-        <img
-          src={imageUrl}
-          alt={file.basename}
-          className="max-w-full max-h-[90vh] object-contain"
-        />
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 rounded-lg transition-colors"
-        >
-          ✕
-        </button>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4 bg-brand-900/90 rounded-lg p-4">
+          <div className="flex items-center gap-3">
+            <div className="text-brand-300">
+              {getFileIcon(file, true)}
+            </div>
+            <div>
+              <h3 className="font-medium text-white">{file.basename}</h3>
+              <p className="text-xs text-white/60">{formatFileSize(file.size)}</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 bg-black/50 hover:bg-black/70 rounded-lg transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="bg-brand-900/50 rounded-lg overflow-hidden">
+          {mime.startsWith('image/') && (
+            <img
+              src={`${fileUrl}?path=${encodeURIComponent(file.filename)}`}
+              alt={file.basename}
+              className="w-full max-h-[70vh] object-contain"
+            />
+          )}
+
+          {mime.startsWith('video/') && (
+            <video
+              controls
+              className="w-full max-h-[70vh]"
+              src={`${fileUrl}?path=${encodeURIComponent(file.filename)}`}
+            >
+              Your browser does not support the video tag.
+            </video>
+          )}
+
+          {mime.startsWith('audio/') && (
+            <div className="p-12 flex flex-col items-center justify-center gap-6">
+              {/* Audio Visualizer */}
+              <div className="relative">
+                <div className="w-32 h-32 bg-gradient-to-br from-brand-500 to-brand-700 rounded-full flex items-center justify-center">
+                  <Music className="w-16 h-16 text-white" />
+                </div>
+                {isPlaying && (
+                  <div className="absolute inset-0 bg-brand-500/20 rounded-full animate-ping" />
+                )}
+              </div>
+
+              {/* Audio Info */}
+              <div className="text-center">
+                <h3 className="font-medium text-xl text-white mb-2">{file.basename}</h3>
+                <p className="text-sm text-white/60">{formatFileSize(file.size)}</p>
+              </div>
+
+              {/* Audio Controls */}
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={toggleMute}
+                  className="p-3 bg-brand-800 hover:bg-brand-700 rounded-full transition-colors"
+                >
+                  {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                </button>
+
+                <button
+                  onClick={handleAudioPlay}
+                  className="p-6 bg-brand-500 hover:bg-brand-600 rounded-full transition-colors"
+                >
+                  {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
+                </button>
+
+                <button
+                  onClick={() => {
+                    if (audioElement) {
+                      audioElement.pause();
+                      audioElement.currentTime = 0;
+                      setIsPlaying(false);
+                    }
+                  }}
+                  className="p-3 bg-brand-800 hover:bg-brand-700 rounded-full transition-colors"
+                  disabled={!audioElement}
+                >
+                  <RefreshCw className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </motion.div>
     </div>
   );
