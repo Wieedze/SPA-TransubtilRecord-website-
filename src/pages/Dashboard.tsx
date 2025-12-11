@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
 import { Link, useSearchParams } from "react-router-dom"
@@ -25,18 +25,32 @@ import {
   Download,
   ExternalLink,
   Globe,
+  MapPin,
 } from "lucide-react"
 import { getArtistById } from "../data/artists"
 import type { Artist } from "../types/artist"
+import SocialLinks from "../components/artists/SocialLinks"
+import HubArtisteAnimated from "../components/artists/HubArtisteAnimated"
+import artistHeaderLine from "../assets/artist_header_line.svg"
+import PhoneMockup from "../components/PhoneMockup"
+import { toPng } from "html-to-image"
 
 type TabType = "studio" | "demo" | "account" | "artist"
 
 export default function Dashboard() {
-  const { user, profile, signOut, isArtist, linkedArtistId } = useAuth()
+  const { user, profile, signOut, isArtist, linkedArtistId, hasStudioAccess } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [activeTab, setActiveTab] = useState<TabType>(
-    (searchParams.get("tab") as TabType) || "account"
-  )
+
+  // Determine default tab based on role
+  const getDefaultTab = (): TabType => {
+    const urlTab = searchParams.get("tab") as TabType
+    if (urlTab) return urlTab
+    // Artists go to artist tab by default
+    if (isArtist) return "artist"
+    return "account"
+  }
+
+  const [activeTab, setActiveTab] = useState<TabType>(getDefaultTab())
 
   // Get linked artist data if user is an artist
   const linkedArtist: Artist | undefined = linkedArtistId ? getArtistById(linkedArtistId) : undefined
@@ -71,6 +85,10 @@ export default function Dashboard() {
   })
   const [savingProfile, setSavingProfile] = useState(false)
 
+  // Story export state (for artist tab)
+  const [isExportingStory, setIsExportingStory] = useState(false)
+  const storyMockupRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (user) {
       loadStudioProjects()
@@ -92,6 +110,25 @@ export default function Dashboard() {
     // Update URL when tab changes
     setSearchParams({ tab: activeTab })
   }, [activeTab, setSearchParams])
+
+  // Redirect to valid tab if user doesn't have access to current tab
+  // Also redirect artists to artist tab on first load (when no tab specified in URL)
+  useEffect(() => {
+    const urlTab = searchParams.get("tab")
+
+    // If no tab in URL and user is artist, go to artist tab
+    if (!urlTab && isArtist) {
+      setActiveTab("artist")
+    }
+
+    // Block access to tabs user doesn't have permission for
+    if (activeTab === "studio" && !hasStudioAccess) {
+      setActiveTab("demo")
+    }
+    if (activeTab === "artist" && !isArtist) {
+      setActiveTab("account")
+    }
+  }, [activeTab, hasStudioAccess, isArtist, searchParams])
 
   const loadStudioProjects = async () => {
     try {
@@ -308,6 +345,30 @@ export default function Dashboard() {
     }
   }
 
+  // Export Story image for artist (like Instagram Generator)
+  const handleExportStory = useCallback(async () => {
+    if (!storyMockupRef.current || !linkedArtist) return
+
+    setIsExportingStory(true)
+
+    try {
+      // Story format dimensions: 1080x1920 (9:16)
+      const dataUrl = await toPng(storyMockupRef.current, {
+        canvasWidth: 1080,
+        canvasHeight: 1920,
+      })
+
+      const link = document.createElement("a")
+      link.download = `${linkedArtist.name.replace(/\s+/g, "-").toLowerCase()}-story.png`
+      link.href = dataUrl
+      link.click()
+    } catch (error) {
+      console.error("Export failed:", error)
+    } finally {
+      setIsExportingStory(false)
+    }
+  }, [linkedArtist])
+
   // Studio Projects helpers (from MyProjects.tsx)
   const getStatusIcon = (status: StudioProject["status"]) => {
     switch (status) {
@@ -415,26 +476,29 @@ export default function Dashboard() {
                 />
               )}
             </button>
-            <button
-              onClick={() => setActiveTab("studio")}
-              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
-                activeTab === "studio"
-                  ? "text-white"
-                  : "text-white/50 hover:text-white/80"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <Folder className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="hidden sm:inline">Studio</span>
-                <span className="sm:hidden">Studio</span>
-              </div>
-              {activeTab === "studio" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-500"
-                />
-              )}
-            </button>
+            {/* Studio Tab - Only visible for users with studio access (client, artist, admin) */}
+            {hasStudioAccess && (
+              <button
+                onClick={() => setActiveTab("studio")}
+                className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
+                  activeTab === "studio"
+                    ? "text-white"
+                    : "text-white/50 hover:text-white/80"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Folder className="w-4 h-4 md:w-5 md:h-5" />
+                  <span className="hidden sm:inline">Studio</span>
+                  <span className="sm:hidden">Studio</span>
+                </div>
+                {activeTab === "studio" && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-500"
+                  />
+                )}
+              </button>
+            )}
             <button
               onClick={() => setActiveTab("demo")}
               className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
@@ -473,7 +537,7 @@ export default function Dashboard() {
                 {activeTab === "artist" && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-500"
                   />
                 )}
               </button>
@@ -481,8 +545,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Studio Projects Tab */}
-        {activeTab === "studio" && (
+        {/* Studio Projects Tab - Only for users with studio access */}
+        {activeTab === "studio" && hasStudioAccess && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -767,33 +831,85 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="space-y-6"
+            className="space-y-8"
           >
             {linkedArtist ? (
               <>
-                {/* Artist Profile Card */}
-                <div className="border border-purple-500/30 rounded-2xl overflow-hidden bg-purple-500/5">
-                  <div className="flex flex-col md:flex-row">
-                    {/* Artist Image */}
-                    <div className="md:w-1/3 relative">
-                      <img
-                        src={linkedArtist.image_url}
-                        alt={linkedArtist.name}
-                        className="w-full h-64 md:h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-brand-900/80 to-transparent" />
-                    </div>
+                {/* Hero Section - Same as ArtistProfile */}
+                <div className="grid md:grid-cols-5 gap-8">
+                  {/* Image with HubArtisteAnimated */}
+                  <div className="md:col-span-2">
+                    <div
+                      className="relative mx-auto"
+                      style={{
+                        aspectRatio: '306 / 307',
+                        maxWidth: '400px',
+                        filter: 'drop-shadow(0 0 20px rgba(250, 244, 211, 0.4)) drop-shadow(0 0 30px rgba(250, 244, 211, 0.3))'
+                      }}
+                    >
+                      {/* SVG ClipPath Definition */}
+                      <svg width="0" height="0" style={{ position: 'absolute' }}>
+                        <defs>
+                          <clipPath id="hub-circle-clip-dashboard" clipPathUnits="objectBoundingBox">
+                            <circle cx="0.5" cy="0.5" r="0.42" />
+                          </clipPath>
+                        </defs>
+                      </svg>
 
-                    {/* Artist Info */}
-                    <div className="md:w-2/3 p-6 space-y-4">
+                      {/* Animated Hub SVG Frame */}
+                      <div className="absolute inset-0 w-full h-full z-10 opacity-90">
+                        <HubArtisteAnimated />
+                      </div>
+
+                      {/* Artist Image - clipped to exact circular area */}
+                      <div
+                        className="absolute w-full h-full"
+                        style={{
+                          clipPath: 'url(#hub-circle-clip-dashboard)'
+                        }}
+                      >
+                        <img
+                          src={linkedArtist.image_url}
+                          alt={linkedArtist.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = "/images/placeholder.webp"
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="md:col-span-3 flex flex-col justify-center space-y-6">
+                    {/* Header */}
+                    <div className="space-y-4">
                       <div>
-                        <p className="uppercase tracking-[0.25em] text-[11px] text-purple-400 mb-1">
+                        <h1 className="font-display text-4xl md:text-5xl font-bold capitalize">
+                          {linkedArtist.name}
+                        </h1>
+
+                        {/* Decorative Line */}
+                        <div className="mt-3">
+                          <img
+                            src={artistHeaderLine}
+                            alt=""
+                            className="w-full max-w-md opacity-60"
+                            aria-hidden="true"
+                          />
+                        </div>
+
+                        <p className="uppercase tracking-[0.25em] text-[11px] text-white/60 mt-1">
                           {linkedArtist.act}
                         </p>
-                        <h2 className="text-3xl font-bold uppercase tracking-[0.15em] text-white">
-                          {linkedArtist.name}
-                        </h2>
-                        <p className="text-white/60 mt-1">{linkedArtist.country}</p>
+                      </div>
+
+                      {/* Location */}
+                      <div className="flex items-center gap-2 text-white/60">
+                        <MapPin className="w-4 h-4" />
+                        <span className="uppercase tracking-[0.25em] text-[11px]">
+                          {linkedArtist.country}
+                        </span>
                       </div>
 
                       {/* Styles */}
@@ -801,106 +917,69 @@ export default function Dashboard() {
                         {linkedArtist.style.map((style) => (
                           <span
                             key={style}
-                            className="px-3 py-1 text-xs uppercase tracking-wider bg-white/10 border border-white/20 rounded-full text-white/80"
+                            className="px-3 py-1 rounded-full bg-brand-700/50 text-brand-300 uppercase tracking-[0.25em] text-[11px] border border-brand-300/20"
                           >
                             {style}
                           </span>
                         ))}
                       </div>
 
-                      {/* Description */}
-                      {linkedArtist.description && (
-                        <p className="text-white/70 text-sm leading-relaxed line-clamp-4">
-                          {linkedArtist.description}
-                        </p>
-                      )}
-
                       {/* Social Links */}
-                      <div className="flex flex-wrap gap-3 pt-2">
-                        {linkedArtist.social.soundcloud && (
-                          <a
-                            href={linkedArtist.social.soundcloud}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded-lg text-orange-400 text-xs uppercase tracking-wider hover:bg-orange-500/30 transition-colors flex items-center gap-2"
-                          >
-                            SoundCloud
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                        )}
-                        {linkedArtist.social.instagram && (
-                          <a
-                            href={linkedArtist.social.instagram}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 bg-pink-500/20 border border-pink-500/30 rounded-lg text-pink-400 text-xs uppercase tracking-wider hover:bg-pink-500/30 transition-colors flex items-center gap-2"
-                          >
-                            Instagram
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                        )}
-                        {linkedArtist.social.facebook && (
-                          <a
-                            href={linkedArtist.social.facebook}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-400 text-xs uppercase tracking-wider hover:bg-blue-500/30 transition-colors flex items-center gap-2"
-                          >
-                            Facebook
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                        )}
-                      </div>
+                      <SocialLinks social={linkedArtist.social} className="!gap-4" />
                     </div>
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  {/* Download Profile Image */}
-                  <div className="border border-white/10 rounded-xl p-6 bg-white/5">
-                    <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-4">
-                      Download Your Profile Image
-                    </h3>
-                    <p className="text-white/60 text-sm mb-4">
-                      Download your official artist profile image in high quality for use in promotional materials.
+                {/* Description */}
+                {linkedArtist.description && (
+                  <section className="space-y-3">
+                    <h2 className="text-xl font-semibold uppercase tracking-[0.25em]">
+                      Biography
+                    </h2>
+                    <p className="uppercase tracking-[0.25em] text-[11px] text-white/70 leading-relaxed">
+                      {linkedArtist.description}
                     </p>
-                    <a
-                      href={linkedArtist.image_url}
-                      download={`${linkedArtist.name.replace(/\s+/g, '-').toLowerCase()}-profile.jpg`}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500/20 border border-purple-500/30 rounded-lg text-purple-400 hover:bg-purple-500/30 transition-colors uppercase tracking-[0.25em] text-[11px]"
-                    >
-                      <Download className="w-4 h-4" />
-                      Download Image
-                    </a>
-                  </div>
+                  </section>
+                )}
 
-                  {/* View Public Page */}
-                  <div className="border border-white/10 rounded-xl p-6 bg-white/5">
-                    <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-4">
-                      Your Public Artist Page
-                    </h3>
-                    <p className="text-white/60 text-sm mb-4">
-                      View your public artist page on the Transubtil Records website.
-                    </p>
-                    <Link
-                      to={`/artists/${linkedArtist.slug}`}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 border border-white/20 rounded-lg text-white hover:bg-white/20 transition-colors uppercase tracking-[0.25em] text-[11px]"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      View Page
-                    </Link>
-                  </div>
+                {/* Download Button - Green like Instagram Generator */}
+                <div className="flex flex-col sm:flex-row gap-2 max-w-md">
+                  <button
+                    onClick={handleExportStory}
+                    disabled={isExportingStory}
+                    className="py-2 px-4 rounded-lg bg-brand-acid text-brand-900 font-medium uppercase tracking-wider text-[10px] hover:bg-brand-acid/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isExportingStory ? (
+                      <>
+                        <div className="w-3 h-3 border-2 border-brand-900 border-t-transparent rounded-full animate-spin" />
+                        Export en cours...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-3 h-3" />
+                        Générer Story
+                      </>
+                    )}
+                  </button>
+
+                  <Link
+                    to={`/artists/${linkedArtist.slug}`}
+                    className="py-2 px-4 rounded-lg border border-white/20 text-white font-medium uppercase tracking-wider text-[10px] hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    Page Publique
+                  </Link>
                 </div>
 
-                {/* Info Box */}
-                <div className="border border-purple-500/30 rounded-2xl p-6 bg-purple-500/5">
-                  <p className="text-sm text-white/70 leading-relaxed">
-                    <strong className="text-white">Artist Account:</strong> As an artist on Transubtil Records,
-                    you have access to your profile image and public page. If you need to update your artist
-                    information, please contact the label administration.
-                  </p>
+                {/* Hidden PhoneMockup for Story export */}
+                <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+                  <PhoneMockup
+                    ref={storyMockupRef}
+                    artist={linkedArtist}
+                    format="story"
+                  />
                 </div>
+
               </>
             ) : (
               /* No linked artist */

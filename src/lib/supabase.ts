@@ -17,7 +17,7 @@ export const supabase = createClient(
 // Database types (will be generated from Supabase later)
 export interface Profile {
   id: string
-  role: "client" | "artist" | "admin"
+  role: "user" | "client" | "artist" | "admin"
   full_name: string | null
   company: string | null
   has_studio_access: boolean

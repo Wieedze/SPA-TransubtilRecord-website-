@@ -263,30 +263,6 @@ export default function ArtistProfile() {
           </motion.section>
         )}
 
-        {/* Videos Section */}
-        {artist.videos && artist.videos.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.75 }}
-            className="space-y-6"
-          >
-            <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">Live Performances</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {artist.videos.map((_, index) => (
-                <div
-                  key={index}
-                  className="aspect-video bg-brand-700 rounded-xl border border-white/10 overflow-hidden"
-                >
-                  {/* TODO: Add YouTube embed when videos are available */}
-                  <div className="w-full h-full flex items-center justify-center text-white/40 uppercase tracking-[0.25em] text-[11px]">
-                    Video Player
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.section>
-        )}
 
         {/* Releases Section */}
         {artistReleases.length > 0 && (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
-import { Users, CheckCircle, XCircle, Mail, Calendar, Music, ChevronDown, AlertTriangle } from 'lucide-react'
+import { Users, CheckCircle, XCircle, Mail, Calendar, Music, ChevronDown, AlertTriangle, Search } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import type { Profile } from '../../lib/supabase'
 import { artists } from '../../data/artists'
@@ -17,6 +17,7 @@ export default function UserManagement() {
   const [showRoleDropdown, setShowRoleDropdown] = useState<string | null>(null)
   const [showArtistDropdown, setShowArtistDropdown] = useState<string | null>(null)
   const [confirmAdminPromotion, setConfirmAdminPromotion] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     fetchUsers()
@@ -83,10 +84,6 @@ export default function UserManagement() {
             ? { ...user, has_studio_access: !currentAccess }
             : user
         )
-      )
-
-      alert(
-        `Studio access ${!currentAccess ? 'granted' : 'revoked'} successfully!`
       )
     } catch (error) {
       console.error('Error updating studio access:', error)
@@ -178,14 +175,26 @@ export default function UserManagement() {
       admin: 'bg-red-500/20 text-red-400 border-red-500/30',
       artist: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
       client: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+      user: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
     }
-    return badges[role] || badges.client
+    return badges[role] || badges.user
   }
 
   const getRoleIcon = (role: Profile['role']) => {
     if (role === 'artist') return <Music className="w-3 h-3" />
     return null
   }
+
+  // Filter users based on search query
+  const filteredUsers = users.filter((user) => {
+    const query = searchQuery.toLowerCase()
+    return (
+      user.full_name?.toLowerCase().includes(query) ||
+      user.email?.toLowerCase().includes(query) ||
+      user.role?.toLowerCase().includes(query) ||
+      user.company?.toLowerCase().includes(query)
+    )
+  })
 
   return (
     <>
@@ -201,11 +210,24 @@ export default function UserManagement() {
           transition={{ duration: 0.6 }}
           className="space-y-3"
         >
-          <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-white/60" />
-            <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-[0.25em]">
-              User Management
-            </h1>
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <Users className="w-8 h-8 text-white/60" />
+              <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-[0.25em]">
+                User Management
+              </h1>
+            </div>
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                type="text"
+                placeholder="Search users..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/40 text-sm focus:outline-none focus:border-white/40 w-64"
+              />
+            </div>
           </div>
           <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
             Manage roles, artist links, and studio access for users
@@ -266,10 +288,10 @@ export default function UserManagement() {
                 Loading users...
               </p>
             </div>
-          ) : users.length === 0 ? (
+          ) : filteredUsers.length === 0 ? (
             <div className="p-12 text-center">
               <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
-                No users found
+                {searchQuery ? 'No users match your search' : 'No users found'}
               </p>
             </div>
           ) : (
@@ -295,13 +317,10 @@ export default function UserManagement() {
                     <th className="px-6 py-4 text-left uppercase tracking-[0.25em] text-[11px] font-medium text-white/80">
                       Joined
                     </th>
-                    <th className="px-6 py-4 text-center uppercase tracking-[0.25em] text-[11px] font-medium text-white/80">
-                      Actions
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10">
-                  {users.map((user) => (
+                  {filteredUsers.map((user) => (
                     <tr
                       key={user.id}
                       className="hover:bg-white/5 transition-colors"
@@ -342,7 +361,7 @@ export default function UserManagement() {
                           {/* Role Dropdown */}
                           {showRoleDropdown === user.id && (
                             <div className="absolute top-full left-0 mt-2 bg-brand-800 border border-white/20 rounded-lg shadow-xl z-10 min-w-[150px]">
-                              {(['client', 'artist', 'admin'] as const).map((role) => (
+                              {(['user', 'client', 'artist', 'admin'] as const).map((role) => (
                                 <button
                                   key={role}
                                   onClick={(e) => {
@@ -415,20 +434,31 @@ export default function UserManagement() {
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        {user.has_studio_access ? (
+                        {/* Admins always have studio access */}
+                        {user.role === 'admin' ? (
                           <div className="flex items-center gap-2 text-green-400">
                             <CheckCircle className="w-5 h-5" />
                             <span className="text-sm uppercase tracking-wider">
-                              Enabled
+                              Auto (Admin)
                             </span>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-2 text-white/40">
-                            <XCircle className="w-5 h-5" />
+                          <button
+                            onClick={() => toggleStudioAccess(user.id, user.has_studio_access)}
+                            disabled={updating === user.id}
+                            className={`flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity disabled:opacity-50 ${
+                              user.has_studio_access ? 'text-green-400' : 'text-white/40'
+                            }`}
+                          >
+                            {user.has_studio_access ? (
+                              <CheckCircle className="w-5 h-5" />
+                            ) : (
+                              <XCircle className="w-5 h-5" />
+                            )}
                             <span className="text-sm uppercase tracking-wider">
-                              Disabled
+                              {updating === user.id ? 'Updating...' : user.has_studio_access ? 'Enabled' : 'Disabled'}
                             </span>
-                          </div>
+                          </button>
                         )}
                       </td>
                       <td className="px-6 py-4">
@@ -437,30 +467,6 @@ export default function UserManagement() {
                           <span className="text-sm">
                             {new Date(user.created_at).toLocaleDateString()}
                           </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex justify-center">
-                          <button
-                            onClick={() =>
-                              toggleStudioAccess(
-                                user.id,
-                                user.has_studio_access
-                              )
-                            }
-                            disabled={updating === user.id}
-                            className={`px-4 py-2 rounded-lg text-xs uppercase tracking-wider font-medium transition-colors ${
-                              user.has_studio_access
-                                ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30'
-                                : 'bg-green-500/20 text-green-400 hover:bg-green-500/30 border border-green-500/30'
-                            } disabled:opacity-50 disabled:cursor-not-allowed`}
-                          >
-                            {updating === user.id
-                              ? 'Updating...'
-                              : user.has_studio_access
-                              ? 'Revoke Access'
-                              : 'Grant Access'}
-                          </button>
                         </div>
                       </td>
                     </tr>
@@ -472,18 +478,28 @@ export default function UserManagement() {
         </motion.div>
 
         {/* Info Boxes */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="border border-blue-500/30 rounded-2xl p-6 bg-blue-500/5"
+            className="border border-gray-500/30 rounded-2xl p-4 bg-gray-500/5"
           >
             <p className="text-sm text-white/70 leading-relaxed">
-              <strong className="text-white">Studio Access:</strong> Users with
-              studio access can submit studio requests and upload files to the
-              studio. Only grant access to authorized clients with active
-              agreements.
+              <strong className="text-gray-400">User:</strong> Basic access.
+              Can only submit demos to the label.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.45 }}
+            className="border border-blue-500/30 rounded-2xl p-4 bg-blue-500/5"
+          >
+            <p className="text-sm text-white/70 leading-relaxed">
+              <strong className="text-blue-400">Client:</strong> Has access to
+              studio requests and demo submissions.
             </p>
           </motion.div>
 
@@ -491,12 +507,23 @@ export default function UserManagement() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="border border-purple-500/30 rounded-2xl p-6 bg-purple-500/5"
+            className="border border-purple-500/30 rounded-2xl p-4 bg-purple-500/5"
           >
             <p className="text-sm text-white/70 leading-relaxed">
-              <strong className="text-white">Artist Role:</strong> Users with the
-              artist role can be linked to an artist from the catalogue. This allows
-              them to download their profile images and access artist-specific features.
+              <strong className="text-purple-400">Artist:</strong> Studio + demo access,
+              plus linked artist profile and Instagram generator.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.55 }}
+            className="border border-red-500/30 rounded-2xl p-4 bg-red-500/5"
+          >
+            <p className="text-sm text-white/70 leading-relaxed">
+              <strong className="text-red-400">Admin:</strong> Full access to all
+              features including user management.
             </p>
           </motion.div>
         </div>

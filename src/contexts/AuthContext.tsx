@@ -13,6 +13,9 @@ interface AuthContextType {
   refreshProfile: () => Promise<void>
   isAdmin: boolean
   isArtist: boolean
+  isClient: boolean
+  isUser: boolean
+  hasStudioAccess: boolean
   linkedArtistId: number | null
 }
 
@@ -117,7 +120,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const isAdmin = profile?.role === "admin"
   const isArtist = profile?.role === "artist"
+  const isClient = profile?.role === "client"
+  const isUser = profile?.role === "user"
   const linkedArtistId = profile?.linked_artist_id ?? null
+
+  // Studio access: admins always have it, others need explicit access
+  const hasStudioAccess = isAdmin || profile?.has_studio_access === true
 
   const refreshProfile = async () => {
     if (user) {
@@ -136,6 +144,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refreshProfile,
     isAdmin,
     isArtist,
+    isClient,
+    isUser,
+    hasStudioAccess,
     linkedArtistId,
   }
 
