@@ -201,10 +201,23 @@ export async function validateShareLink(
 export async function incrementDownloadCount(token: string): Promise<void> {
   const supabase = getSupabaseAdminClient();
 
+  // First get current count
+  const { data: current, error: fetchError } = await supabase
+    .from('shared_links')
+    .select('download_count')
+    .eq('token', token)
+    .single();
+
+  if (fetchError) {
+    console.error('Error fetching download count:', fetchError);
+    throw new Error('Failed to fetch download count');
+  }
+
+  // Then update with incremented value
   const { error } = await supabase
     .from('shared_links')
     .update({
-      download_count: supabase.sql`download_count + 1`,
+      download_count: (current?.download_count || 0) + 1,
       last_accessed_at: new Date().toISOString(),
     })
     .eq('token', token);

@@ -255,7 +255,7 @@ router.post('/:token/download', async (req, res) => {
     const link = validation.link!;
 
     // Get the file from SFTP (connexion déjà établie au démarrage)
-    const { O2SwitchStorage } = await import('../src/lib/sftp.js');
+    const { O2SwitchStorage } = await import('./sftp.js');
     const storage = O2SwitchStorage.getInstance();
     const fileBuffer = await storage.downloadAdminFile(link.file_path);
 

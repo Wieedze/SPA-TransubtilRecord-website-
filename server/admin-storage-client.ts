@@ -116,9 +116,9 @@ export class AdminStorageClient {
         size: stat.size,
         modifyTime: stat.modifyTime,
         accessTime: stat.accessTime,
-        rights: stat.rights,
-        owner: stat.owner,
-        group: stat.group,
+        rights: (stat as any).rights,
+        owner: (stat as any).owner,
+        group: (stat as any).group,
       };
     } catch (error) {
       console.error('❌ Error uploading file:', error);
@@ -174,9 +174,9 @@ export class AdminStorageClient {
         size: stat.size,
         modifyTime: stat.modifyTime,
         accessTime: stat.accessTime,
-        rights: stat.rights,
-        owner: stat.owner,
-        group: stat.group,
+        rights: (stat as any).rights,
+        owner: (stat as any).owner,
+        group: (stat as any).group,
       };
     } catch (error) {
       console.error('❌ Error creating directory:', error);
@@ -227,9 +227,9 @@ export class AdminStorageClient {
         size: stat.size,
         modifyTime: stat.modifyTime,
         accessTime: stat.accessTime,
-        rights: stat.rights,
-        owner: stat.owner,
-        group: stat.group,
+        rights: (stat as any).rights,
+        owner: (stat as any).owner,
+        group: (stat as any).group,
       };
     } catch (error) {
       console.error('❌ Error getting file info:', error);

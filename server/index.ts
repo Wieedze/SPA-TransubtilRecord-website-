@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { fileTypeFromBuffer } from 'file-type';
 import { createClient } from '@supabase/supabase-js';
-import { O2SwitchStorage } from '../src/lib/sftp.js';
+import { O2SwitchStorage } from './sftp.js';
 import adminStorageRouter from './admin-storage.js';
 import shareRouter from './share-routes.js';
 import catalogueRouter from './catalogue-routes.js';

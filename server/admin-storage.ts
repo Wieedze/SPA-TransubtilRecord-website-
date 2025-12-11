@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import { O2SwitchStorage } from '../src/lib/sftp.js';
+import { O2SwitchStorage } from './sftp.js';
 import { createClient } from '@supabase/supabase-js';
 
 const router = express.Router();

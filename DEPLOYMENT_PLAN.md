@@ -480,28 +480,32 @@ export default defineConfig({
 
 ---
 
-## Informations à Collecter
-
-Avant de commencer, rassemble ces informations :
+## Informations Collectées ✅
 
 1. **o2switch SFTP :**
    - ✅ Host : `barbotte.o2switch.net`
-   - ❓ Username : `__________`
-   - ❓ Password : `__________`
+   - ✅ Username : `faji2535`
+   - ✅ Password : (voir fichier `.env`)
+   - ✅ Base Path : `/home/faji2535/public_html/`
 
 2. **Backend Node.js :**
-   - ❓ Où est-il hébergé ? `__________`
-   - ❓ URL de l'API : `__________`
-   - ❓ Port : `__________`
+   - ✅ Port : `3001`
+   - ✅ Fonctionnalités :
+     - Upload SFTP (demo submissions, studio requests)
+     - Admin Storage (MyDrive) → `/home/faji2535/admin-files`
+     - File Sharing (liens publics)
+     - API Catalogue (artists, releases)
+   - ⚠️ **À déployer sur un service externe** (Railway/Render) car o2switch ne supporte pas Node.js
 
 3. **Supabase :**
-   - ❓ Project URL : `__________`
-   - ❓ Anon Key : `__________`
-   - ❓ Service Role Key : `__________`
+   - ✅ Project URL : `https://ezcdwxpvpydmeimhgsey.supabase.co/`
+   - ✅ Anon Key : (voir fichier `.env`)
+   - ✅ Service Role Key : (voir fichier `.env`)
 
 4. **Domaine :**
    - ✅ Domaine principal : `transubtil-record.org`
-   - ❓ Accès cPanel : `__________`
+   - ✅ Public uploads : `https://transubtil-record.org/public-uploads/users`
+   - ✅ Shared links : `https://transubtil-record.org/shared`
 
 5. **IP Whitelisting :**
    - ✅ IP actuelle : `176.176.19.73`
@@ -510,22 +514,78 @@ Avant de commencer, rassemble ces informations :
 
 ## Prochaines Étapes Immédiates
 
-1. **Déterminer où héberger le backend Node.js**
-   - Vérifier si o2switch supporte Node.js
-   - Sinon, choisir un service alternatif (Railway recommandé)
+### Phase 1 : Déployer le Backend sur Railway (Gratuit)
 
-2. **Vérifier le contenu actuel de /public_html/**
-   - Se connecter en SFTP
-   - Lister ce qui cause l'affichage de phpMyAdmin
+1. **Créer un compte Railway**
+   - Aller sur https://railway.app/
+   - Se connecter avec GitHub
 
-3. **Configurer les variables d'environnement de production**
-   - Créer `.env.production`
-   - Rebuild l'application
+2. **Déployer le backend**
+   ```bash
+   # Créer un projet Railway depuis le repo GitHub
+   # Ou utiliser Railway CLI
+   npm install -g @railway/cli
+   railway login
+   railway init
+   railway up
+   ```
 
-4. **Déployer progressivement**
-   - D'abord le backend
-   - Puis le frontend
-   - Tester à chaque étape
+3. **Configurer les variables d'environnement sur Railway**
+   ```env
+   PORT=3001
+   NODE_ENV=production
+   VITE_SUPABASE_URL=https://ezcdwxpvpydmeimhgsey.supabase.co/
+   VITE_SUPABASE_ANON_KEY=[ta-clé]
+   O2SWITCH_SFTP_HOST=barbotte.o2switch.net
+   O2SWITCH_SFTP_PORT=22
+   O2SWITCH_SFTP_USER=faji2535
+   O2SWITCH_SFTP_PASSWORD=[ton-password]
+   O2SWITCH_BASE_PATH=/home/faji2535/public_html/public-uploads/users
+   O2SWITCH_PUBLIC_URL=https://transubtil-record.org/public-uploads/users
+   ADMIN_STORAGE_PATH=/home/faji2535/admin-files
+   VITE_APP_URL=https://transubtil-record.org
+   ```
+
+4. **Noter l'URL de l'API Railway**
+   - Exemple : `https://transubtil-backend.up.railway.app`
+
+### Phase 2 : Préparer le Frontend
+
+1. **Créer `.env.production`** avec l'URL du backend Railway
+
+2. **Build le frontend**
+   ```bash
+   npm run build
+   ```
+
+3. **Le fichier `.htaccess` est déjà créé dans `public/`**
+
+### Phase 3 : Déployer le Frontend sur o2switch
+
+1. **Se connecter via SFTP**
+   ```bash
+   sftp faji2535@barbotte.o2switch.net
+   ```
+
+2. **Sauvegarder l'existant**
+   ```bash
+   cd /home/faji2535
+   mkdir backup_$(date +%Y%m%d)
+   # Déplacer phpMyAdmin ou autres fichiers
+   ```
+
+3. **Upload les fichiers**
+   ```bash
+   cd public_html
+   put -r dist/* .
+   ```
+
+### Phase 4 : Configuration finale
+
+1. **Mettre à jour Supabase** (Authentication > URL Configuration)
+   - Ajouter `https://transubtil-record.org` aux URLs autorisées
+
+2. **Tester toutes les fonctionnalités**
 
 ---
 
@@ -540,4 +600,4 @@ Avant de commencer, rassemble ces informations :
 
 **Créé le :** 2025-12-11
 **Dernière mise à jour :** 2025-12-11
-**Status :** 📋 Plan prêt, en attente de déploiement
+**Status :** 🚀 Informations collectées - Prêt pour le déploiement

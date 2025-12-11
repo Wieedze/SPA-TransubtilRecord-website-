@@ -8,8 +8,11 @@
     "dev:server": "tsx watch server/index.ts",
     "dev:all": "npm run dev & npm run dev:server",
     "build": "vite build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:all": "npm run build && npm run build:server",
     "preview": "vite preview",
-    "server": "tsx server/index.ts"
+    "server": "tsx server/index.ts",
+    "server:prod": "node dist-server/server/index.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.83.0",
