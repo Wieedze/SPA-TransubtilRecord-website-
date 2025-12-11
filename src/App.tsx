@@ -20,6 +20,8 @@ import Artists from "./pages/Artists.tsx"
 import ArtistProfile from "./pages/ArtistProfile.tsx"
 import Releases from "./pages/Releases.tsx"
 import About from "./pages/About.tsx"
+import InstagramGenerator from "./pages/InstagramGenerator.tsx"
+import CatalogueManager from "./pages/admin/CatalogueManager.tsx"
 import NotFound from "./pages/NotFound.tsx"
 
 function App() {
@@ -117,6 +119,22 @@ function App() {
             <Route path="/artists/:slug" element={<ArtistProfile />} />
             <Route path="/releases" element={<Releases />} />
             <Route path="/about" element={<About />} />
+            <Route
+              path="/admin/instagram-generator"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <InstagramGenerator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/catalogue"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <CatalogueManager />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

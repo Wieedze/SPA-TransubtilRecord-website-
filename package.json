@@ -23,6 +23,7 @@
     "express": "^5.2.1",
     "file-type": "^21.1.1",
     "framer-motion": "^11.0.0",
+    "html-to-image": "^1.11.13",
     "lucide-react": "^0.441.0",
     "motion": "^12.23.25",
     "multer": "^2.0.2",
