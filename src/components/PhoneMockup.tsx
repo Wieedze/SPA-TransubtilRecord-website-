@@ -180,11 +180,11 @@ const PhoneMockup = forwardRef<HTMLDivElement, PhoneMockupProps>(
               </div>
 
               {/* Artist Info Section */}
-              <div className="flex-1 flex flex-col justify-center items-center text-center mt-2 space-y-1.5">
+              <div className="flex-1 flex flex-col justify-center items-center text-center mt-3 space-y-2">
                 {/* Name */}
                 <h1
                   className="font-display font-bold capitalize text-white"
-                  style={{ fontSize: `${18 * scale * 2.5}px` }}
+                  style={{ fontSize: `${28 * scale * 2.5}px` }}
                 >
                   {artist.name}
                 </h1>
@@ -195,37 +195,37 @@ const PhoneMockup = forwardRef<HTMLDivElement, PhoneMockupProps>(
                   alt=""
                   className="opacity-60"
                   style={{
-                    width: "80%",
-                    maxWidth: "150px",
+                    width: "85%",
+                    maxWidth: "180px",
                   }}
                 />
 
                 {/* Act Type */}
                 <p
                   className="uppercase tracking-[0.25em] text-white/60"
-                  style={{ fontSize: `${7 * scale * 2.5}px` }}
+                  style={{ fontSize: `${11 * scale * 2.5}px` }}
                 >
                   {artist.act}
                 </p>
 
                 {/* Location */}
                 <div
-                  className="flex items-center gap-1 text-white/60"
-                  style={{ fontSize: `${7 * scale * 2.5}px` }}
+                  className="flex items-center gap-1.5 text-white/60"
+                  style={{ fontSize: `${11 * scale * 2.5}px` }}
                 >
-                  <MapPin style={{ width: `${8 * scale * 2.5}px`, height: `${8 * scale * 2.5}px` }} />
+                  <MapPin style={{ width: `${12 * scale * 2.5}px`, height: `${12 * scale * 2.5}px` }} />
                   <span className="uppercase tracking-[0.25em]">{artist.country}</span>
                 </div>
 
                 {/* Styles Tags */}
-                <div className="flex flex-wrap justify-center gap-1 mt-1">
+                <div className="flex flex-wrap justify-center gap-1.5 mt-2">
                   {artist.style.map((style) => (
                     <span
                       key={style}
                       className="rounded-full text-white/90 uppercase tracking-[0.15em]"
                       style={{
-                        fontSize: `${6 * scale * 2.5}px`,
-                        padding: `${2 * scale * 2.5}px ${6 * scale * 2.5}px`,
+                        fontSize: `${9 * scale * 2.5}px`,
+                        padding: `${3 * scale * 2.5}px ${8 * scale * 2.5}px`,
                         backgroundColor: "rgba(26, 26, 26, 0.5)",
                         border: "1px solid rgba(250, 244, 211, 0.2)",
                       }}
@@ -237,22 +237,22 @@ const PhoneMockup = forwardRef<HTMLDivElement, PhoneMockupProps>(
 
                 {/* Social Links */}
                 <div
-                  className="flex items-center justify-center gap-2 mt-2"
-                  style={{ fontSize: `${10 * scale * 2.5}px` }}
+                  className="flex items-center justify-center gap-3 mt-3"
+                  style={{ fontSize: `${14 * scale * 2.5}px` }}
                 >
                   {artist.social.soundcloud && (
                     <div className="text-white/60">
-                      <Music2 style={{ width: `${12 * scale * 2.5}px`, height: `${12 * scale * 2.5}px` }} />
+                      <Music2 style={{ width: `${18 * scale * 2.5}px`, height: `${18 * scale * 2.5}px` }} />
                     </div>
                   )}
                   {artist.social.instagram && (
                     <div className="text-white/60">
-                      <Instagram style={{ width: `${12 * scale * 2.5}px`, height: `${12 * scale * 2.5}px` }} />
+                      <Instagram style={{ width: `${18 * scale * 2.5}px`, height: `${18 * scale * 2.5}px` }} />
                     </div>
                   )}
                   {artist.social.facebook && (
                     <div className="text-white/60">
-                      <Facebook style={{ width: `${12 * scale * 2.5}px`, height: `${12 * scale * 2.5}px` }} />
+                      <Facebook style={{ width: `${18 * scale * 2.5}px`, height: `${18 * scale * 2.5}px` }} />
                     </div>
                   )}
                 </div>
@@ -260,10 +260,10 @@ const PhoneMockup = forwardRef<HTMLDivElement, PhoneMockupProps>(
                 {/* Description */}
                 {artist.description && (
                   <p
-                    className="text-white/50 text-center mt-2 leading-relaxed line-clamp-4"
+                    className="text-white/70 text-center mt-4 leading-relaxed line-clamp-6"
                     style={{
-                      fontSize: `${5 * scale * 2.5}px`,
-                      maxWidth: "90%",
+                      fontSize: `${11 * scale * 2.5}px`,
+                      maxWidth: "95%",
                     }}
                   >
                     {artist.description}

@@ -174,6 +174,56 @@ export default function MobileMenuModal({
                   >
                     Studio Requests
                   </NavLink>
+                  <NavLink
+                    to="/admin/catalogue"
+                    onClick={onClose}
+                    className={({ isActive }) =>
+                      `uppercase tracking-[0.25em] text-2xl font-medium transition-colors text-center ${
+                        isActive ? "text-white" : "text-white/60"
+                      }`
+                    }
+                    style={{
+                      filter: "drop-shadow(0 0 0px rgba(250, 244, 211, 0))",
+                      transition: "filter 0s, filter 0.6s ease-out, color 0.3s",
+                    }}
+                    onTouchStart={(e) => {
+                      e.currentTarget.style.transition = "filter 0s"
+                      e.currentTarget.style.filter =
+                        "drop-shadow(0 0 20px rgba(250, 244, 211, 1)) drop-shadow(0 0 10px rgba(250, 244, 211, 1))"
+                    }}
+                    onTouchEnd={(e) => {
+                      e.currentTarget.style.transition = "filter 0.6s ease-out"
+                      e.currentTarget.style.filter =
+                        "drop-shadow(0 0 0px rgba(250, 244, 211, 0))"
+                    }}
+                  >
+                    Catalogue
+                  </NavLink>
+                  <NavLink
+                    to="/admin/instagram-generator"
+                    onClick={onClose}
+                    className={({ isActive }) =>
+                      `uppercase tracking-[0.25em] text-2xl font-medium transition-colors text-center ${
+                        isActive ? "text-white" : "text-white/60"
+                      }`
+                    }
+                    style={{
+                      filter: "drop-shadow(0 0 0px rgba(250, 244, 211, 0))",
+                      transition: "filter 0s, filter 0.6s ease-out, color 0.3s",
+                    }}
+                    onTouchStart={(e) => {
+                      e.currentTarget.style.transition = "filter 0s"
+                      e.currentTarget.style.filter =
+                        "drop-shadow(0 0 20px rgba(250, 244, 211, 1)) drop-shadow(0 0 10px rgba(250, 244, 211, 1))"
+                    }}
+                    onTouchEnd={(e) => {
+                      e.currentTarget.style.transition = "filter 0.6s ease-out"
+                      e.currentTarget.style.filter =
+                        "drop-shadow(0 0 0px rgba(250, 244, 211, 0))"
+                    }}
+                  >
+                    Instagram Generator
+                  </NavLink>
                 </>
               )}
             </nav>

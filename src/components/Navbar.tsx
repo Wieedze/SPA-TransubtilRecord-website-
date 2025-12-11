@@ -211,6 +211,30 @@ export default function Navbar() {
                     >
                       MyDrive
                     </NavLink>
+                    <NavLink
+                      to="/admin/catalogue"
+                      className={({ isActive }) =>
+                        `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
+                          isActive
+                            ? "bg-brand-500 text-white"
+                            : "text-white/80 hover:bg-white/5 hover:text-white"
+                        }`
+                      }
+                    >
+                      Catalogue
+                    </NavLink>
+                    <NavLink
+                      to="/admin/instagram-generator"
+                      className={({ isActive }) =>
+                        `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
+                          isActive
+                            ? "bg-brand-500 text-white"
+                            : "text-white/80 hover:bg-white/5 hover:text-white"
+                        }`
+                      }
+                    >
+                      Instagram Generator
+                    </NavLink>
                     </div>
                   </div>
                 )}

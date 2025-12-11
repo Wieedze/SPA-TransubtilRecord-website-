@@ -7,6 +7,7 @@ import { createClient } from '@supabase/supabase-js';
 import { O2SwitchStorage } from '../src/lib/sftp.js';
 import adminStorageRouter from './admin-storage.js';
 import shareRouter from './share-routes.js';
+import catalogueRouter from './catalogue-routes.js';
 
 dotenv.config({ path: '.env.local' });
 
@@ -38,6 +39,9 @@ app.use('/api/admin-storage', adminStorageRouter); // New route name
 // File Sharing routes (public and admin)
 app.use('/api/share', shareRouter); // Admin routes: /api/share/create, /api/share/list, etc.
 app.use('/api/shared', shareRouter); // Public routes: /api/shared/:token, /api/shared/:token/download
+
+// Catalogue management routes (artists & releases)
+app.use('/api/catalogue', catalogueRouter);
 
 // Multer configuration pour gérer les fichiers volumineux
 const upload = multer({
