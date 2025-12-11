@@ -1,10 +1,9 @@
 import { useParams, Link, Navigate } from "react-router-dom"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
 import { ArrowLeft, MapPin, ExternalLink } from "lucide-react"
-import { getArtistBySlug } from "../data/artists"
-import { getReleasesByArtist } from "../data/releases"
+import { getArtistBySlug, getReleasesByArtist, type Artist, type Release } from "../lib/catalogue"
 import SocialLinks from "../components/artists/SocialLinks"
 import BookingForm from "../components/BookingForm"
 import SoundCloudPlayer from "../components/SoundCloudPlayer"
@@ -14,16 +13,51 @@ import DecryptedText from "../components/DecryptedText"
 
 export default function ArtistProfile() {
   const { slug } = useParams<{ slug: string }>()
-  const artist = slug ? getArtistBySlug(slug) : undefined
-  const artistReleases = artist ? getReleasesByArtist(artist.name) : []
+  const [artist, setArtist] = useState<Artist | null>(null)
+  const [artistReleases, setArtistReleases] = useState<Release[]>([])
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
-  // Scroll to top when component mounts or slug changes
+  // Scroll to top and load data when component mounts or slug changes
   useEffect(() => {
     window.scrollTo(0, 0)
+    if (slug) {
+      loadArtist(slug)
+    }
   }, [slug])
 
+  async function loadArtist(artistSlug: string) {
+    try {
+      setLoading(true)
+      const artistData = await getArtistBySlug(artistSlug)
+      if (!artistData) {
+        setNotFound(true)
+        return
+      }
+      setArtist(artistData)
+      const releases = await getReleasesByArtist(artistData.name)
+      setArtistReleases(releases)
+    } catch (err) {
+      console.error("Error loading artist:", err)
+      setNotFound(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="mx-auto max-w-6xl">
+        <div className="flex items-center justify-center py-24">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-500"></div>
+        </div>
+      </section>
+    )
+  }
+
   // If artist not found, redirect to artists page
-  if (!artist) {
+  if (notFound || !artist) {
     return <Navigate to="/artists" replace />
   }
 
@@ -239,7 +273,7 @@ export default function ArtistProfile() {
           >
             <h2 className="text-2xl font-semibold uppercase tracking-[0.25em]">Live Performances</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {artist.videos.map((videoUrl, index) => (
+              {artist.videos.map((_, index) => (
                 <div
                   key={index}
                   className="aspect-video bg-brand-700 rounded-xl border border-white/10 overflow-hidden"
@@ -289,7 +323,7 @@ export default function ArtistProfile() {
                   {/* Cover Image */}
                   <div className="aspect-square bg-brand-700 rounded-lg overflow-hidden border border-white/10">
                     <img
-                      src={release.coverUrl}
+                      src={release.cover_url}
                       alt={`${release.title} cover`}
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -307,12 +341,12 @@ export default function ArtistProfile() {
 
                     <div className="flex items-center justify-between uppercase tracking-[0.25em] text-[11px]">
                       <span className="text-white/40">{release.type}</span>
-                      <span className="text-white/40">{release.releaseDate}</span>
+                      <span className="text-white/40">{release.release_date}</span>
                     </div>
 
                     {/* Bandcamp Link */}
                     <a
-                      href={release.bandcampUrl}
+                      href={release.bandcamp_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 px-4 py-2 text-center border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg uppercase tracking-[0.25em] text-[11px] transition-all"

@@ -1,13 +1,36 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
 import { ExternalLink, Search } from "lucide-react"
-import { releases } from "../data/releases"
+import { getReleases, type Release } from "../lib/catalogue"
 import BandcampPlayer from "../components/BandcampPlayer"
 
 export default function Releases() {
-  const [selectedRelease, setSelectedRelease] = useState(releases[0])
+  const [releases, setReleases] = useState<Release[]>([])
+  const [selectedRelease, setSelectedRelease] = useState<Release | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    loadReleases()
+  }, [])
+
+  async function loadReleases() {
+    try {
+      setLoading(true)
+      const data = await getReleases()
+      setReleases(data)
+      if (data.length > 0) {
+        setSelectedRelease(data[0])
+      }
+    } catch (err) {
+      console.error("Error loading releases:", err)
+      setError("Failed to load releases. Please try again later.")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   // Filter releases based on search query
   const filteredReleases = useMemo(() => {
@@ -18,9 +41,35 @@ export default function Releases() {
       (release) =>
         release.title.toLowerCase().includes(query) ||
         release.artist.toLowerCase().includes(query) ||
-        release.catalogNumber?.toLowerCase().includes(query)
+        release.catalog_number?.toLowerCase().includes(query)
     )
-  }, [searchQuery])
+  }, [releases, searchQuery])
+
+  if (loading) {
+    return (
+      <section className="mx-auto max-w-6xl">
+        <div className="flex items-center justify-center py-24">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-500"></div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section className="mx-auto max-w-6xl">
+        <div className="text-center py-24">
+          <p className="text-red-400 mb-4">{error}</p>
+          <button
+            onClick={loadReleases}
+            className="px-6 py-2 border border-white/20 hover:border-white/40 rounded-lg text-sm uppercase tracking-wider transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <>
@@ -43,36 +92,38 @@ export default function Releases() {
         </motion.div>
 
         {/* Featured Player */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="border border-white/10 rounded-xl p-4 md:p-6 bg-brand-700/10"
-        >
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-            <div>
-              <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-white/40 mb-1">
-                Now Playing
-              </p>
-              <h2 className="font-display text-xl font-bold capitalize tracking-wide">{selectedRelease.title}</h2>
-              <p className="font-sans text-brand-300/70 uppercase tracking-[0.25em] text-[11px]">{selectedRelease.artist}</p>
+        {selectedRelease && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="border border-white/10 rounded-xl p-4 md:p-6 bg-brand-700/10"
+          >
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+              <div>
+                <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-white/40 mb-1">
+                  Now Playing
+                </p>
+                <h2 className="font-display text-xl font-bold capitalize tracking-wide">{selectedRelease.title}</h2>
+                <p className="font-sans text-brand-300/70 uppercase tracking-[0.25em] text-[11px]">{selectedRelease.artist}</p>
+              </div>
+              <a
+                href={selectedRelease.bandcamp_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-4 py-2 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white font-sans uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center justify-center gap-2"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span className="hidden sm:inline">Buy on Bandcamp</span>
+              </a>
             </div>
-            <a
-              href={selectedRelease.bandcampUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-4 py-2 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white font-sans uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center justify-center gap-2"
-            >
-              <ExternalLink className="w-4 h-4" />
-              <span className="hidden sm:inline">Buy on Bandcamp</span>
-            </a>
-          </div>
 
-          <BandcampPlayer
-            albumId={selectedRelease.bandcampId}
-            type={selectedRelease.type === "track" ? "track" : "album"}
-          />
-        </motion.div>
+            <BandcampPlayer
+              albumId={selectedRelease.bandcamp_id}
+              type={selectedRelease.type === "track" ? "track" : "album"}
+            />
+          </motion.div>
+        )}
 
         {/* Releases Grid */}
         <div className="space-y-4">
@@ -103,7 +154,7 @@ export default function Releases() {
                 className={`
                   border rounded-xl p-4 transition-all
                   ${
-                    selectedRelease.id === release.id
+                    selectedRelease?.id === release.id
                       ? "border-white/40 bg-white/5"
                       : "border-white/10 hover:border-white/30 hover:bg-white/5"
                   }
@@ -115,7 +166,7 @@ export default function Releases() {
                   className="w-full aspect-square bg-brand-700 rounded-lg mb-4 overflow-hidden border border-white/10 hover:opacity-80 transition-opacity"
                 >
                   <img
-                    src={release.coverUrl}
+                    src={release.cover_url}
                     alt={`${release.title} cover`}
                     className="w-full h-full object-cover"
                     loading="lazy"
@@ -125,9 +176,9 @@ export default function Releases() {
                 {/* Info */}
                 <div className="space-y-2">
                   <div>
-                    {release.catalogNumber && (
+                    {release.catalog_number && (
                       <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-white/40 mb-1">
-                        {release.catalogNumber}
+                        {release.catalog_number}
                       </p>
                     )}
                     <h4 className="font-display font-semibold text-sm line-clamp-2 capitalize tracking-wide">
@@ -138,12 +189,12 @@ export default function Releases() {
 
                   <div className="flex items-center justify-between font-sans uppercase tracking-[0.25em] text-[11px]">
                     <span className="text-white/40">{release.type}</span>
-                    <span className="text-white/40">{release.releaseDate}</span>
+                    <span className="text-white/40">{release.release_date}</span>
                   </div>
 
                   {/* Bandcamp Link */}
                   <a
-                    href={release.bandcampUrl}
+                    href={release.bandcamp_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block mt-3 px-4 py-2 text-center border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg font-sans uppercase tracking-[0.25em] text-[11px] transition-all"
