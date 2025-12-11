@@ -184,7 +184,7 @@ export async function getReleases(): Promise<Release[]> {
   const { data, error } = await supabase
     .from("releases")
     .select("*")
-    .order("id", { ascending: false }) // Newest first
+    .order("release_date", { ascending: false }) // Newest first by release date
 
   if (error) {
     console.error("Error fetching releases:", error)
@@ -214,7 +214,7 @@ export async function getReleasesByArtist(artistName: string): Promise<Release[]
     .from("releases")
     .select("*")
     .or(`artist.ilike.%${artistName}%,title.ilike.%${artistName}%`)
-    .order("id", { ascending: false })
+    .order("release_date", { ascending: false })
 
   if (error) throw error
 
@@ -228,7 +228,7 @@ export async function getReleasesByType(
     .from("releases")
     .select("*")
     .eq("type", type)
-    .order("id", { ascending: false })
+    .order("release_date", { ascending: false })
 
   if (error) throw error
 
@@ -240,7 +240,7 @@ export async function getReleasesByYear(year: string): Promise<Release[]> {
     .from("releases")
     .select("*")
     .ilike("release_date", `%${year}%`)
-    .order("id", { ascending: false })
+    .order("release_date", { ascending: false })
 
   if (error) throw error
 
@@ -289,5 +289,69 @@ export async function deleteRelease(id: number): Promise<void> {
   if (error) {
     console.error("Error deleting release:", error)
     throw error
+  }
+}
+
+// =============================================
+// IMAGE UPLOAD (Supabase Storage)
+// =============================================
+
+const BUCKET_NAME = "catalogue-images"
+
+export type ImageType = "artist" | "release"
+
+/**
+ * Upload an image to Supabase Storage
+ * @param file - The file to upload
+ * @param type - "artist" or "release"
+ * @param name - Name for the file (will be slugified)
+ * @returns The public URL of the uploaded image
+ */
+export async function uploadImage(
+  file: File,
+  type: ImageType,
+  name: string
+): Promise<string> {
+  // Generate unique filename
+  const extension = file.name.split(".").pop()?.toLowerCase() || "jpg"
+  const slug = slugify(name)
+  const timestamp = Date.now()
+  const filename = `${type}s/${slug}-${timestamp}.${extension}`
+
+  // Upload to Supabase Storage
+  const { error: uploadError } = await supabase.storage
+    .from(BUCKET_NAME)
+    .upload(filename, file, {
+      cacheControl: "3600",
+      upsert: false,
+    })
+
+  if (uploadError) {
+    console.error("Error uploading image:", uploadError)
+    throw uploadError
+  }
+
+  // Get public URL
+  const { data } = supabase.storage.from(BUCKET_NAME).getPublicUrl(filename)
+
+  return data.publicUrl
+}
+
+/**
+ * Delete an image from Supabase Storage
+ * @param imageUrl - The full public URL of the image
+ */
+export async function deleteImage(imageUrl: string): Promise<void> {
+  // Extract the path from the URL
+  const bucketUrl = supabase.storage.from(BUCKET_NAME).getPublicUrl("").data.publicUrl
+  const path = imageUrl.replace(bucketUrl, "")
+
+  if (!path) return
+
+  const { error } = await supabase.storage.from(BUCKET_NAME).remove([path])
+
+  if (error) {
+    console.error("Error deleting image:", error)
+    // Don't throw - image deletion is not critical
   }
 }

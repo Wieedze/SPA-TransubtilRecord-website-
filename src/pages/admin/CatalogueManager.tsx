@@ -16,6 +16,8 @@ import {
   Trash2,
   X,
   Search,
+  Upload,
+  Image as ImageIcon,
 } from "lucide-react"
 import {
   getArtists,
@@ -26,6 +28,7 @@ import {
   createRelease,
   updateRelease,
   deleteRelease,
+  uploadImage,
   type Artist,
   type Release,
 } from "../../lib/catalogue"
@@ -68,6 +71,10 @@ export default function CatalogueManager() {
     id: number
     name: string
   } | null>(null)
+
+  // Image upload state
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null)
 
   // Artist form state
   const [artistForm, setArtistForm] = useState({
@@ -123,6 +130,58 @@ export default function CatalogueManager() {
         ? prev.styles.filter((s) => s !== style)
         : [...prev.styles, style],
     }))
+  }
+
+  // Handle image upload for artists
+  const handleArtistImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!artistForm.name) {
+      setError("Please enter artist name first")
+      return
+    }
+
+    setIsUploading(true)
+    setUploadProgress("Uploading image...")
+    setError(null)
+
+    try {
+      const imageUrl = await uploadImage(file, "artist", artistForm.name)
+      setArtistForm((prev) => ({ ...prev, image_url: imageUrl }))
+      setUploadProgress("Image uploaded successfully!")
+      setTimeout(() => setUploadProgress(null), 2000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload image")
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  // Handle image upload for releases
+  const handleReleaseImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!releaseForm.title) {
+      setError("Please enter release title first")
+      return
+    }
+
+    setIsUploading(true)
+    setUploadProgress("Uploading cover...")
+    setError(null)
+
+    try {
+      const imageUrl = await uploadImage(file, "release", releaseForm.title)
+      setReleaseForm((prev) => ({ ...prev, coverUrl: imageUrl }))
+      setUploadProgress("Cover uploaded successfully!")
+      setTimeout(() => setUploadProgress(null), 2000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload cover")
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   const resetArtistForm = () => {
@@ -666,19 +725,50 @@ export default function CatalogueManager() {
 
                   <div>
                     <label className="block text-white/60 uppercase tracking-[0.25em] text-[11px] mb-2">
-                      Image URL *
+                      <ImageIcon className="w-3 h-3 inline mr-1" />
+                      Image *
                     </label>
-                    <input
-                      type="text"
-                      value={artistForm.image_url}
-                      onChange={(e) =>
-                        setArtistForm({
-                          ...artistForm,
-                          image_url: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-brand-acid focus:outline-none text-white"
-                    />
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={artistForm.image_url}
+                          onChange={(e) =>
+                            setArtistForm({
+                              ...artistForm,
+                              image_url: e.target.value,
+                            })
+                          }
+                          placeholder="URL or upload"
+                          className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-brand-acid focus:outline-none text-white text-sm"
+                        />
+                        <label className={`flex items-center gap-2 px-4 py-3 rounded-lg cursor-pointer transition-colors ${isUploading ? 'bg-white/5 text-white/40' : 'bg-brand-acid/20 hover:bg-brand-acid/30 text-brand-acid'}`}>
+                          {isUploading ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Upload className="w-4 h-4" />
+                          )}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleArtistImageUpload}
+                            disabled={isUploading}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                      {uploadProgress && (
+                        <p className="text-brand-acid text-[10px] uppercase tracking-[0.15em]">{uploadProgress}</p>
+                      )}
+                      {artistForm.image_url && (
+                        <img
+                          src={artistForm.image_url}
+                          alt="Preview"
+                          className="w-16 h-16 rounded-full object-cover border border-white/20"
+                          onError={(e) => (e.currentTarget.style.display = "none")}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -928,16 +1018,47 @@ export default function CatalogueManager() {
 
                 <div>
                   <label className="block text-white/60 uppercase tracking-[0.25em] text-[11px] mb-2">
-                    Cover URL *
+                    <ImageIcon className="w-3 h-3 inline mr-1" />
+                    Cover *
                   </label>
-                  <input
-                    type="text"
-                    value={releaseForm.coverUrl}
-                    onChange={(e) =>
-                      setReleaseForm({ ...releaseForm, coverUrl: e.target.value })
-                    }
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-brand-acid focus:outline-none text-white"
-                  />
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={releaseForm.coverUrl}
+                        onChange={(e) =>
+                          setReleaseForm({ ...releaseForm, coverUrl: e.target.value })
+                        }
+                        placeholder="URL or upload"
+                        className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-brand-acid focus:outline-none text-white text-sm"
+                      />
+                      <label className={`flex items-center gap-2 px-4 py-3 rounded-lg cursor-pointer transition-colors ${isUploading ? 'bg-white/5 text-white/40' : 'bg-brand-acid/20 hover:bg-brand-acid/30 text-brand-acid'}`}>
+                        {isUploading ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Upload className="w-4 h-4" />
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleReleaseImageUpload}
+                          disabled={isUploading}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                    {uploadProgress && (
+                      <p className="text-brand-acid text-[10px] uppercase tracking-[0.15em]">{uploadProgress}</p>
+                    )}
+                    {releaseForm.coverUrl && (
+                      <img
+                        src={releaseForm.coverUrl}
+                        alt="Cover preview"
+                        className="w-20 h-20 rounded object-cover border border-white/20"
+                        onError={(e) => (e.currentTarget.style.display = "none")}
+                      />
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
@@ -993,20 +1114,7 @@ export default function CatalogueManager() {
                   />
                 </div>
 
-                {releaseForm.coverUrl && (
-                  <div>
-                    <label className="block text-white/60 uppercase tracking-[0.25em] text-[11px] mb-2">
-                      Preview
-                    </label>
-                    <img
-                      src={releaseForm.coverUrl}
-                      alt="Cover preview"
-                      className="w-24 h-24 rounded object-cover"
-                      onError={(e) => (e.currentTarget.style.display = "none")}
-                    />
-                  </div>
-                )}
-              </div>
+                </div>
 
               <div className="p-6 border-t border-white/10 flex justify-end gap-3">
                 <button
