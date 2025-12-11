@@ -80,13 +80,8 @@ export default function InstagramGenerator() {
       const { width, height } = dimensions[selectedFormat]
 
       const dataUrl = await toPng(mockupRef.current, {
-        width,
-        height,
-        pixelRatio: 1,
-        style: {
-          transform: "scale(2.5)",
-          transformOrigin: "top left",
-        },
+        canvasWidth: width,
+        canvasHeight: height,
       })
 
       const itemName = contentType === "artists"
@@ -139,34 +134,34 @@ export default function InstagramGenerator() {
         </motion.div>
 
         {/* Content Type Tabs */}
-        <div className="flex justify-center gap-4 mb-8">
+        <div className="flex justify-center gap-2 sm:gap-4 mb-8">
           <button
             onClick={() => setContentType("artists")}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all ${
+            className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-lg border transition-all text-sm sm:text-base ${
               contentType === "artists"
                 ? "border-brand-acid bg-brand-acid/10 text-white"
                 : "border-white/20 hover:border-white/40 text-white/60"
             }`}
           >
-            <Users className="w-5 h-5" />
+            <Users className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="font-medium">Artistes</span>
-            <span className="text-xs opacity-60">({artists.length})</span>
+            <span className="text-xs opacity-60 hidden sm:inline">({artists.length})</span>
           </button>
           <button
             onClick={() => setContentType("releases")}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all ${
+            className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-lg border transition-all text-sm sm:text-base ${
               contentType === "releases"
                 ? "border-brand-acid bg-brand-acid/10 text-white"
                 : "border-white/20 hover:border-white/40 text-white/60"
             }`}
           >
-            <Disc3 className="w-5 h-5" />
+            <Disc3 className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="font-medium">Releases</span>
-            <span className="text-xs opacity-60">({releases.length})</span>
+            <span className="text-xs opacity-60 hidden sm:inline">({releases.length})</span>
           </button>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Preview */}
           <motion.div
             key={contentType}
@@ -183,6 +178,7 @@ export default function InstagramGenerator() {
 
               {selectedItem && contentType === "artists" && (
                 <PhoneMockup
+                  key={`artist-${selectedItem.id}-${selectedFormat}`}
                   ref={mockupRef}
                   artist={selectedItem as Artist}
                   format={selectedFormat}
@@ -191,6 +187,7 @@ export default function InstagramGenerator() {
 
               {selectedItem && contentType === "releases" && (
                 <ReleaseMockup
+                  key={`release-${selectedItem.id}-${selectedFormat}`}
                   ref={mockupRef}
                   release={selectedItem as Release}
                   format={selectedFormat}
@@ -199,30 +196,30 @@ export default function InstagramGenerator() {
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center gap-6 mt-8">
+            <div className="flex items-center gap-3 sm:gap-6 mt-6 sm:mt-8">
               <button
                 onClick={handlePrev}
-                className="p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
               >
-                <ChevronLeft className="w-6 h-6 text-white" />
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </button>
 
-              <div className="text-center min-w-[200px]">
-                <p className="font-display text-xl text-white capitalize">
+              <div className="text-center min-w-[140px] sm:min-w-[200px]">
+                <p className="font-display text-base sm:text-xl text-white capitalize truncate">
                   {contentType === "artists"
                     ? (selectedItem as Artist)?.name
                     : (selectedItem as Release)?.title}
                 </p>
-                <p className="text-sm text-white/50">
+                <p className="text-xs sm:text-sm text-white/50">
                   {selectedIndex + 1} / {currentList.length}
                 </p>
               </div>
 
               <button
                 onClick={handleNext}
-                className="p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
               >
-                <ChevronRight className="w-6 h-6 text-white" />
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </button>
             </div>
           </motion.div>
@@ -231,46 +228,46 @@ export default function InstagramGenerator() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8"
           >
             {/* Format Selection */}
-            <div className="space-y-4">
-              <h3 className="font-display text-lg text-white flex items-center gap-2">
-                <Image className="w-5 h-5 text-brand-acid" />
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="font-display text-base sm:text-lg text-white flex items-center gap-2">
+                <Image className="w-4 h-4 sm:w-5 sm:h-5 text-brand-acid" />
                 Format
               </h3>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 {formats.map((format) => (
                   <button
                     key={format.value}
                     onClick={() => setSelectedFormat(format.value)}
-                    className={`p-4 rounded-lg border transition-all ${
+                    className={`p-2 sm:p-4 rounded-lg border transition-all ${
                       selectedFormat === format.value
                         ? "border-brand-acid bg-brand-acid/10 text-white"
                         : "border-white/20 hover:border-white/40 text-white/60"
                     }`}
                   >
-                    <p className="font-medium">{format.label}</p>
-                    <p className="text-xs opacity-60 mt-1">{format.ratio}</p>
+                    <p className="font-medium text-xs sm:text-base">{format.label}</p>
+                    <p className="text-[10px] sm:text-xs opacity-60 mt-1">{format.ratio}</p>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Item Selection */}
-            <div className="space-y-4">
-              <h3 className="font-display text-lg text-white flex items-center gap-2">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="font-display text-base sm:text-lg text-white flex items-center gap-2">
                 {contentType === "artists" ? (
-                  <Smartphone className="w-5 h-5 text-brand-acid" />
+                  <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-brand-acid" />
                 ) : (
-                  <Disc3 className="w-5 h-5 text-brand-acid" />
+                  <Disc3 className="w-4 h-4 sm:w-5 sm:h-5 text-brand-acid" />
                 )}
                 {contentType === "artists" ? "Artiste" : "Release"}
               </h3>
               <select
                 value={selectedIndex}
                 onChange={(e) => setSelectedIndex(Number(e.target.value))}
-                className="w-full p-4 rounded-lg bg-white/5 border border-white/20 text-white focus:border-brand-acid focus:outline-none transition-colors"
+                className="w-full p-3 sm:p-4 rounded-lg bg-white/5 border border-white/20 text-white text-sm sm:text-base focus:border-brand-acid focus:outline-none transition-colors"
               >
                 {currentList.map((item, index) => (
                   <option key={item.id} value={index} className="bg-brand-900">

@@ -21,6 +21,7 @@ export interface Profile {
   full_name: string | null
   company: string | null
   has_studio_access: boolean
+  linked_artist_id: number | null
   created_at: string
 }
 
@@ -88,3 +89,5 @@ export interface Notification {
   read: boolean
   created_at: string
 }
+
+

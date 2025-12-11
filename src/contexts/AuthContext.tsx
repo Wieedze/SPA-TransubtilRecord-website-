@@ -10,8 +10,10 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: AuthError | null }>
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
+  refreshProfile: () => Promise<void>
   isAdmin: boolean
   isArtist: boolean
+  linkedArtistId: number | null
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -115,6 +117,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const isAdmin = profile?.role === "admin"
   const isArtist = profile?.role === "artist"
+  const linkedArtistId = profile?.linked_artist_id ?? null
+
+  const refreshProfile = async () => {
+    if (user) {
+      await loadProfile(user.id)
+    }
+  }
 
   const value = {
     user,
@@ -124,8 +133,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signIn,
     signOut,
+    refreshProfile,
     isAdmin,
     isArtist,
+    linkedArtistId,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

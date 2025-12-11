@@ -22,16 +22,24 @@ import {
   Mail,
   Save,
   Trash2,
+  Download,
+  ExternalLink,
+  Globe,
 } from "lucide-react"
+import { getArtistById } from "../data/artists"
+import type { Artist } from "../types/artist"
 
-type TabType = "studio" | "demo" | "account"
+type TabType = "studio" | "demo" | "account" | "artist"
 
 export default function Dashboard() {
-  const { user, profile, signOut } = useAuth()
+  const { user, profile, signOut, isArtist, linkedArtistId } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState<TabType>(
     (searchParams.get("tab") as TabType) || "account"
   )
+
+  // Get linked artist data if user is an artist
+  const linkedArtist: Artist | undefined = linkedArtistId ? getArtistById(linkedArtistId) : undefined
 
   console.log("🎯 Dashboard loaded - Active tab:", activeTab)
   console.log("🎯 User:", user ? "Connected" : "Not connected")
@@ -447,6 +455,29 @@ export default function Dashboard() {
                 />
               )}
             </button>
+            {/* Artist Tab - Only visible for users with artist role */}
+            {isArtist && (
+              <button
+                onClick={() => setActiveTab("artist")}
+                className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
+                  activeTab === "artist"
+                    ? "text-white"
+                    : "text-white/50 hover:text-white/80"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 md:w-5 md:h-5" />
+                  <span className="hidden sm:inline">Artist</span>
+                  <span className="sm:hidden">Artist</span>
+                </div>
+                {activeTab === "artist" && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500"
+                  />
+                )}
+              </button>
+            )}
           </div>
         </div>
 
@@ -727,6 +758,163 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+          </motion.div>
+        )}
+
+        {/* Artist Tab - Only for users with artist role */}
+        {activeTab === "artist" && isArtist && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-6"
+          >
+            {linkedArtist ? (
+              <>
+                {/* Artist Profile Card */}
+                <div className="border border-purple-500/30 rounded-2xl overflow-hidden bg-purple-500/5">
+                  <div className="flex flex-col md:flex-row">
+                    {/* Artist Image */}
+                    <div className="md:w-1/3 relative">
+                      <img
+                        src={linkedArtist.image_url}
+                        alt={linkedArtist.name}
+                        className="w-full h-64 md:h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-900/80 to-transparent" />
+                    </div>
+
+                    {/* Artist Info */}
+                    <div className="md:w-2/3 p-6 space-y-4">
+                      <div>
+                        <p className="uppercase tracking-[0.25em] text-[11px] text-purple-400 mb-1">
+                          {linkedArtist.act}
+                        </p>
+                        <h2 className="text-3xl font-bold uppercase tracking-[0.15em] text-white">
+                          {linkedArtist.name}
+                        </h2>
+                        <p className="text-white/60 mt-1">{linkedArtist.country}</p>
+                      </div>
+
+                      {/* Styles */}
+                      <div className="flex flex-wrap gap-2">
+                        {linkedArtist.style.map((style) => (
+                          <span
+                            key={style}
+                            className="px-3 py-1 text-xs uppercase tracking-wider bg-white/10 border border-white/20 rounded-full text-white/80"
+                          >
+                            {style}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Description */}
+                      {linkedArtist.description && (
+                        <p className="text-white/70 text-sm leading-relaxed line-clamp-4">
+                          {linkedArtist.description}
+                        </p>
+                      )}
+
+                      {/* Social Links */}
+                      <div className="flex flex-wrap gap-3 pt-2">
+                        {linkedArtist.social.soundcloud && (
+                          <a
+                            href={linkedArtist.social.soundcloud}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded-lg text-orange-400 text-xs uppercase tracking-wider hover:bg-orange-500/30 transition-colors flex items-center gap-2"
+                          >
+                            SoundCloud
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                        {linkedArtist.social.instagram && (
+                          <a
+                            href={linkedArtist.social.instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-pink-500/20 border border-pink-500/30 rounded-lg text-pink-400 text-xs uppercase tracking-wider hover:bg-pink-500/30 transition-colors flex items-center gap-2"
+                          >
+                            Instagram
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                        {linkedArtist.social.facebook && (
+                          <a
+                            href={linkedArtist.social.facebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-400 text-xs uppercase tracking-wider hover:bg-blue-500/30 transition-colors flex items-center gap-2"
+                          >
+                            Facebook
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Download Profile Image */}
+                  <div className="border border-white/10 rounded-xl p-6 bg-white/5">
+                    <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-4">
+                      Download Your Profile Image
+                    </h3>
+                    <p className="text-white/60 text-sm mb-4">
+                      Download your official artist profile image in high quality for use in promotional materials.
+                    </p>
+                    <a
+                      href={linkedArtist.image_url}
+                      download={`${linkedArtist.name.replace(/\s+/g, '-').toLowerCase()}-profile.jpg`}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-purple-500/20 border border-purple-500/30 rounded-lg text-purple-400 hover:bg-purple-500/30 transition-colors uppercase tracking-[0.25em] text-[11px]"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download Image
+                    </a>
+                  </div>
+
+                  {/* View Public Page */}
+                  <div className="border border-white/10 rounded-xl p-6 bg-white/5">
+                    <h3 className="uppercase tracking-[0.25em] text-[11px] font-medium text-white/80 mb-4">
+                      Your Public Artist Page
+                    </h3>
+                    <p className="text-white/60 text-sm mb-4">
+                      View your public artist page on the Transubtil Records website.
+                    </p>
+                    <Link
+                      to={`/artists/${linkedArtist.slug}`}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 border border-white/20 rounded-lg text-white hover:bg-white/20 transition-colors uppercase tracking-[0.25em] text-[11px]"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      View Page
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Info Box */}
+                <div className="border border-purple-500/30 rounded-2xl p-6 bg-purple-500/5">
+                  <p className="text-sm text-white/70 leading-relaxed">
+                    <strong className="text-white">Artist Account:</strong> As an artist on Transubtil Records,
+                    you have access to your profile image and public page. If you need to update your artist
+                    information, please contact the label administration.
+                  </p>
+                </div>
+              </>
+            ) : (
+              /* No linked artist */
+              <div className="border border-yellow-500/30 rounded-2xl p-8 bg-yellow-500/5 text-center">
+                <Globe className="w-12 h-12 mx-auto mb-4 text-yellow-500/60" />
+                <h3 className="text-xl font-bold uppercase tracking-[0.25em] mb-2 text-yellow-400">
+                  No Artist Linked
+                </h3>
+                <p className="text-white/60 max-w-md mx-auto">
+                  Your account has the artist role but is not yet linked to an artist profile.
+                  Please contact the label administration to link your account.
+                </p>
+              </div>
+            )}
           </motion.div>
         )}
 
