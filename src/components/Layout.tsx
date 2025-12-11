@@ -2,10 +2,14 @@ import { Outlet } from "react-router-dom"
 import Navbar from "./Navbar.tsx"
 import Footer from "./Footer.tsx"
 import PageFrame from "./PageFrame.tsx"
+import GridBackground from "./GridBackground.tsx"
 
 export default function Layout() {
   return (
     <div className="min-h-screen flex flex-col bg-brand-900 text-white overflow-x-hidden">
+      {/* Animated Grid Background */}
+      <GridBackground />
+
       {/* SVG Frame Border */}
       <PageFrame />
 
