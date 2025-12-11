@@ -1,21 +1,25 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
-import { Users, CheckCircle, XCircle, Mail, Calendar, Music, ChevronDown, AlertTriangle, Search } from 'lucide-react'
+import { Users, CheckCircle, XCircle, Mail, Calendar, Music, ChevronDown, AlertTriangle, Search, Shield } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import type { Profile } from '../../lib/supabase'
 import { artists } from '../../data/artists'
+import { useAuth } from '../../contexts/AuthContext'
 
 interface UserWithEmail extends Profile {
   email: string
 }
 
 export default function UserManagement() {
+  const { isSuperAdmin } = useAuth()
   const [users, setUsers] = useState<UserWithEmail[]>([])
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState<string | null>(null)
   const [showRoleDropdown, setShowRoleDropdown] = useState<string | null>(null)
   const [showArtistDropdown, setShowArtistDropdown] = useState<string | null>(null)
+  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
   const [confirmAdminPromotion, setConfirmAdminPromotion] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -172,6 +176,7 @@ export default function UserManagement() {
 
   const getRoleBadge = (role: Profile['role']) => {
     const badges = {
+      superadmin: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
       admin: 'bg-red-500/20 text-red-400 border-red-500/30',
       artist: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
       client: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
@@ -181,8 +186,24 @@ export default function UserManagement() {
   }
 
   const getRoleIcon = (role: Profile['role']) => {
+    if (role === 'superadmin') return <Shield className="w-3 h-3" />
     if (role === 'artist') return <Music className="w-3 h-3" />
     return null
+  }
+
+  // Get available roles based on current user's role
+  const getAvailableRoles = (targetUserRole: Profile['role']): Profile['role'][] => {
+    // Superadmin can't be changed by anyone (including themselves via UI)
+    if (targetUserRole === 'superadmin') return []
+
+    // Only superadmin can assign admin role
+    if (isSuperAdmin) {
+      return ['user', 'client', 'artist', 'admin']
+    }
+
+    // Regular admin can't promote to admin or change other admins
+    if (targetUserRole === 'admin') return []
+    return ['user', 'client', 'artist']
   }
 
   // Filter users based on search query
@@ -280,7 +301,7 @@ export default function UserManagement() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="border border-white/10 rounded-2xl overflow-hidden bg-brand-700/10"
+          className="border border-white/10 rounded-2xl bg-brand-700/10 overflow-x-auto"
         >
           {loading ? (
             <div className="p-12 text-center">
@@ -295,8 +316,8 @@ export default function UserManagement() {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className="overflow-visible">
+              <table className="w-full min-w-[900px]">
                 <thead className="bg-brand-700/20 border-b border-white/10">
                   <tr>
                     <th className="px-6 py-4 text-left uppercase tracking-[0.25em] text-[11px] font-medium text-white/80">
@@ -344,10 +365,12 @@ export default function UserManagement() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="relative">
+                        {getAvailableRoles(user.role).length > 0 ? (
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
+                              const rect = e.currentTarget.getBoundingClientRect()
+                              setDropdownPosition({ top: rect.bottom + 8, left: rect.left })
                               setShowRoleDropdown(showRoleDropdown === user.id ? null : user.id)
                               setShowArtistDropdown(null)
                             }}
@@ -357,35 +380,49 @@ export default function UserManagement() {
                             {user.role}
                             <ChevronDown className="w-3 h-3" />
                           </button>
+                        ) : (
+                          <span
+                            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase tracking-wider font-medium border ${getRoleBadge(user.role)}`}
+                          >
+                            {getRoleIcon(user.role)}
+                            {user.role}
+                          </span>
+                        )}
 
-                          {/* Role Dropdown */}
-                          {showRoleDropdown === user.id && (
-                            <div className="absolute top-full left-0 mt-2 bg-brand-800 border border-white/20 rounded-lg shadow-xl z-10 min-w-[150px]">
-                              {(['user', 'client', 'artist', 'admin'] as const).map((role) => (
-                                <button
-                                  key={role}
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    updateUserRole(user.id, role)
-                                  }}
-                                  disabled={updating === user.id}
-                                  className={`w-full px-4 py-2 text-left text-sm uppercase tracking-wider hover:bg-white/10 transition-colors first:rounded-t-lg last:rounded-b-lg ${
-                                    user.role === role ? 'bg-white/5 text-white' : 'text-white/70'
-                                  }`}
-                                >
-                                  {role}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+                        {/* Role Dropdown - Portal */}
+                        {showRoleDropdown === user.id && getAvailableRoles(user.role).length > 0 && createPortal(
+                          <div
+                            className="fixed bg-brand-900 border border-white/20 rounded-lg shadow-2xl z-[9999] min-w-[150px]"
+                            style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {getAvailableRoles(user.role).map((role) => (
+                              <button
+                                key={role}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  updateUserRole(user.id, role)
+                                }}
+                                disabled={updating === user.id}
+                                className={`w-full px-4 py-2 text-left text-sm uppercase tracking-wider hover:bg-white/10 transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                                  user.role === role ? 'bg-white/5 text-white' : 'text-white/70'
+                                }`}
+                              >
+                                {role}
+                              </button>
+                            ))}
+                          </div>,
+                          document.body
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         {user.role === 'artist' ? (
-                          <div className="relative">
+                          <>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation()
+                                const rect = e.currentTarget.getBoundingClientRect()
+                                setDropdownPosition({ top: rect.bottom + 8, left: rect.left })
                                 setShowArtistDropdown(showArtistDropdown === user.id ? null : user.id)
                                 setShowRoleDropdown(null)
                               }}
@@ -398,9 +435,13 @@ export default function UserManagement() {
                               <ChevronDown className="w-3 h-3" />
                             </button>
 
-                            {/* Artist Dropdown */}
-                            {showArtistDropdown === user.id && (
-                              <div className="absolute top-full left-0 mt-2 bg-brand-800 border border-white/20 rounded-lg shadow-xl z-10 min-w-[200px] max-h-[300px] overflow-y-auto">
+                            {/* Artist Dropdown - Portal */}
+                            {showArtistDropdown === user.id && createPortal(
+                              <div
+                                className="fixed bg-brand-800 border border-white/20 rounded-lg shadow-xl z-[9999] min-w-[200px] max-h-[300px] overflow-y-auto"
+                                style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation()
@@ -426,20 +467,21 @@ export default function UserManagement() {
                                     <span className="text-white/40 ml-2">({artist.country})</span>
                                   </button>
                                 ))}
-                              </div>
+                              </div>,
+                              document.body
                             )}
-                          </div>
+                          </>
                         ) : (
                           <span className="text-white/30 text-sm">—</span>
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        {/* Admins always have studio access */}
-                        {user.role === 'admin' ? (
+                        {/* Admins and superadmins always have studio access */}
+                        {user.role === 'admin' || user.role === 'superadmin' ? (
                           <div className="flex items-center gap-2 text-green-400">
                             <CheckCircle className="w-5 h-5" />
                             <span className="text-sm uppercase tracking-wider">
-                              Auto (Admin)
+                              Auto ({user.role === 'superadmin' ? 'Super Admin' : 'Admin'})
                             </span>
                           </div>
                         ) : (
@@ -526,6 +568,20 @@ export default function UserManagement() {
               features including user management.
             </p>
           </motion.div>
+
+          {isSuperAdmin && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="border border-yellow-500/30 rounded-2xl p-4 bg-yellow-500/5 lg:col-span-4"
+            >
+              <p className="text-sm text-white/70 leading-relaxed">
+                <strong className="text-yellow-400">Super Admin:</strong> Owner access.
+                Can promote users to admin. Only you (maxime.moodz@gmail.com) have this role.
+              </p>
+            </motion.div>
+          )}
         </div>
       </section>
     </>

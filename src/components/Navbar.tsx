@@ -15,7 +15,7 @@ const navLinks = [
 ]
 
 export default function Navbar() {
-  const { user, profile, signOut } = useAuth()
+  const { user, profile, signOut, isAdmin } = useAuth()
   const [showAdminMenu, setShowAdminMenu] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -147,7 +147,7 @@ export default function Navbar() {
                 )}
               </NavLink>
             )}
-            {user && profile?.role === "admin" && (
+            {user && isAdmin && (
               <div
                 className="relative"
                 onMouseEnter={() => setShowAdminMenu(true)}
@@ -245,7 +245,7 @@ export default function Navbar() {
           {/* Auth Section - Desktop */}
           <div className="hidden md:flex items-center gap-4">
             {/* Notification Bell - Only for admin */}
-            {user && profile?.role === "admin" && (
+            {user && isAdmin && (
               <NotificationBell userId={user.id} />
             )}
 
@@ -294,7 +294,7 @@ export default function Navbar() {
         profile={profile}
         signOut={signOut}
         navLinks={navLinks}
-        isAdmin={profile?.role === "admin"}
+        isAdmin={isAdmin}
       />
     </header>
   )

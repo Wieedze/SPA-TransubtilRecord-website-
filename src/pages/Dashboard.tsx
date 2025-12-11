@@ -123,10 +123,14 @@ export default function Dashboard() {
 
     // Block access to tabs user doesn't have permission for
     if (activeTab === "studio" && !hasStudioAccess) {
-      setActiveTab("demo")
+      setActiveTab("account")
     }
     if (activeTab === "artist" && !isArtist) {
       setActiveTab("account")
+    }
+    // Artists don't have access to demo tab
+    if (activeTab === "demo" && isArtist) {
+      setActiveTab("artist")
     }
   }, [activeTab, hasStudioAccess, isArtist, searchParams])
 
@@ -499,26 +503,29 @@ export default function Dashboard() {
                 )}
               </button>
             )}
-            <button
-              onClick={() => setActiveTab("demo")}
-              className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
-                activeTab === "demo"
-                  ? "text-white"
-                  : "text-white/50 hover:text-white/80"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <Music className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="hidden sm:inline">Demos</span>
-                <span className="sm:hidden">Demos</span>
-              </div>
-              {activeTab === "demo" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-500"
-                />
-              )}
-            </button>
+            {/* Demo Tab - Hidden for artists (they're already on the label) */}
+            {!isArtist && (
+              <button
+                onClick={() => setActiveTab("demo")}
+                className={`pb-4 px-2 uppercase tracking-[0.25em] text-[11px] transition-colors relative whitespace-nowrap ${
+                  activeTab === "demo"
+                    ? "text-white"
+                    : "text-white/50 hover:text-white/80"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Music className="w-4 h-4 md:w-5 md:h-5" />
+                  <span className="hidden sm:inline">Demos</span>
+                  <span className="sm:hidden">Demos</span>
+                </div>
+                {activeTab === "demo" && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-500"
+                  />
+                )}
+              </button>
+            )}
             {/* Artist Tab - Only visible for users with artist role */}
             {isArtist && (
               <button
@@ -559,7 +566,7 @@ export default function Dashboard() {
                 className="w-full sm:w-auto px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center justify-center gap-2"
               >
                 <Plus className="w-5 h-5" />
-                <span>New Request</span>
+                <span>New Track</span>
               </Link>
             </div>
 

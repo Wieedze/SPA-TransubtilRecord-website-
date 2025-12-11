@@ -11,6 +11,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
+  isSuperAdmin: boolean
   isAdmin: boolean
   isArtist: boolean
   isClient: boolean
@@ -118,14 +119,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setSession(null)
   }
 
-  const isAdmin = profile?.role === "admin"
+  const isSuperAdmin = profile?.role === "superadmin"
+  const isAdmin = profile?.role === "admin" || isSuperAdmin
   const isArtist = profile?.role === "artist"
   const isClient = profile?.role === "client"
   const isUser = profile?.role === "user"
   const linkedArtistId = profile?.linked_artist_id ?? null
 
-  // Studio access: admins always have it, others need explicit access
-  const hasStudioAccess = isAdmin || profile?.has_studio_access === true
+  // Studio access: superadmin, admin, artist, and client roles have it (not basic 'user' role)
+  const hasStudioAccess = isSuperAdmin || isAdmin || isArtist || isClient
 
   const refreshProfile = async () => {
     if (user) {
@@ -142,6 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signIn,
     signOut,
     refreshProfile,
+    isSuperAdmin,
     isAdmin,
     isArtist,
     isClient,
