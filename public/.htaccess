@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Si le fichier ou dossier existe, ne pas réécrire
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Redirige tout vers index.html (pour React Router)
+  RewriteRule ^ index.html [QSA,L]
+</IfModule>

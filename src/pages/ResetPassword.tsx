@@ -2,7 +2,7 @@ import { useState, useMemo } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
 import { motion } from "framer-motion"
-import { Mail, Lock, User, UserPlus, AlertCircle, CheckCircle, Check, X } from "lucide-react"
+import { Lock, AlertCircle, CheckCircle, Check, X } from "lucide-react"
 import { useAuth } from "../contexts/AuthContext"
 
 // Password validation rules
@@ -20,16 +20,14 @@ const isPasswordValid = (password: string) => {
   return rules.minLength && rules.hasUppercase && rules.hasLowercase && rules.hasNumber
 }
 
-export default function Signup() {
+export default function ResetPassword() {
   const navigate = useNavigate()
-  const { signUp } = useAuth()
+  const { updatePassword } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
     password: "",
     confirmPassword: "",
   })
@@ -64,7 +62,7 @@ export default function Signup() {
       return
     }
 
-    const { error } = await signUp(formData.email, formData.password, formData.fullName)
+    const { error } = await updatePassword(formData.password)
 
     if (error) {
       setError(error.message)
@@ -79,7 +77,7 @@ export default function Signup() {
     return (
       <>
         <Helmet>
-          <title>Sign Up — Transubtil Records</title>
+          <title>Password Updated — Transubtil Records</title>
         </Helmet>
 
         <div className="min-h-screen flex items-center justify-center px-4">
@@ -89,37 +87,17 @@ export default function Signup() {
             className="text-center space-y-6 max-w-md"
           >
             <div className="w-20 h-20 mx-auto bg-green-500/20 rounded-full flex items-center justify-center">
-              <Mail className="w-10 h-10 text-green-400" />
+              <CheckCircle className="w-10 h-10 text-green-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold mb-2">Check your email!</h2>
+              <h2 className="text-2xl font-bold mb-2">Password Updated!</h2>
               <p className="text-white/60">
-                We've sent a confirmation link to <strong className="text-white">{formData.email}</strong>
+                Your password has been successfully changed. You can now log in with your new password.
               </p>
             </div>
-            <div className="bg-white/5 border border-white/10 rounded-lg p-4 text-left space-y-2">
-              <p className="text-sm text-white/70">
-                <span className="text-white font-medium">1.</span> Open your email inbox
-              </p>
-              <p className="text-sm text-white/70">
-                <span className="text-white font-medium">2.</span> Click the confirmation link
-              </p>
-              <p className="text-sm text-white/70">
-                <span className="text-white font-medium">3.</span> Return here to log in
-              </p>
-            </div>
-            <p className="text-xs text-white/40">
-              Didn't receive the email? Check your spam folder or{" "}
-              <button
-                onClick={() => setSuccess(false)}
-                className="text-white/60 hover:text-white underline"
-              >
-                try again
-              </button>
-            </p>
             <Link
               to="/login"
-              className="inline-block px-6 py-3 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white text-sm uppercase tracking-[0.25em] rounded-lg transition-all"
+              className="inline-block px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white text-sm uppercase tracking-[0.25em] rounded-lg transition-all"
             >
               Go to Login
             </Link>
@@ -132,7 +110,7 @@ export default function Signup() {
   return (
     <>
       <Helmet>
-        <title>Sign Up — Transubtil Records</title>
+        <title>Set New Password — Transubtil Records</title>
       </Helmet>
 
       <div className="min-h-screen flex items-center justify-center px-4 py-12">
@@ -143,56 +121,14 @@ export default function Signup() {
           className="w-full max-w-md"
         >
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">Create Account</h1>
+            <h1 className="text-3xl font-bold mb-2">Set New Password</h1>
             <p className="text-white/60 text-sm">
-              Join Transubtil to access our studio services
+              Choose a strong password for your account
             </p>
           </div>
 
           <div className="border border-white/10 rounded-2xl p-8 bg-brand-700/10">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Full Name */}
-              <div>
-                <label
-                  htmlFor="fullName"
-                  className="block text-sm font-medium text-white/80 mb-2"
-                >
-                  <User className="w-4 h-4 inline mr-2" />
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
-                  placeholder="John Doe"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-white/80 mb-2"
-                >
-                  <Mail className="w-4 h-4 inline mr-2" />
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-brand-700/30 border border-white/10 rounded-lg text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 transition-colors"
-                  placeholder="you@example.com"
-                />
-              </div>
-
               {/* Password */}
               <div>
                 <label
@@ -200,7 +136,7 @@ export default function Signup() {
                   className="block text-sm font-medium text-white/80 mb-2"
                 >
                   <Lock className="w-4 h-4 inline mr-2" />
-                  Password
+                  New Password
                 </label>
                 <input
                   type="password"
@@ -254,7 +190,7 @@ export default function Signup() {
                   className="block text-sm font-medium text-white/80 mb-2"
                 >
                   <Lock className="w-4 h-4 inline mr-2" />
-                  Confirm Password
+                  Confirm New Password
                 </label>
                 <input
                   type="password"
@@ -283,28 +219,12 @@ export default function Signup() {
                 className="w-full px-6 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
-                  <span>Creating account...</span>
+                  <span>Updating...</span>
                 ) : (
-                  <>
-                    <UserPlus className="w-5 h-5" />
-                    <span>Create Account</span>
-                  </>
+                  <span>Update Password</span>
                 )}
               </button>
             </form>
-
-            {/* Login Link */}
-            <div className="mt-6 text-center">
-              <p className="text-sm text-white/60">
-                Already have an account?{" "}
-                <Link
-                  to="/login"
-                  className="text-white hover:underline font-medium"
-                >
-                  Sign in
-                </Link>
-              </p>
-            </div>
           </div>
 
           {/* Back to Home */}

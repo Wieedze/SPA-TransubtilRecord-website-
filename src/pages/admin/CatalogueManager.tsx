@@ -404,7 +404,7 @@ export default function CatalogueManager() {
   return (
     <>
       <Helmet>
-        <title>Catalogue Manager — Admin — Transubtil Records</title>
+        <title>Artist / Release Manager — Admin — Transubtil Records</title>
       </Helmet>
 
       <div className="mx-auto max-w-6xl space-y-6">
@@ -417,7 +417,7 @@ export default function CatalogueManager() {
         >
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold uppercase tracking-[0.25em]">
-              Catalogue Manager
+              Artist / Release Manager
             </h1>
             <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
               Manage artists and releases

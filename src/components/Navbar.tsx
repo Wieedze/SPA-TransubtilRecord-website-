@@ -164,7 +164,7 @@ export default function Navbar() {
                   <div className="absolute top-full left-0 pt-2 w-48 z-50">
                     <div className="bg-brand-900 border border-white/10 rounded-lg shadow-lg overflow-hidden">
                     <NavLink
-                      to="/admin/submissions"
+                      to="/admin/my-drive"
                       className={({ isActive }) =>
                         `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
                           isActive
@@ -173,7 +173,7 @@ export default function Navbar() {
                         }`
                       }
                     >
-                      Demo Received
+                      MyDrive
                     </NavLink>
                     <NavLink
                       to="/admin/studio-requests"
@@ -188,7 +188,7 @@ export default function Navbar() {
                       Studio Requests
                     </NavLink>
                     <NavLink
-                      to="/admin/users"
+                      to="/admin/submissions"
                       className={({ isActive }) =>
                         `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
                           isActive
@@ -197,19 +197,7 @@ export default function Navbar() {
                         }`
                       }
                     >
-                      User Management
-                    </NavLink>
-                    <NavLink
-                      to="/admin/my-drive"
-                      className={({ isActive }) =>
-                        `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
-                          isActive
-                            ? "bg-brand-500 text-white"
-                            : "text-white/80 hover:bg-white/5 hover:text-white"
-                        }`
-                      }
-                    >
-                      MyDrive
+                      Demo Received
                     </NavLink>
                     <NavLink
                       to="/admin/catalogue"
@@ -221,7 +209,19 @@ export default function Navbar() {
                         }`
                       }
                     >
-                      Catalogue
+                      Music
+                    </NavLink>
+                    <NavLink
+                      to="/admin/users"
+                      className={({ isActive }) =>
+                        `block px-4 py-2 uppercase tracking-[0.25em] text-[11px] transition-colors ${
+                          isActive
+                            ? "bg-brand-500 text-white"
+                            : "text-white/80 hover:bg-white/5 hover:text-white"
+                        }`
+                      }
+                    >
+                      User Management
                     </NavLink>
                     <NavLink
                       to="/admin/instagram-generator"

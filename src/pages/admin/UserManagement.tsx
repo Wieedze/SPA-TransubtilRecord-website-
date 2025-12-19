@@ -438,7 +438,7 @@ export default function UserManagement() {
                             {/* Artist Dropdown - Portal */}
                             {showArtistDropdown === user.id && createPortal(
                               <div
-                                className="fixed bg-brand-800 border border-white/20 rounded-lg shadow-xl z-[9999] min-w-[200px] max-h-[300px] overflow-y-auto"
+                                className="fixed bg-brand-900 border border-white/20 rounded-lg shadow-2xl z-[9999] min-w-[200px] max-h-[300px] overflow-y-auto"
                                 style={{ top: dropdownPosition.top, left: dropdownPosition.left }}
                                 onClick={(e) => e.stopPropagation()}
                               >
