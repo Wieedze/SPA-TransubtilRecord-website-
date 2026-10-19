@@ -78,11 +78,17 @@ export default function Home() {
           <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0" style={backgroundStyle}>
             <HeroBackground />
           </motion.div>
-          {/* Fade into the page below */}
+          {/* Curved fade into the page below: an arc, lowest in the middle and rising
+              toward the sides, plus a thin straight band so the bottom edge is fully dark */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 -bottom-1 h-44"
-            style={{ background: "linear-gradient(to bottom, transparent, #07060B 80%)" }}
+            className="pointer-events-none absolute inset-0"
+            style={{ background: "radial-gradient(ellipse 85% 100% at 50% 0%, transparent 66%, #07060B 98%)" }}
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 -bottom-1 h-16"
+            style={{ background: "linear-gradient(to bottom, transparent, #07060B)" }}
           />
           <div className="relative flex w-full justify-center" {...hoverProps}>
             <HeroContent hovered={hovered} onNavigate={handleHeroNavigate} />
