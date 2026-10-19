@@ -22,7 +22,7 @@ export default function BandcampPlayer({
         width: "100%",
         height: `${height}px`,
       }}
-      src={`https://bandcamp.com/EmbeddedPlayer/${embedType}=${albumId}/size=${size}/bgcol=030008/linkcol=ffffff/tracklist=false/artwork=${artworkSize}/transparent=true/`}
+      src={`https://bandcamp.com/EmbeddedPlayer/${embedType}=${albumId}/size=${size}/bgcol=030008/linkcol=f9bc14/tracklist=false/artwork=${artworkSize}/transparent=true/`}
       seamless
       title="Bandcamp Player"
       className="rounded-xl"

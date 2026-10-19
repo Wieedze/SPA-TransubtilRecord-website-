@@ -13,6 +13,8 @@ interface DecryptedTextProps {
   revealDirection?: "start" | "end" | "center"
   cursorFollow?: boolean
   cursorRadius?: number
+  // Scramble again each time this value changes (e.g. a parent's hover count)
+  trigger?: number
 }
 
 const defaultCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?"
@@ -29,6 +31,7 @@ export default function DecryptedText({
   revealDirection = "center",
   cursorFollow = false,
   cursorRadius = 100,
+  trigger,
 }: DecryptedTextProps) {
   const [displayText, setDisplayText] = useState(text)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -159,6 +162,10 @@ export default function DecryptedText({
   }, [isInView, animateOn])
 
   useEffect(() => {
+    if (trigger) decrypt()
+  }, [trigger])
+
+  useEffect(() => {
     if (cursorFollow) {
       calculateLetterPositions()
       window.addEventListener("resize", calculateLetterPositions)
@@ -193,7 +200,9 @@ export default function DecryptedText({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <span ref={textRef} className={isAnimating ? encryptedClassName : className}>
+      {/* Screen readers get the real text, never the scrambled one */}
+      <span className="sr-only">{text}</span>
+      <span ref={textRef} aria-hidden="true" className={isAnimating ? encryptedClassName : className}>
         {displayText}
       </span>
     </span>

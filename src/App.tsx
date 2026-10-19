@@ -27,11 +27,13 @@ import InstagramGenerator from "./pages/InstagramGenerator.tsx"
 import CatalogueManager from "./pages/admin/CatalogueManager.tsx"
 import NotFound from "./pages/NotFound.tsx"
 import { FEATURE_AUTH, FEATURE_STUDIO } from "./config/features.ts"
+import ScrollToTop from "./components/site/ScrollToTop.tsx"
 
 function App() {
   return (
     <HelmetProvider>
       <AuthProvider>
+        <ScrollToTop />
         <Routes>
           {/* Home renders its own nav and footer (fullscreen intro) */}
           <Route path="/" element={<Home />} />

@@ -1,27 +1,52 @@
 import { Link } from "react-router-dom"
+import { motion } from "framer-motion"
 import type { RosterArtist } from "../../data/roster"
+import DecryptedText from "../DecryptedText"
+import CardFrame from "../mecha/CardFrame"
+import SocialIcons from "../site/SocialIcons"
+import { useHoverCount } from "../../hooks/useHoverCount"
 
-export default function ArtistCard({ artist, showLocation = false }: { artist: RosterArtist; showLocation?: boolean }) {
+// Artist card: 2026 design + v1 interactions (mecha frame brightening on hover,
+// slow photo zoom, name scrambling on hover, country and social links).
+export default function ArtistCard({ artist, showDetails = false }: { artist: RosterArtist; showDetails?: boolean }) {
+  const { count, hoverProps } = useHoverCount()
+  const place = artist.location ?? artist.country
+
   return (
-    <Link to={`/artists/${artist.slug}`} className="group flex flex-col gap-3.5 text-bone hover:text-bone">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-photo bg-brand-800">
-        <img
-          src={artist.photo}
-          alt={artist.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.04]"
-        />
-        <span className="absolute right-2.5 top-2.5 rounded bg-accent px-[9px] py-[5px] text-[11px] font-bold uppercase tracking-[0.12em] text-brand-950">
-          {artist.format}
-        </span>
-      </div>
-      <div className="flex flex-col gap-1.5">
-        <span className="font-display text-[15px] font-semibold uppercase transition-colors group-hover:text-accent md:text-[19px]">
-          {artist.name}
-        </span>
-        <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent md:text-xs">{artist.style}</span>
-        {showLocation && artist.location && <span className="text-small text-brand-300">{artist.location}</span>}
-      </div>
-    </Link>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="group relative"
+      {...hoverProps}
+    >
+      <CardFrame className="z-10 text-accent opacity-25 transition-opacity duration-500 group-hover:opacity-60" />
+      <Link to={`/artists/${artist.slug}`} className="flex flex-col gap-3.5 text-bone hover:text-bone">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-photo bg-brand-800">
+          <img
+            src={artist.photo}
+            alt={artist.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <span className="absolute right-2.5 top-2.5 rounded bg-accent px-[9px] py-[5px] text-[11px] font-bold uppercase tracking-[0.12em] text-brand-950">
+            {artist.format}
+          </span>
+        </div>
+        <div className="flex flex-col gap-1.5 px-1">
+          <span className="font-display text-[15px] font-semibold uppercase transition-colors group-hover:text-accent md:text-[19px]">
+            <DecryptedText text={artist.name} trigger={count} speed={50} maxIterations={6} />
+          </span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent md:text-xs">{artist.style}</span>
+          {showDetails && <span className="text-xs uppercase tracking-[0.12em] text-brand-300">{artist.act}</span>}
+        </div>
+      </Link>
+      {showDetails && (place || artist.links.soundcloud || artist.links.instagram || artist.links.facebook) && (
+        <div className="relative z-20 mt-2 flex items-center justify-between gap-2 border-t border-brand-700 px-1 pt-2">
+          <span className="text-small text-brand-300">{place}</span>
+          <SocialIcons links={artist.links} className="-mr-2 gap-0" />
+        </div>
+      )}
+    </motion.div>
   )
 }

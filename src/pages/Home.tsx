@@ -1,9 +1,10 @@
+import { useState, type MouseEvent } from "react"
 import { Helmet } from "react-helmet-async"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import SiteNav from "../components/site/SiteNav"
 import SiteFooter from "../components/site/SiteFooter"
-import HeroContent, { HeroBackground } from "../components/home/HeroContent"
+import HeroContent, { HeroBackground, useHeroHover } from "../components/home/HeroContent"
 import ArtistCard from "../components/home/ArtistCard"
 import { useIntroZoom, ZOOM_DURATION } from "../components/home/useIntroZoom"
 import { getRosterArtist, roster, type RosterArtist } from "../data/roster"
@@ -17,6 +18,17 @@ const bandcampUrl = SOCIAL_LINKS.find((l) => l.label === "Bandcamp")?.href ?? nu
 export default function Home() {
   const { phase, heroRef, heroStyle, backgroundStyle } = useIntroZoom()
   const intro = phase === "intro"
+  const { hovered, hoverProps } = useHeroHover()
+  const navigate = useNavigate()
+  const [leaving, setLeaving] = useState(false)
+
+  // v1 landing transition: the page fades out, then navigates
+  const handleHeroNavigate = (e: MouseEvent<HTMLAnchorElement>, to: string) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    setLeaving(true)
+    window.setTimeout(() => navigate(to), 600)
+  }
   // Nav and page content arrive while the hero pulls back
   const reveal = {
     initial: false as const,
@@ -25,7 +37,12 @@ export default function Home() {
   }
 
   return (
-    <div className="relative min-h-screen text-bone">
+    <motion.div
+      className="relative min-h-screen text-bone"
+      initial={false}
+      animate={{ opacity: leaving ? 0 : 1 }}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+    >
       <Helmet>
         <title>Transubtil Records — Psychedelic label, Marseille</title>
         <meta
@@ -58,7 +75,7 @@ export default function Home() {
         >
           {/* Animated background, confined to the hero */}
           <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0" style={backgroundStyle}>
-            <HeroBackground />
+            <HeroBackground hovered={hovered} />
           </motion.div>
           {/* Fade into the page below */}
           <div
@@ -66,7 +83,9 @@ export default function Home() {
             className="pointer-events-none absolute inset-x-0 -bottom-1 h-44"
             style={{ background: "linear-gradient(to bottom, transparent, #07060B 80%)" }}
           />
-          <HeroContent />
+          <div className="relative flex w-full justify-center" {...hoverProps}>
+            <HeroContent hovered={hovered} onNavigate={handleHeroNavigate} />
+          </div>
         </motion.section>
 
         <motion.div {...reveal}>
@@ -142,6 +161,6 @@ export default function Home() {
           <SiteFooter />
         </motion.div>
       </main>
-    </div>
+    </motion.div>
   )
 }

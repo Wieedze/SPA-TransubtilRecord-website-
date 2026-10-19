@@ -26,10 +26,9 @@ export default function SoundCloudPlayer({
         // If it's already a SoundCloud URL (profile or track)
         if (soundcloudUrl.includes("soundcloud.com")) {
           // Build embed URL
-          const encodedUrl = encodeURIComponent(soundcloudUrl)
           const params = new URLSearchParams({
             url: soundcloudUrl,
-            color: "%23808782", // brand-500 color
+            color: "#F9BC14", // accent
             auto_play: autoPlay.toString(),
             hide_related: "true",
             show_comments: "false",
@@ -79,7 +78,7 @@ export default function SoundCloudPlayer({
           href={soundcloudUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-brand-300 hover:text-brand-200 text-sm underline"
+          className="text-accent hover:text-accent-hover text-sm underline"
         >
           Open on SoundCloud
         </a>

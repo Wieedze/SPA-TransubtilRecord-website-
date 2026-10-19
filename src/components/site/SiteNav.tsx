@@ -4,6 +4,10 @@ import { Link, NavLink, useLocation } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import brandmark from "../../assets/design/assets/brandmark-white.png"
 import { BOOKING_PATH, NAV_LINKS, activeSocialLinks } from "../../config/site"
+import DecryptedText from "../DecryptedText"
+import NavFrame from "../mecha/NavFrame"
+import { glowFlashProps } from "../mecha/glowFlash"
+import { useHoverCount } from "../../hooks/useHoverCount"
 
 function Wordmark({ compact = false }: { compact?: boolean }) {
   return (
@@ -66,6 +70,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
             to={link.to}
             end={link.to === "/"}
             onClick={onClose}
+            {...glowFlashProps}
             className={({ isActive }) =>
               [
                 "border-b border-brand-700 py-[18px] font-display text-[30px] font-bold",
@@ -95,6 +100,30 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
   )
 }
 
+function DesktopNavLink({ to, label }: { to: string; label: string }) {
+  const { count, hoverProps } = useHoverCount()
+  return (
+    <NavLink
+      to={to}
+      end={to === "/"}
+      {...hoverProps}
+      {...glowFlashProps}
+      className={({ isActive }) =>
+        ["relative px-4 py-2", isActive ? "text-accent" : "text-bone hover:text-accent"].join(" ")
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <AnimatePresence>{isActive && <NavFrame />}</AnimatePresence>
+          <span className="relative">
+            <DecryptedText text={label} trigger={count} speed={45} maxIterations={6} />
+          </span>
+        </>
+      )}
+    </NavLink>
+  )
+}
+
 export default function SiteNav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
@@ -111,21 +140,9 @@ export default function SiteNav() {
       >
         <Wordmark />
 
-        <div className="hidden items-center gap-8 text-[15px] font-semibold lg:flex">
+        <div className="hidden items-center gap-3 text-[15px] font-semibold lg:flex">
           {NAV_LINKS.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              end={link.to === "/"}
-              className={({ isActive }) =>
-                [
-                  "border-b-2 py-1.5",
-                  isActive ? "border-accent text-accent" : "border-transparent text-bone hover:text-accent",
-                ].join(" ")
-              }
-            >
-              {link.label}
-            </NavLink>
+            <DesktopNavLink key={link.to} to={link.to} label={link.label} />
           ))}
         </div>
 
