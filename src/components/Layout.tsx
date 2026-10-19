@@ -8,7 +8,7 @@ export default function Layout() {
       <div className="sticky top-0 z-30">
         <SiteNav />
       </div>
-      <main className="mx-auto w-full max-w-page flex-1 px-4 py-10 md:px-6">
+      <main className="mx-auto w-full max-w-page flex-1 px-4 pb-20 pt-12 md:px-6 md:pb-24 md:pt-16">
         <Outlet />
       </main>
       <SiteFooter />

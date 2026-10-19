@@ -1,242 +1,100 @@
-import { useState, useMemo, useEffect } from "react"
+import { useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { motion } from "framer-motion"
-import { ExternalLink, Search } from "lucide-react"
-import { getReleases, type Release } from "../lib/catalogue"
-import BandcampPlayer from "../components/BandcampPlayer"
+import PageHeader from "../components/site/PageHeader"
+import { releases } from "../data/releases"
+import type { Release } from "../types/release"
+
+const PAGE_SIZE = 12
+
+const TYPE_LABELS: Record<Release["type"], string> = {
+  album: "Album",
+  ep: "EP",
+  track: "Single",
+  compilation: "Compilation",
+}
+
+type Sort = "newest" | "artist" | "compilations"
+
+// releases.ts is stored newest first
+function sortReleases(sort: Sort): Release[] {
+  if (sort === "artist") return [...releases].sort((a, b) => a.artist.localeCompare(b.artist))
+  if (sort === "compilations") return releases.filter((r) => r.type === "compilation")
+  return releases
+}
 
 export default function Releases() {
-  const [releases, setReleases] = useState<Release[]>([])
-  const [selectedRelease, setSelectedRelease] = useState<Release | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    loadReleases()
-  }, [])
-
-  async function loadReleases() {
-    try {
-      setLoading(true)
-      const data = await getReleases()
-      setReleases(data)
-      if (data.length > 0) {
-        setSelectedRelease(data[0])
-      }
-    } catch (err) {
-      console.error("Error loading releases:", err)
-      setError("Failed to load releases. Please try again later.")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Filter releases based on search query
-  const filteredReleases = useMemo(() => {
-    if (!searchQuery.trim()) return releases
-
-    const query = searchQuery.toLowerCase()
-    return releases.filter(
-      (release) =>
-        release.title.toLowerCase().includes(query) ||
-        release.artist.toLowerCase().includes(query) ||
-        release.catalog_number?.toLowerCase().includes(query)
-    )
-  }, [releases, searchQuery])
-
-  if (loading) {
-    return (
-      <section className="mx-auto max-w-6xl">
-        <div className="flex items-center justify-center py-24">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-500"></div>
-        </div>
-      </section>
-    )
-  }
-
-  if (error) {
-    return (
-      <section className="mx-auto max-w-6xl">
-        <div className="text-center py-24">
-          <p className="text-red-400 mb-4">{error}</p>
-          <button
-            onClick={loadReleases}
-            className="px-6 py-2 border border-white/20 hover:border-white/40 rounded-lg text-sm uppercase tracking-wider transition-colors"
-          >
-            Retry
-          </button>
-        </div>
-      </section>
-    )
-  }
+  const [sort, setSort] = useState<Sort>("newest")
+  const [visible, setVisible] = useState(PAGE_SIZE)
+  const sorted = useMemo(() => sortReleases(sort), [sort])
 
   return (
-    <>
+    <div className="flex flex-col gap-10">
       <Helmet>
         <title>Releases — Transubtil Records</title>
-        <meta
-          name="description"
-          content="Explore the full Transubtil Records discography. Dark psy, forest, twilight releases from international artists."
-        />
+        <meta name="description" content="EPs, albums and compilations from Transubtil Records, newest first." />
       </Helmet>
 
-      <section className="mx-auto max-w-6xl space-y-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="space-y-4 text-center"
-        >
-        </motion.div>
+      <PageHeader
+        eyebrow="Catalogue"
+        title="Releases"
+        intro="EPs, albums and compilations from the label, newest first."
+        aside={
+          <div className="flex flex-col gap-2">
+            <label htmlFor="sort" className="text-[13px] font-semibold text-brand-300">
+              Sort
+            </label>
+            <select
+              id="sort"
+              value={sort}
+              onChange={(e) => {
+                setSort(e.target.value as Sort)
+                setVisible(PAGE_SIZE)
+              }}
+              className="h-11 rounded-field border-[1.5px] border-brand-700 bg-brand-900 px-3.5 text-[15px] text-bone"
+            >
+              <option value="newest">Newest</option>
+              <option value="artist">By artist</option>
+              <option value="compilations">Compilations</option>
+            </select>
+          </div>
+        }
+      />
 
-        {/* Featured Player */}
-        {selectedRelease && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="border border-white/10 rounded-xl p-4 md:p-6 bg-brand-700/10"
-          >
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-              <div>
-                <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-white/40 mb-1">
-                  Now Playing
-                </p>
-                <h2 className="font-display text-xl font-bold capitalize tracking-wide">{selectedRelease.title}</h2>
-                <p className="font-sans text-brand-300/70 uppercase tracking-[0.25em] text-[11px]">{selectedRelease.artist}</p>
-              </div>
-              <a
-                href={selectedRelease.bandcamp_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-4 py-2 border border-white/40 hover:border-white/80 hover:bg-white/5 text-white font-sans uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all flex items-center justify-center gap-2"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span className="hidden sm:inline">Buy on Bandcamp</span>
-              </a>
-            </div>
-
-            <BandcampPlayer
-              albumId={selectedRelease.bandcamp_id}
-              type={selectedRelease.type === "track" ? "track" : "album"}
-            />
-          </motion.div>
-        )}
-
-        {/* Releases Grid */}
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <h3 className="font-display text-2xl font-bold uppercase tracking-[0.25em]">All Releases</h3>
-
-            {/* Search Bar */}
-            <div className="relative w-full sm:w-auto sm:min-w-[300px]">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="SEARCH RELEASES..."
-                className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-brand-500 focus:outline-none text-white placeholder:text-white/40 uppercase tracking-[0.25em] text-[11px] transition-colors"
+      <div className="grid grid-cols-2 gap-x-3.5 gap-y-8 lg:grid-cols-4 lg:gap-6">
+        {sorted.slice(0, visible).map((release) => (
+          <article key={release.id} className="flex flex-col gap-3.5">
+            <a href={release.bandcampUrl} target="_blank" rel="noreferrer" className="group block overflow-hidden rounded-panel">
+              <img
+                src={release.coverUrl}
+                alt={`${release.title} artwork`}
+                loading="lazy"
+                className="aspect-square w-full bg-brand-800 object-cover transition-transform duration-200 group-hover:scale-[1.04]"
               />
+            </a>
+            <div className="flex flex-col gap-1">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent md:text-xs">
+                {TYPE_LABELS[release.type]} · {release.releaseDate}
+              </span>
+              <h2 className="font-display text-[15px] font-semibold leading-snug md:text-lg">{release.title}</h2>
+              <span className="text-small text-brand-300 md:text-[15px]">{release.artist}</span>
             </div>
-          </div>
+            <a
+              href={release.bandcampUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="self-start border-b-[1.5px] border-accent pb-0.5 text-sm font-semibold text-bone hover:text-accent"
+            >
+              Listen &amp; buy on Bandcamp
+            </a>
+          </article>
+        ))}
+      </div>
 
-          {filteredReleases.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredReleases.map((release, index) => (
-              <motion.div
-                key={release.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
-                className={`
-                  border rounded-xl p-4 transition-all
-                  ${
-                    selectedRelease?.id === release.id
-                      ? "border-white/40 bg-white/5"
-                      : "border-white/10 hover:border-white/30 hover:bg-white/5"
-                  }
-                `}
-              >
-                {/* Cover Image - Clickable to change player */}
-                <button
-                  onClick={() => setSelectedRelease(release)}
-                  className="w-full aspect-square bg-brand-700 rounded-lg mb-4 overflow-hidden border border-white/10 hover:opacity-80 transition-opacity"
-                >
-                  <img
-                    src={release.cover_url}
-                    alt={`${release.title} cover`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </button>
-
-                {/* Info */}
-                <div className="space-y-2">
-                  <div>
-                    {release.catalog_number && (
-                      <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-white/40 mb-1">
-                        {release.catalog_number}
-                      </p>
-                    )}
-                    <h4 className="font-display font-semibold text-sm line-clamp-2 capitalize tracking-wide">
-                      {release.title}
-                    </h4>
-                    <p className="font-sans uppercase tracking-[0.25em] text-[11px] text-white/60 mt-1">{release.artist}</p>
-                  </div>
-
-                  <div className="flex items-center justify-between font-sans uppercase tracking-[0.25em] text-[11px]">
-                    <span className="text-white/40">{release.type}</span>
-                    <span className="text-white/40">{release.release_date}</span>
-                  </div>
-
-                  {/* Bandcamp Link */}
-                  <a
-                    href={release.bandcamp_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block mt-3 px-4 py-2 text-center border border-white/20 hover:border-white/40 hover:bg-white/5 rounded-lg font-sans uppercase tracking-[0.25em] text-[11px] transition-all"
-                  >
-                    View on Bandcamp
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          ) : (
-            <div className="text-center py-12 border border-white/10 rounded-xl bg-white/5">
-              <p className="text-white/60 uppercase tracking-[0.25em] text-[11px]">
-                No releases found matching "{searchQuery}"
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Bandcamp CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center py-12 border-t border-white/10"
-        >
-          <h3 className="font-display text-2xl font-bold mb-4 uppercase tracking-[0.25em]">Support the Label</h3>
-          <p className="font-sans text-white/60 mb-6 max-w-xl mx-auto uppercase tracking-[0.25em] text-[11px]">
-            All releases are available on Bandcamp. Your support helps us continue
-            releasing cutting-edge psychedelic music.
-          </p>
-          <a
-            href="https://transubtilrec.bandcamp.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3 border-2 border-white/80 hover:bg-white hover:text-black text-white font-sans font-medium uppercase tracking-[0.25em] text-[11px] rounded-lg transition-all"
-          >
-            <ExternalLink className="w-5 h-5" />
-            Visit Bandcamp Store
-          </a>
-        </motion.div>
-      </section>
-    </>
+      {visible < sorted.length && (
+        <button type="button" onClick={() => setVisible((v) => v + PAGE_SIZE)} className="btn-secondary self-center">
+          Load more releases
+        </button>
+      )}
+    </div>
   )
 }

@@ -20,7 +20,7 @@ import ForgotPassword from "./pages/ForgotPassword.tsx"
 import ResetPassword from "./pages/ResetPassword.tsx"
 import AuthCallback from "./pages/AuthCallback.tsx"
 import Artists from "./pages/Artists.tsx"
-import ArtistProfile from "./pages/ArtistProfile.tsx"
+import ArtistPage from "./pages/ArtistPage.tsx"
 import Releases from "./pages/Releases.tsx"
 import About from "./pages/About.tsx"
 import InstagramGenerator from "./pages/InstagramGenerator.tsx"
@@ -135,7 +135,7 @@ function App() {
             )}
 
             <Route path="/artists" element={<Artists />} />
-            <Route path="/artists/:slug" element={<ArtistProfile />} />
+            <Route path="/artists/:slug" element={<ArtistPage />} />
             <Route path="/releases" element={<Releases />} />
             <Route path="/about" element={<About />} />
             {/* TODO(v2 pages): dedicated Label and Contact pages */}
