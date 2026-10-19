@@ -59,7 +59,7 @@ export default function SoundCloudPlayer({
   if (isLoading) {
     return (
       <div
-        className="w-full bg-brand-700/20 border border-white/10 rounded-xl flex items-center justify-center"
+        className="w-full bg-brand-700/20 border border-white/10 flex items-center justify-center"
         style={{ height: `${height}px` }}
       >
         <div className="animate-pulse text-white/40">Loading player...</div>
@@ -70,7 +70,7 @@ export default function SoundCloudPlayer({
   if (error || !embedUrl) {
     return (
       <div
-        className="w-full bg-brand-700/20 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-3 p-6"
+        className="w-full bg-brand-700/20 border border-white/10 flex flex-col items-center justify-center gap-3 p-6"
         style={{ height: `${height}px` }}
       >
         <p className="text-white/40 text-sm">Unable to load SoundCloud player</p>
@@ -96,7 +96,7 @@ export default function SoundCloudPlayer({
         allow="autoplay"
         src={embedUrl}
         title={`${artistName} on SoundCloud`}
-        className="rounded-xl"
+        className=""
       />
     </div>
   )

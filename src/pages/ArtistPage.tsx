@@ -2,7 +2,7 @@ import { useState, type FormEvent, type ReactNode } from "react"
 import { Helmet } from "react-helmet-async"
 import { Link, useParams } from "react-router-dom"
 import { motion } from "framer-motion"
-import { ExternalLink, MapPin } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 import NotFound from "./NotFound"
 import { getRosterArtist, releasesByArtist, type RosterArtist } from "../data/roster"
 import DecryptedText from "../components/DecryptedText"
@@ -11,7 +11,7 @@ import SoundCloudPlayer from "../components/SoundCloudPlayer"
 import SocialIcons from "../components/site/SocialIcons"
 
 const fieldClass =
-  "h-[52px] rounded-field border-[1.5px] border-brand-700 bg-brand-950 px-4 text-base text-bone placeholder:text-[#8C8995] [color-scheme:dark]"
+  "h-12 rounded-field border border-brand-700 bg-brand-900 px-4 text-base text-bone placeholder:text-[#8C8995] [color-scheme:dark]"
 
 const BOOKING_FIELDS = [
   { id: "bk-name", name: "name", label: "Name *", type: "text", placeholder: "First and last name", required: true, autoComplete: "name" },
@@ -121,16 +121,16 @@ function BookingForm({ artist }: { artist: RosterArtist }) {
           name="message"
           rows={5}
           placeholder="Line-up, set times, accommodation, travel…"
-          className="resize-y rounded-field border-[1.5px] border-brand-700 bg-brand-950 px-4 py-3.5 text-base leading-normal text-bone placeholder:text-[#8C8995]"
+          className="resize-y rounded-field border border-brand-700 bg-brand-900 px-4 py-3.5 text-base leading-normal text-bone placeholder:text-[#8C8995]"
         />
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-4 md:col-span-2">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-span-2">
+        <button type="submit" className="btn-primary h-12 px-7">
+          Send request
+        </button>
         <p role="status" className="text-small text-brand-300">
           {notice ?? "Your details are only used to handle this request."}
         </p>
-        <button type="submit" className="btn-primary h-12 px-6">
-          Send request
-        </button>
       </div>
     </form>
   )
@@ -174,50 +174,33 @@ export default function ArtistPage() {
           className="grid grid-cols-1 items-center gap-7 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-[72px]"
         >
           <ArtistHub artist={artist} />
-          <div className="flex flex-col gap-[22px]">
-            <p className="eyebrow">
-              <DecryptedText text={`${artist.style} · ${artist.format}`} animateOn="view" speed={120} maxIterations={10} />
-            </p>
-            <h1 className="font-display text-[40px] font-extrabold uppercase leading-none md:text-[72px]">{artist.name}</h1>
-            {place && (
-              <p className="flex items-center gap-2 text-brand-300">
-                <MapPin className="h-4 w-4 text-accent" aria-hidden="true" />
-                <DecryptedText text={place} animateOn="view" speed={180} maxIterations={15} />
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
+              <h1 className="font-display text-[40px] font-extrabold uppercase leading-none md:text-[72px]">{artist.name}</h1>
+              <p className="meta">
+                <DecryptedText text={artist.styles.join(" · ")} animateOn="view" speed={120} maxIterations={10} />
               </p>
-            )}
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            </div>
+            <dl className="grid grid-cols-2 border-t border-brand-700 md:grid-cols-3">
               {facts.map((fact) => (
-                <div key={fact.label} className="flex flex-col gap-1 rounded-xl border border-brand-700 px-4 py-3.5">
-                  <span className="text-xs uppercase tracking-[0.12em] text-brand-300">{fact.label}</span>
-                  <span className="font-bold">
+                <div key={fact.label} className="flex flex-col gap-1 border-b border-brand-700 py-3.5 pr-4">
+                  <dt className="text-xs uppercase tracking-[0.12em] text-brand-300">{fact.label}</dt>
+                  <dd className="font-semibold">
                     <DecryptedText text={fact.value} animateOn="view" speed={180} maxIterations={15} />
-                  </span>
+                  </dd>
                 </div>
               ))}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {artist.styles.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-brand-700 bg-brand-900 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-brand-300"
-                >
-                  <DecryptedText text={tag} animateOn="view" speed={180} maxIterations={15} />
-                </span>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <a href="#booking" className="btn-primary h-12 px-6">
+            </dl>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+              <a href="#booking" className="btn-primary h-12 px-7">
                 Book {artist.name}
               </a>
               {artist.presskitZip && (
-                <a href={artist.presskitZip} download className="btn-secondary h-12">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M12 3v12M7 10l5 5 5-5M5 21h14" />
-                  </svg>
+                <a href={artist.presskitZip} download className="text-link">
                   Press kit (ZIP)
                 </a>
               )}
-              <SocialIcons links={artist.links} />
+              <SocialIcons links={artist.links} className="-ml-2 gap-1" />
             </div>
           </div>
         </motion.div>
@@ -247,8 +230,8 @@ export default function ArtistPage() {
             {artist.rider && (
               <FadeUp className="flex flex-col gap-4">
                 <SectionTitle>Technical rider</SectionTitle>
-                <a href={artist.rider} className="self-start border-b-[1.5px] border-accent pb-0.5 font-semibold text-bone hover:text-accent">
-                  Full rider (PDF) →
+                <a href={artist.rider} className="text-link self-start">
+                  Full rider (PDF)
                 </a>
               </FadeUp>
             )}
@@ -257,7 +240,7 @@ export default function ArtistPage() {
           <FadeUp className="flex flex-col gap-4" delay={0.2}>
             <SectionTitle>Upcoming dates</SectionTitle>
             {/* TODO(content): render artist.upcomingDates once the label provides them */}
-            <p className="rounded-panel border border-brand-700 bg-brand-950 px-[18px] py-4 text-brand-300">
+            <p className="border-y border-brand-700 py-4 text-brand-300">
               No dates announced yet.
             </p>
             <p className="text-small text-brand-300">Got a free date in mind? Send your request just below.</p>
@@ -310,9 +293,8 @@ export default function ArtistPage() {
 
       {/* Booking */}
       <section id="booking" className="scroll-mt-28 pt-16 md:pt-24">
-        <FadeUp className="flex flex-col gap-8 rounded-card border-[1.5px] border-brand-700 bg-brand-900 p-6 md:p-14">
+        <FadeUp className="flex flex-col gap-8 border-t border-brand-700 pt-10 md:pt-14">
           <div className="flex max-w-[680px] flex-col gap-3">
-            <p className="eyebrow">Booking</p>
             <h2 className="font-display text-[28px] font-bold leading-tight md:text-[40px]">
               <DecryptedText text={`Book ${artist.name}`} animateOn="view" speed={60} maxIterations={5} />
             </h2>

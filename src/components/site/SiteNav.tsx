@@ -45,7 +45,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
           type="button"
           onClick={onClose}
           aria-label="Close menu"
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-brand-950"
+          className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-accent text-brand-950"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
             <path d="M6 6l12 12M18 6L6 18" />
@@ -138,7 +138,7 @@ export default function SiteNav() {
           onClick={() => setMenuOpen(true)}
           aria-label="Open menu"
           aria-expanded={menuOpen}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-brand-700 text-bone lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-[2px] border border-brand-700 text-bone lg:hidden"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M4 7h16M4 12h16M4 17h10" />

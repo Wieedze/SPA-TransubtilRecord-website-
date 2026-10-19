@@ -20,7 +20,7 @@ export default function SocialIcons({ links, className = "" }: { links: RosterAr
           rel="noreferrer"
           aria-label={label}
           onClick={(e) => e.stopPropagation()}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-brand-300 transition-colors hover:text-accent"
+          className="flex h-9 w-9 items-center justify-center text-brand-300 transition-colors hover:text-accent"
         >
           <Icon className="h-5 w-5" aria-hidden="true" />
         </a>

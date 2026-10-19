@@ -25,7 +25,7 @@ export default function BandcampPlayer({
       src={`https://bandcamp.com/EmbeddedPlayer/${embedType}=${albumId}/size=${size}/bgcol=030008/linkcol=f9bc14/tracklist=false/artwork=${artworkSize}/transparent=true/`}
       seamless
       title="Bandcamp Player"
-      className="rounded-xl"
+      className=""
     >
       <a href="https://transubtilrec.bandcamp.com">Transubtil Rec on Bandcamp</a>
     </iframe>

@@ -10,10 +10,6 @@ import DecryptedText from "../DecryptedText"
 import { glowFlashProps } from "../site/glowFlash"
 import { useHoverCount } from "../../hooks/useHoverCount"
 
-const tileBase =
-  "flex h-12 items-center justify-between rounded-panel px-5 text-[15px] font-semibold md:h-14 md:text-base"
-const tileDark = `${tileBase} border border-brand-700 bg-brand-900/80 text-bone hover:border-accent hover:text-bone`
-
 // Spinning yellow spiral, dark vignette and yellow halo, behind the home hero.
 export function HeroBackground() {
   return (
@@ -40,7 +36,8 @@ export function HeroBackground() {
   )
 }
 
-function HeroTile({
+// Hero action: the one primary button, or a quiet text link. Labels scramble on hover.
+function HeroAction({
   to,
   label,
   primary = false,
@@ -58,22 +55,15 @@ function HeroTile({
       onClick={(e) => onNavigate(e, to)}
       {...hoverProps}
       {...glowFlashProps}
-      className={
-        primary
-          ? `${tileBase} order-first bg-accent text-brand-950 hover:bg-accent-hover hover:text-brand-950 md:order-none`
-          : tileDark
-      }
+      className={primary ? "btn-primary h-12 px-7" : "text-link"}
     >
       <DecryptedText text={label} trigger={count} speed={90} maxIterations={5} />
-      <span aria-hidden="true" className={primary ? "" : "text-accent"}>
-        →
-      </span>
     </Link>
   )
 }
 
 // Content of the home hero (01-home / mobile-home mockups) with the v1 landing
-// interactions: logo easing back on hover, scrambled tile labels on hover.
+// interactions: logo easing back on hover, scrambled action labels on hover.
 export default function HeroContent({
   hovered,
   onNavigate,
@@ -96,10 +86,10 @@ export default function HeroContent({
       <p className="max-w-[620px] text-base leading-relaxed text-body md:text-[19px]">
         Psytrance, darkpsy and forest. Artists to book for your festival, releases to play tonight.
       </p>
-      <div className="mt-2 grid w-full max-w-[820px] grid-cols-1 gap-2.5 md:mt-3 md:grid-cols-3 md:gap-4">
-        <HeroTile to="/artists" label="Artists" onNavigate={onNavigate} />
-        <HeroTile to="/releases" label="Releases" onNavigate={onNavigate} />
-        <HeroTile to={BOOKING_PATH} label="Booking" primary onNavigate={onNavigate} />
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-x-8 gap-y-5">
+        <HeroAction to={BOOKING_PATH} label="Book an artist" primary onNavigate={onNavigate} />
+        <HeroAction to="/artists" label="Artists" onNavigate={onNavigate} />
+        <HeroAction to="/releases" label="Releases" onNavigate={onNavigate} />
       </div>
     </div>
   )

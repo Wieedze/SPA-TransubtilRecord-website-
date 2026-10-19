@@ -48,13 +48,13 @@ export default function Artists() {
       </Helmet>
 
       <PageHeader
-        eyebrow={`Roster · ${roster.length} artists`}
         title="Artists"
+        meta={`${roster.length} artists · ${allCountries.length} countries`}
         intro="DJs and live acts from France, Portugal, Japan, Mexico, Brazil, Australia and beyond. Each page has a press kit, a rider and a direct booking form."
       />
 
       <div className="flex flex-col gap-4">
-        <div role="group" aria-label="Filter by format" className="flex flex-wrap items-center gap-2.5">
+        <div role="group" aria-label="Filter by format" className="flex flex-wrap items-center gap-7">
           {Object.keys(FORMATS).map((label) => {
             const active = label === format
             return (
@@ -64,10 +64,8 @@ export default function Artists() {
                 aria-pressed={active}
                 onClick={() => setFormat(label)}
                 className={[
-                  "h-10 rounded-full border px-4 text-sm font-medium",
-                  active
-                    ? "border-accent bg-accent text-brand-950"
-                    : "border-brand-700 text-bone hover:border-accent hover:text-accent",
+                  "border-b-2 py-1.5 text-base font-medium",
+                  active ? "border-accent text-accent" : "border-transparent text-bone hover:text-accent",
                 ].join(" ")}
               >
                 {label}

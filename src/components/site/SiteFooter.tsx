@@ -29,11 +29,11 @@ function NewsletterBand() {
             required
             autoComplete="email"
             placeholder="your@email.com"
-            className="h-12 min-w-0 flex-[1_1_240px] rounded-full border-[1.5px] border-brand-950 bg-accent px-[18px] text-base font-medium text-brand-950 placeholder:text-brand-950/60 focus-visible:outline-brand-950"
+            className="h-12 min-w-0 flex-[1_1_240px] rounded-[2px] border-[1.5px] border-brand-950 bg-accent px-[18px] text-base font-medium text-brand-950 placeholder:text-brand-950/60 focus-visible:outline-brand-950"
           />
           <button
             type="submit"
-            className="h-12 rounded-full bg-brand-950 px-6 font-semibold text-accent focus-visible:outline-brand-950"
+            className="h-12 rounded-[2px] bg-brand-950 px-6 font-semibold text-accent focus-visible:outline-brand-950"
           >
             Subscribe
           </button>

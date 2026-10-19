@@ -10,6 +10,8 @@ import { SOCIAL_LINKS } from "../config/site"
 import type { Release } from "../types/release"
 
 const PAGE_SIZE = 12
+const years = releases.map((r) => Number(r.releaseDate)).filter(Boolean)
+const yearSpan = `${Math.min(...years)}–${Math.max(...years)}`
 const bandcampStore = SOCIAL_LINKS.find((l) => l.label === "Bandcamp")?.href ?? null
 
 const TYPE_LABELS: Record<Release["type"], string> = {
@@ -57,7 +59,11 @@ export default function Releases() {
         />
       </Helmet>
 
-      <PageHeader eyebrow="Catalogue" title="Releases" intro="EPs, albums and compilations from the label, newest first." />
+      <PageHeader
+        title="Releases"
+        meta={`${releases.length} releases · ${yearSpan}`}
+        intro="EPs, albums and compilations from the label, newest first."
+      />
 
       {/* Now playing */}
       {selected && (
@@ -67,17 +73,16 @@ export default function Releases() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="scroll-mt-28 rounded-card border border-brand-700 bg-brand-900 p-4 md:p-8"
+          className="scroll-mt-28 border-b border-brand-700 pb-10"
         >
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="eyebrow">Now playing</p>
-              <h2 className="font-display text-xl font-semibold md:text-[28px]">
-                <DecryptedText key={selected.id} text={selected.title} animateOn="view" speed={40} maxIterations={6} />
-              </h2>
-              <p className="text-brand-300">{selected.artist}</p>
-            </div>
-            <a href={selected.bandcampUrl} target="_blank" rel="noreferrer" className="btn-primary">
+          <div className="mb-6 flex flex-col gap-3">
+            <h2 className="font-display text-xl font-semibold md:text-[28px]">
+              <DecryptedText key={selected.id} text={selected.title} animateOn="view" speed={40} maxIterations={6} />
+            </h2>
+            <p className="meta">
+              Now playing · {selected.artist} · {TYPE_LABELS[selected.type]} · {selected.releaseDate}
+            </p>
+            <a href={selected.bandcampUrl} target="_blank" rel="noreferrer" className="btn-primary mt-2 self-start">
               Buy on Bandcamp <ExternalLink className="h-4 w-4" aria-hidden="true" />
             </a>
           </div>
@@ -166,7 +171,7 @@ export default function Releases() {
                       className="aspect-square w-full bg-brand-800 object-cover transition duration-300 group-hover:scale-[1.04] group-hover:opacity-80"
                     />
                     <span className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
-                      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-brand-950">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-[2px] bg-accent text-brand-950">
                         <Play className="h-6 w-6 translate-x-0.5" fill="currentColor" aria-hidden="true" />
                       </span>
                     </span>
@@ -183,7 +188,7 @@ export default function Releases() {
                     href={release.bandcampUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="self-start border-b-[1.5px] border-accent pb-0.5 text-sm font-semibold text-bone hover:text-accent"
+                    className="text-link self-start text-sm"
                   >
                     View on Bandcamp
                   </a>
@@ -194,7 +199,7 @@ export default function Releases() {
         )}
 
         {visible < list.length && (
-          <button type="button" onClick={() => setVisible((v) => v + PAGE_SIZE)} className="btn-secondary self-center">
+          <button type="button" onClick={() => setVisible((v) => v + PAGE_SIZE)} className="btn-secondary self-start">
             Load more releases
           </button>
         )}
@@ -207,15 +212,15 @@ export default function Releases() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex flex-wrap items-center justify-between gap-6 rounded-card border-[1.5px] border-accent p-8 md:p-12"
+          className="flex flex-col gap-5 border-t border-brand-700 pt-10 md:pt-14"
         >
           <div className="flex max-w-[620px] flex-col gap-2">
             <h2 className="font-display text-2xl font-bold md:text-[32px]">Support the label</h2>
-            <p className="text-brand-300">
+            <p className="text-body">
               All releases are available on Bandcamp. Buying music there supports the artists and the label directly.
             </p>
           </div>
-          <a href={bandcampStore} target="_blank" rel="noreferrer" className="btn-primary h-12 px-6">
+          <a href={bandcampStore} target="_blank" rel="noreferrer" className="btn-primary h-12 self-start px-7">
             Visit Bandcamp store
           </a>
         </motion.section>

@@ -36,11 +36,12 @@ export default {
         small: ["0.875rem", { lineHeight: "1.25rem" }], // 14px
         label: ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.16em", fontWeight: "600" }], // 12px, uppercase
       },
+      // Square, sleeve-like corners: no pills, no soft cards
       borderRadius: {
-        field: "10px",
-        photo: "6px",
-        panel: "14px",
-        card: "22px",
+        field: "2px",
+        photo: "0px",
+        panel: "2px",
+        card: "2px",
       },
       maxWidth: {
         page: "1280px",

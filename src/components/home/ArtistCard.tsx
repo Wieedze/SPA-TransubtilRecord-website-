@@ -20,23 +20,21 @@ export default function ArtistCard({ artist, showDetails = false }: { artist: Ro
       {...hoverProps}
     >
       <Link to={`/artists/${artist.slug}`} className="flex flex-col gap-3.5 text-bone hover:text-bone">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-photo bg-brand-800">
+        <div className="relative aspect-[4/5] overflow-hidden bg-brand-800">
           <img
             src={artist.photo}
             alt={artist.name}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
-          <span className="absolute right-2.5 top-2.5 rounded bg-accent px-[9px] py-[5px] text-[11px] font-bold uppercase tracking-[0.12em] text-brand-950">
-            {artist.format}
-          </span>
         </div>
         <div className="flex flex-col gap-1.5 px-1">
           <span className="font-display text-[15px] font-semibold uppercase transition-colors group-hover:text-accent md:text-[19px]">
             <DecryptedText text={artist.name} trigger={count} speed={50} maxIterations={6} />
           </span>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent md:text-xs">{artist.style}</span>
-          {showDetails && <span className="text-xs uppercase tracking-[0.12em] text-brand-300">{artist.act}</span>}
+          <span className="text-[11px] uppercase tracking-[0.12em] text-brand-300 md:text-xs">
+            {artist.style} · <span className="text-accent">{artist.format}</span>
+          </span>
         </div>
       </Link>
       {showDetails && (place || artist.links.soundcloud || artist.links.instagram || artist.links.facebook) && (
