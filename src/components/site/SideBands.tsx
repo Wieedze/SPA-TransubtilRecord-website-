@@ -1,11 +1,11 @@
 import type { CSSProperties } from "react"
-import bandLeft from "../../assets/design/assets/band-left.webp"
-import bandRight from "../../assets/design/assets/band-right.webp"
+import bandLeft from "../../assets/design/assets/band-left.svg"
+import bandRight from "../../assets/design/assets/band-right.svg"
 
 // Two fixed strips on the outer edges of the site, filled with the yellow flames cut
-// from the edges of the "10 Years" artwork (band-*.webp: a 360 px slice plus its
-// vertical mirror, so it repeats without a seam). Shown at or below native size so it
-// stays sharp. Wide screens only.
+// from the edges of the "10 Years" artwork (band-*.svg: a traced 360 px slice plus its
+// vertical mirror, so it repeats without a seam). Vector, so it stays sharp on
+// high-density screens. Wide screens only.
 const BAND = "max(20px, calc((100vw - 1280px) / 2))"
 
 function Strip({ side }: { side: "left" | "right" }) {
