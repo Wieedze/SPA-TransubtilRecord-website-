@@ -11,8 +11,8 @@ import { glowFlashProps } from "../site/glowFlash"
 import { useHoverCount } from "../../hooks/useHoverCount"
 
 const tileBase =
-  "flex h-14 items-center justify-between rounded-panel px-5 font-bold md:h-16 md:px-[22px] md:text-[17px]"
-const tileDark = `${tileBase} border-[1.5px] border-brand-700 bg-brand-900/80 text-bone hover:border-accent hover:text-bone`
+  "flex h-12 items-center justify-between rounded-panel px-5 text-[15px] font-semibold md:h-14 md:text-base"
+const tileDark = `${tileBase} border border-brand-700 bg-brand-900/80 text-bone hover:border-accent hover:text-bone`
 
 // Spinning yellow spiral, dark vignette and yellow halo, behind the home hero.
 export function HeroBackground() {

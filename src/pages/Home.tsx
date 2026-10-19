@@ -152,7 +152,7 @@ export default function Home() {
                   Pick an artist, send your date, capacity and budget.
                 </p>
               </div>
-              <Link to={BOOKING_PATH} className="btn-primary h-14 px-[30px] text-[17px]">
+              <Link to={BOOKING_PATH} className="btn-primary h-12 px-6">
                 Send a booking request
               </Link>
             </div>

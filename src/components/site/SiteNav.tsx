@@ -74,7 +74,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
       </nav>
 
       <div className="mt-auto flex flex-col gap-[18px] px-4 pb-8">
-        <Link to={BOOKING_PATH} onClick={onClose} className="btn-primary h-14 text-[17px]">
+        <Link to={BOOKING_PATH} onClick={onClose} className="btn-primary h-12">
           Book an artist
         </Link>
         <div className="flex justify-center gap-[22px] text-sm font-semibold">
@@ -123,13 +123,13 @@ export default function SiteNav() {
       >
         <Wordmark />
 
-        <div className="hidden items-center gap-8 text-[15px] font-semibold lg:flex">
+        <div className="hidden items-center gap-8 text-[17px] font-medium lg:flex">
           {NAV_LINKS.map((link) => (
             <DesktopNavLink key={link.to} to={link.to} label={link.label} />
           ))}
         </div>
 
-        <Link to={BOOKING_PATH} className="btn-primary hidden h-11 px-5 text-[15px] lg:inline-flex">
+        <Link to={BOOKING_PATH} className="btn-primary hidden h-10 px-5 text-sm lg:inline-flex">
           Book an artist
         </Link>
 

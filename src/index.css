@@ -39,11 +39,11 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-6 font-bold text-brand-950 transition-colors hover:bg-accent-hover hover:text-brand-950 disabled:bg-brand-700 disabled:text-brand-500;
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-full bg-accent px-5 text-[15px] font-semibold text-brand-950 transition-colors hover:bg-accent-hover hover:text-brand-950 disabled:bg-brand-700 disabled:text-brand-500;
   }
 
   .btn-secondary {
-    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full border-[1.5px] border-bone px-6 font-semibold text-bone transition-colors hover:border-accent hover:text-accent;
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-full border border-bone/70 px-5 text-[15px] font-medium text-bone transition-colors hover:border-accent hover:text-accent;
   }
 
   .eyebrow {

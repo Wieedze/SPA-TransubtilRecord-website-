@@ -64,10 +64,10 @@ export default function Artists() {
                 aria-pressed={active}
                 onClick={() => setFormat(label)}
                 className={[
-                  "h-11 rounded-full border-[1.5px] px-[18px] text-sm",
+                  "h-10 rounded-full border px-4 text-sm font-medium",
                   active
-                    ? "border-accent bg-accent font-bold text-brand-950"
-                    : "border-brand-700 font-semibold text-bone hover:border-accent hover:text-accent",
+                    ? "border-accent bg-accent text-brand-950"
+                    : "border-brand-700 text-bone hover:border-accent hover:text-accent",
                 ].join(" ")}
               >
                 {label}

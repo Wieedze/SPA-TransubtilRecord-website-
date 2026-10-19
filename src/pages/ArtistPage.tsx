@@ -9,7 +9,6 @@ import DecryptedText from "../components/DecryptedText"
 import HubArtisteAnimated from "../components/artists/HubArtisteAnimated"
 import SoundCloudPlayer from "../components/SoundCloudPlayer"
 import SocialIcons from "../components/site/SocialIcons"
-import hubCircle from "../assets/design/assets/hub-circle.svg"
 
 const fieldClass =
   "h-[52px] rounded-field border-[1.5px] border-brand-700 bg-brand-950 px-4 text-base text-bone placeholder:text-[#8C8995] [color-scheme:dark]"
@@ -27,19 +26,18 @@ function formatLabel(artist: RosterArtist) {
   return artist.format === "Live" ? "Live act" : "DJ set"
 }
 
-// v1 animated mecha hub: its 8 rings assemble on load and scatter on hover (yellow),
-// around the circular photo, with the design's slow ring turning behind.
+// v1 animated mecha hub around the circular photo: one SVG that turns slowly and whose
+// 8 rings assemble on load and scatter on hover. The photo fits the hub's inner ring (r = 126.7 / 306).
 function ArtistHub({ artist }: { artist: RosterArtist }) {
   return (
     <div className="flex w-full max-w-[420px] flex-col items-center gap-4 justify-self-center">
       <div className="relative aspect-[306/307] w-full" style={{ filter: "drop-shadow(0 0 24px rgba(249,188,20,0.25))" }}>
-        <img src={hubCircle} alt="" aria-hidden="true" className="absolute -inset-[6%] w-[112%] max-w-none animate-spin-hub opacity-15" />
         <img
           src={artist.photo}
           alt={artist.name}
-          className="absolute left-[8%] top-[8%] aspect-square w-[84%] rounded-full object-cover"
+          className="absolute left-[9%] top-[9.1%] aspect-square w-[82%] rounded-full object-cover"
         />
-        <div className="absolute inset-0 z-10 text-accent">
+        <div className="absolute inset-0 z-10 animate-spin-hub text-accent">
           <HubArtisteAnimated />
         </div>
       </div>
@@ -130,7 +128,7 @@ function BookingForm({ artist }: { artist: RosterArtist }) {
         <p role="status" className="text-small text-brand-300">
           {notice ?? "Your details are only used to handle this request."}
         </p>
-        <button type="submit" className="btn-primary h-14 px-8 text-[17px]">
+        <button type="submit" className="btn-primary h-12 px-6">
           Send request
         </button>
       </div>
@@ -208,11 +206,11 @@ export default function ArtistPage() {
               ))}
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <a href="#booking" className="btn-primary h-[52px] px-[26px]">
+              <a href="#booking" className="btn-primary h-12 px-6">
                 Book {artist.name}
               </a>
               {artist.presskitZip && (
-                <a href={artist.presskitZip} download className="btn-secondary h-[52px]">
+                <a href={artist.presskitZip} download className="btn-secondary h-12">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M12 3v12M7 10l5 5 5-5M5 21h14" />
                   </svg>
@@ -329,7 +327,7 @@ export default function ArtistPage() {
       {/* Mobile sticky booking bar */}
       <div className="sticky bottom-0 z-20 mx-[calc(50%-50vw)] mt-10 flex items-center gap-3 border-t border-brand-700 bg-brand-950/95 px-4 py-3 md:hidden">
         <span className="flex-1 text-[15px] font-bold">{artist.name}</span>
-        <a href="#booking" className="btn-primary h-12 px-[22px]">
+        <a href="#booking" className="btn-primary">
           Book
         </a>
       </div>
