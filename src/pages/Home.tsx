@@ -97,7 +97,7 @@ export default function Home() {
           </section>
 
           {/* Featured artists */}
-          <section className="border-y border-brand-700 bg-brand-900/85 backdrop-blur-sm">
+          <section className="border-y border-brand-700/60">
             <div className="mx-auto flex max-w-page flex-col gap-10 px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-[72px]">
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div className="flex flex-col gap-3">

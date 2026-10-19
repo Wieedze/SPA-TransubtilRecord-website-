@@ -1,29 +1,30 @@
 import { Link } from "react-router-dom"
 import brandmark from "../../assets/design/assets/brandmark-white.png"
-import artwork from "../../assets/design/assets/artwork-10-years.jpg"
+// Yellow swirl extracted from the "10 Years" artwork (no central figure, no text)
+import spiral from "../../assets/design/assets/spiral-yellow.webp"
 import { BOOKING_PATH } from "../../config/site"
 
 const tileBase =
   "flex h-14 items-center justify-between rounded-panel px-5 font-bold md:h-16 md:px-[22px] md:text-[17px]"
 const tileDark = `${tileBase} border-[1.5px] border-brand-700 bg-brand-900/80 text-bone hover:border-accent hover:text-bone`
 
-// Spinning artwork, dark vignette and yellow halo. Rendered inside a fixed,
+// Spinning yellow spiral, dark vignette and yellow halo. Rendered inside a fixed,
 // full-viewport layer so it stays behind the whole home page.
 export function HeroBackground() {
   return (
     <>
       <div className="absolute inset-[-30%] flex items-center justify-center">
         <img
-          src={artwork}
+          src={spiral}
           alt=""
-          className="w-[140%] min-w-[900px] max-w-[2000px] animate-spin-slow opacity-[0.38]"
+          className="w-[140%] min-w-[900px] max-w-[2600px] animate-spin-slow opacity-60"
         />
       </div>
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 50% 45%, rgba(7,6,11,0.55) 0%, rgba(7,6,11,0.92) 55%, #07060B 85%)",
+            "radial-gradient(circle at 50% 45%, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)",
         }}
       />
       <div
