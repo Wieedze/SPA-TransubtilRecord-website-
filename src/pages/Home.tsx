@@ -70,8 +70,8 @@ export default function Home() {
           className={[
             // clip-path as well as overflow: Chrome lets the spinning layer bleed 1px past the edge
             "relative flex items-center justify-center overflow-hidden [clip-path:inset(0)]",
-            // Leaves the start of the next section visible once the hero has landed
-            "h-[calc(100svh-68px-6svh)] min-h-[560px] md:h-[calc(100svh-96px-10svh)] md:min-h-[600px]",
+            // 20% taller than the space left under the nav: more room for the spiral
+            "h-[calc((100svh-68px-6svh)*1.2)] min-h-[672px] md:h-[calc((100svh-96px-10svh)*1.2)] md:min-h-[720px]",
           ].join(" ")}
         >
           {/* Animated background, confined to the hero */}

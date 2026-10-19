@@ -15,6 +15,8 @@ const SESSION_KEY = "tr-intro-played"
 const AUTO_DELAY_MS = 2500
 export const ZOOM_DURATION = 1.3 // seconds
 const BACKGROUND_START_SCALE = 1.2
+// The hero can be taller than the screen: always start at least this zoomed in
+const MIN_START_SCALE = 1.2
 const ZOOM_EASE = [0.76, 0, 0.24, 1] as const
 const SKIP_KEYS = new Set([" ", "ArrowDown", "PageDown", "End", "Enter", "Escape"])
 
@@ -55,7 +57,7 @@ export function useIntroZoom() {
     const box = heroRef.current.getBoundingClientRect()
     const vw = window.innerWidth
     const vh = window.innerHeight
-    scale.set(Math.max(vw / box.width, vh / box.height))
+    scale.set(Math.max(vw / box.width, vh / box.height, MIN_START_SCALE))
     x.set(vw / 2 - (box.left + box.width / 2))
     y.set(vh / 2 - (box.top + box.height / 2))
     backgroundScale.set(BACKGROUND_START_SCALE)
