@@ -8,14 +8,27 @@ Transubtil Record — a music label website with React frontend (Vite + TypeScri
 
 ## Commands
 
-- `npm run dev` — Vite dev server (frontend only)
-- `npm run dev:server` — Backend dev server with watch mode (tsx watch server/index.ts)
-- `npm run dev:all` — Run both frontend and backend concurrently
-- `npm run build` — Production build (Vite)
-- `npm run preview` — Preview production build
-- `npm run server` — Run backend in production mode
+Package manager / script runner: **Bun** (`bun.lock`). Vite remains the bundler.
 
-No test runner or linter is configured.
+- `bun run dev` — Vite dev server (frontend only, proxies `/api` to port 8788)
+- `bun run build` — Production build (Vite) into `dist/`
+- `bun run preview` — Preview production build
+- `bun run dev:api` — Build, then serve `dist/` + Cloudflare Pages Functions + local D1 via wrangler (port 8788)
+- `bun run db:migrate:local` / `db:migrate:remote` — Apply `db/migrations/` to D1
+- `bun run deploy` — Build and deploy to Cloudflare Pages
+- Legacy Express backend (studio/auth, feature-flagged off): `bun run dev:server`, `bun run server`
+
+No test runner or linter is configured. Typecheck with `bunx tsc --noEmit -p tsconfig.json` (app) and `bunx tsc --noEmit -p functions/tsconfig.json` (Pages Functions).
+
+## Feature flags
+
+`src/config/features.ts`: `VITE_FEATURE_STUDIO` and `VITE_FEATURE_AUTH` (off unless `"true"`) gate the studio, auth, dashboard and admin routes and UI. When auth is off, `AuthProvider` never calls Supabase.
+
+## Cloudflare (v2 target)
+
+- `wrangler.toml`: Pages build output `dist/`, D1 binding `DB` (`transubtil-db`)
+- `functions/api/*` — Pages Functions; shared `Env` type in `cf/env.ts`
+- `db/migrations/` — D1 (SQLite) schema: `subscribers`, `submissions`
 
 ## Architecture
 
