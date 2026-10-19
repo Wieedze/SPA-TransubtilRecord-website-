@@ -6,6 +6,5 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "transubtil-db"
-# Fill with the id printed by `npx wrangler d1 create transubtil-db`
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "d04725a8-8b60-43ad-9d18-ccc8b95ecbd9"
 migrations_dir = "db/migrations"
