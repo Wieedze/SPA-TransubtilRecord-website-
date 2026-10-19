@@ -33,3 +33,7 @@ dist-ssr
 
 # Build archives
 dist.zip
+
+# Cloudflare
+.wrangler/
+.dev.vars
