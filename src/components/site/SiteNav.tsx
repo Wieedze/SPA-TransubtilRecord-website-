@@ -74,7 +74,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
       </nav>
 
       <div className="mt-auto flex flex-col gap-[18px] px-4 pb-8">
-        <Link to={BOOKING_PATH} onClick={onClose} className="btn-primary h-12">
+        <Link to={BOOKING_PATH} onClick={onClose} className="btn-primary h-11">
           Book an artist
         </Link>
         <div className="flex justify-center gap-[22px] text-sm font-semibold">
@@ -129,7 +129,7 @@ export default function SiteNav() {
           ))}
         </div>
 
-        <Link to={BOOKING_PATH} className="btn-primary hidden h-10 px-5 text-sm lg:inline-flex">
+        <Link to={BOOKING_PATH} className="btn-primary hidden lg:inline-flex">
           Book an artist
         </Link>
 

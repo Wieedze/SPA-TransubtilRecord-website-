@@ -123,7 +123,7 @@ function BookingForm({ artist }: { artist: RosterArtist }) {
         />
       </div>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-span-2">
-        <button type="submit" className="btn-primary h-12 px-7">
+        <button type="submit" className="btn-primary">
           Send request
         </button>
         <p role="status" className="text-small text-brand-300">
@@ -190,7 +190,7 @@ export default function ArtistPage() {
               ))}
             </dl>
             <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-              <a href="#booking" className="btn-primary h-12 px-7">
+              <a href="#booking" className="btn-primary">
                 Book {artist.name}
               </a>
               {artist.presskitZip && (

@@ -144,7 +144,7 @@ export default function Home() {
               <p className="text-[15px] leading-relaxed text-body md:text-lg">
                 Pick an artist, send your date, capacity and budget.
               </p>
-              <Link to={BOOKING_PATH} className="btn-primary mt-2 h-12 self-start px-7">
+              <Link to={BOOKING_PATH} className="btn-primary mt-2 self-start">
                 Send a booking request
               </Link>
             </div>

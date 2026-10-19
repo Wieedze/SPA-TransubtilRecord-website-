@@ -220,7 +220,7 @@ export default function Releases() {
               All releases are available on Bandcamp. Buying music there supports the artists and the label directly.
             </p>
           </div>
-          <a href={bandcampStore} target="_blank" rel="noreferrer" className="btn-primary h-12 self-start px-7">
+          <a href={bandcampStore} target="_blank" rel="noreferrer" className="btn-primary self-start">
             Visit Bandcamp store
           </a>
         </motion.section>

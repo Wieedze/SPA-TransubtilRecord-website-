@@ -53,7 +53,7 @@ function DemoForm() {
         <textarea id="dm-msg" name="message" rows={5} placeholder="Your background, style, projects…" className={textareaClass} />
       </div>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-span-2">
-        <button type="submit" className="btn-primary h-12 px-7">
+        <button type="submit" className="btn-primary">
           Send my demo
         </button>
         <p role="status" className="text-small text-brand-300">
