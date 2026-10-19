@@ -8,8 +8,7 @@ const tileBase =
   "flex h-14 items-center justify-between rounded-panel px-5 font-bold md:h-16 md:px-[22px] md:text-[17px]"
 const tileDark = `${tileBase} border-[1.5px] border-brand-700 bg-brand-900/80 text-bone hover:border-accent hover:text-bone`
 
-// Spinning yellow spiral, dark vignette and yellow halo. Rendered inside a fixed,
-// full-viewport layer so it stays behind the whole home page.
+// Spinning yellow spiral, dark vignette and yellow halo, behind the home hero.
 export function HeroBackground() {
   return (
     <>

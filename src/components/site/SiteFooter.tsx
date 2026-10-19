@@ -48,7 +48,7 @@ function NewsletterBand() {
 
 export default function SiteFooter() {
   return (
-    <footer className="w-full text-bone">
+    <footer className="w-full bg-brand-950 text-bone">
       <NewsletterBand />
       <div className="mx-auto flex max-w-page flex-col gap-11 px-4 pb-10 pt-14 md:px-6">
         <div className="flex flex-wrap justify-between gap-10">

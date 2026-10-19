@@ -34,15 +34,6 @@ export default function Home() {
         />
       </Helmet>
 
-      {/* Animated hero background, fixed behind the whole page */}
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-brand-950"
-        style={backgroundStyle}
-      >
-        <HeroBackground />
-      </motion.div>
-
       <motion.div
         className="sticky top-0 z-30"
         initial={false}
@@ -53,17 +44,28 @@ export default function Home() {
         <SiteNav />
       </motion.div>
 
-      <main className="relative z-10">
+      <main>
         <motion.section
           ref={heroRef}
           aria-label="Transubtil Records"
           style={heroStyle}
           className={[
-            "relative flex items-center justify-center",
+            // clip-path as well as overflow: Chrome lets the spinning layer bleed 1px past the edge
+            "relative flex items-center justify-center overflow-hidden [clip-path:inset(0)]",
             // Leaves the start of the next section visible once the hero has landed
             "h-[calc(100svh-68px-6svh)] min-h-[560px] md:h-[calc(100svh-96px-10svh)] md:min-h-[600px]",
           ].join(" ")}
         >
+          {/* Animated background, confined to the hero */}
+          <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0" style={backgroundStyle}>
+            <HeroBackground />
+          </motion.div>
+          {/* Fade into the page below */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 -bottom-1 h-44"
+            style={{ background: "linear-gradient(to bottom, transparent, #07060B 80%)" }}
+          />
           <HeroContent />
         </motion.section>
 
@@ -97,7 +99,7 @@ export default function Home() {
           </section>
 
           {/* Featured artists */}
-          <section className="border-y border-brand-700/60">
+          <section className="border-y border-brand-700 bg-brand-900">
             <div className="mx-auto flex max-w-page flex-col gap-10 px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-[72px]">
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div className="flex flex-col gap-3">
