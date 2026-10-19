@@ -15,7 +15,8 @@ Package manager / script runner: **Bun** (`bun.lock`). Vite remains the bundler.
 - `bun run preview` — Preview production build
 - `bun run dev:api` — Build, then serve `dist/` + Cloudflare Pages Functions + local D1 via wrangler (port 8788)
 - `bun run db:migrate:local` / `db:migrate:remote` — Apply `db/migrations/` to D1
-- `bun run deploy` — Build and deploy to Cloudflare Pages
+- `bun run deploy` — Build and deploy a preview of the current git branch to Cloudflare Pages
+- `bun run deploy:prod` — Build and deploy to production (Pages production branch: `main`)
 - Legacy Express backend (studio/auth, feature-flagged off): `bun run dev:server`, `bun run server`
 
 No test runner or linter is configured. Typecheck with `bunx tsc --noEmit -p tsconfig.json` (app) and `bunx tsc --noEmit -p functions/tsconfig.json` (Pages Functions).

@@ -16,7 +16,8 @@
     "dev:api": "vite build && wrangler pages dev --port 8788",
     "db:migrate:local": "wrangler d1 migrations apply transubtil-db --local",
     "db:migrate:remote": "wrangler d1 migrations apply transubtil-db --remote",
-    "deploy": "vite build && wrangler pages deploy"
+    "deploy": "vite build && wrangler pages deploy",
+    "deploy:prod": "vite build && wrangler pages deploy --branch main"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.83.0",
