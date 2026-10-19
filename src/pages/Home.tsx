@@ -75,7 +75,7 @@ export default function Home() {
         >
           {/* Animated background, confined to the hero */}
           <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0" style={backgroundStyle}>
-            <HeroBackground hovered={hovered} />
+            <HeroBackground />
           </motion.div>
           {/* Fade into the page below */}
           <div

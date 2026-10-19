@@ -2,26 +2,16 @@ import { useCallback, useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { Link, NavLink, useLocation } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
-import brandmark from "../../assets/design/assets/brandmark-white.png"
+import logo from "../../assets/brand/transubtil-logo-white.svg"
 import { BOOKING_PATH, NAV_LINKS, activeSocialLinks } from "../../config/site"
 import DecryptedText from "../DecryptedText"
-import NavFrame from "../mecha/NavFrame"
-import { glowFlashProps } from "../mecha/glowFlash"
+import { glowFlashProps } from "./glowFlash"
 import { useHoverCount } from "../../hooks/useHoverCount"
 
 function Wordmark({ compact = false }: { compact?: boolean }) {
   return (
-    <Link to="/" className="flex items-center gap-3 text-bone hover:text-bone">
-      <img src={brandmark} alt="" className={compact ? "w-10" : "w-10 md:w-[52px]"} />
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-sm font-bold tracking-[0.08em] md:text-[17px]">TRANSUBTIL</span>
-        {!compact && (
-          <span className="mt-1 hidden text-[10px] font-semibold tracking-[0.42em] text-brand-300 md:block">
-            RECORDS
-          </span>
-        )}
-      </span>
-      <span className="sr-only">Transubtil Records, home</span>
+    <Link to="/" className="flex items-center hover:opacity-80">
+      <img src={logo} alt="Transubtil Records, home" className={compact ? "h-9" : "h-9 md:h-12"} />
     </Link>
   )
 }
@@ -109,17 +99,10 @@ function DesktopNavLink({ to, label }: { to: string; label: string }) {
       {...hoverProps}
       {...glowFlashProps}
       className={({ isActive }) =>
-        ["relative px-4 py-2", isActive ? "text-accent" : "text-bone hover:text-accent"].join(" ")
+        ["border-b-2 py-1.5", isActive ? "border-accent text-accent" : "border-transparent text-bone hover:text-accent"].join(" ")
       }
     >
-      {({ isActive }) => (
-        <>
-          <AnimatePresence>{isActive && <NavFrame />}</AnimatePresence>
-          <span className="relative">
-            <DecryptedText text={label} trigger={count} speed={45} maxIterations={6} />
-          </span>
-        </>
-      )}
+      <DecryptedText text={label} trigger={count} speed={45} maxIterations={6} />
     </NavLink>
   )
 }
@@ -140,7 +123,7 @@ export default function SiteNav() {
       >
         <Wordmark />
 
-        <div className="hidden items-center gap-3 text-[15px] font-semibold lg:flex">
+        <div className="hidden items-center gap-8 text-[15px] font-semibold lg:flex">
           {NAV_LINKS.map((link) => (
             <DesktopNavLink key={link.to} to={link.to} label={link.label} />
           ))}

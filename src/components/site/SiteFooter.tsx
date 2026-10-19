@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react"
 import { Link } from "react-router-dom"
-import brandmark from "../../assets/design/assets/brandmark-white.png"
+import logo from "../../assets/brand/transubtil-logo-white.svg"
 import { activeSocialLinks } from "../../config/site"
 
 function NewsletterBand() {
@@ -53,10 +53,7 @@ export default function SiteFooter() {
       <div className="mx-auto flex max-w-page flex-col gap-11 px-4 pb-10 pt-14 md:px-6">
         <div className="flex flex-wrap justify-between gap-10">
           <div className="flex flex-[1_1_280px] flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <img src={brandmark} alt="" className="w-14" />
-              <span className="font-display text-lg font-bold tracking-[0.08em]">TRANSUBTIL</span>
-            </div>
+            <img src={logo} alt="Transubtil Records" className="h-12 self-start" />
             <p className="max-w-[340px] text-[15px] leading-relaxed text-brand-300">
               Independent psychedelic music label. Ten years of psytrance, darkpsy and forest from Marseille, France.
             </p>

@@ -2,12 +2,11 @@ import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import type { RosterArtist } from "../../data/roster"
 import DecryptedText from "../DecryptedText"
-import CardFrame from "../mecha/CardFrame"
 import SocialIcons from "../site/SocialIcons"
 import { useHoverCount } from "../../hooks/useHoverCount"
 
-// Artist card: 2026 design + v1 interactions (mecha frame brightening on hover,
-// slow photo zoom, name scrambling on hover, country and social links).
+// Artist card: 2026 design + v1 interactions (slow photo zoom, name scrambling on
+// hover, country and social links).
 export default function ArtistCard({ artist, showDetails = false }: { artist: RosterArtist; showDetails?: boolean }) {
   const { count, hoverProps } = useHoverCount()
   const place = artist.location ?? artist.country
@@ -20,7 +19,6 @@ export default function ArtistCard({ artist, showDetails = false }: { artist: Ro
       className="group relative"
       {...hoverProps}
     >
-      <CardFrame className="z-10 text-accent opacity-25 transition-opacity duration-500 group-hover:opacity-60" />
       <Link to={`/artists/${artist.slug}`} className="flex flex-col gap-3.5 text-bone hover:text-bone">
         <div className="relative aspect-[4/5] overflow-hidden rounded-photo bg-brand-800">
           <img
