@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from "react"
+import { useRef, useState, type MouseEvent } from "react"
 import Seo from "../components/site/Seo"
 import { labelLd, websiteLd } from "../lib/structuredData"
 import { releases } from "../data/releases"
@@ -17,56 +17,8 @@ const FEATURED_SLUGS = ["thehorrids", "heavyfawn", "xipetotecs", "fiorenza"]
 const featured = FEATURED_SLUGS.map(getRosterArtist).filter((a): a is RosterArtist => Boolean(a))
 const bandcampUrl = SOCIAL_LINKS.find((l) => l.label === "Bandcamp")?.href ?? null
 
-// Circular fade of the hero background, coaxial with the central logo. The circle is
-// as wide as the screen (its sides touch the screen edges), its top slides under the
-// translucent nav, and the hero grows to its bottom so the circle is never cut there
-// (the next section moves down with it).
-// Measured in layout pixels (box ratios undo the intro's scale), refreshed on resize.
-interface HeroGeometry {
-  x: number
-  y: number
-  radius: number
-  extra: number // space added under the content block to reach the circle's bottom
-}
-
-const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect
-
-function useLogoCircle(heroRef: React.RefObject<HTMLElement>) {
-  const logoRef = useRef<HTMLImageElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
-  const [geo, setGeo] = useState<HeroGeometry | null>(null)
-
-  useIsoLayoutEffect(() => {
-    const hero = heroRef.current
-    const logo = logoRef.current
-    const content = contentRef.current
-    if (!hero || !logo || !content) return
-    const update = () => {
-      const h = hero.getBoundingClientRect()
-      const l = logo.getBoundingClientRect()
-      const k = hero.offsetHeight / h.height // undo the intro's scale
-      const x = (l.left + l.width / 2 - h.left) * k
-      const y = (l.top + l.height / 2 - h.top) * k
-      const base = content.offsetHeight
-      const radius = hero.offsetWidth / 2
-      setGeo({ x, y, radius, extra: Math.max(0, Math.round(y + radius + 8 - base)) })
-    }
-    update()
-    const observer = new ResizeObserver(update)
-    observer.observe(content)
-    return () => observer.disconnect()
-  }, [heroRef])
-
-  const mask = geo
-    ? `radial-gradient(circle at ${geo.x}px ${geo.y}px, #000 ${Math.round(geo.radius * 0.7)}px, transparent ${Math.round(geo.radius)}px)`
-    : undefined
-  return { logoRef, contentRef, geo, mask }
-}
-
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null)
-  // Declared before the intro so the hero has its final height when the intro measures it
-  const circle = useLogoCircle(heroRef)
   const { phase, heroStyle, backgroundStyle } = useIntroZoom(heroRef)
   const intro = phase === "intro"
   const { hovered, hoverProps } = useHeroHover()
@@ -121,26 +73,24 @@ export default function Home() {
             "relative overflow-hidden [clip-path:inset(0)]",
           ].join(" ")}
         >
-          {/* Animated background, confined to the hero. A circular mask centred on the logo
-              fades it out before the hero's bottom edge, so the boundary is invisible */}
-          <motion.div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{ ...backgroundStyle, maskImage: circle.mask, WebkitMaskImage: circle.mask }}
-          >
-            <HeroBackground center={circle.geo ? { x: circle.geo.x, y: circle.geo.y } : undefined} />
+          {/* Background, confined to the hero */}
+          <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0" style={backgroundStyle}>
+            <HeroBackground />
           </motion.div>
+          {/* Short fade into the page below */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 -bottom-1 h-24"
+            style={{ background: "linear-gradient(to bottom, transparent, #07060B)" }}
+          />
           {/* Content block: 20% taller than the space under the nav, logo and text centred */}
           <div
-            ref={circle.contentRef}
             className="relative flex h-[calc((100svh-68px-6svh)*1.2)] min-h-[672px] w-full items-center justify-center md:h-[calc((100svh-96px-10svh)*1.2)] md:min-h-[720px]"
           >
             <div className="relative flex w-full justify-center" {...hoverProps}>
-              <HeroContent hovered={hovered} onNavigate={handleHeroNavigate} logoRef={circle.logoRef} />
+              <HeroContent hovered={hovered} onNavigate={handleHeroNavigate} />
             </div>
           </div>
-          {/* Down to the bottom of the circle */}
-          <div aria-hidden="true" style={{ height: circle.geo?.extra ?? 0 }} />
         </motion.section>
 
         <motion.div {...reveal}>

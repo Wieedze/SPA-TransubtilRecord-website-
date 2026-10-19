@@ -1,39 +1,35 @@
-import { useState, type MouseEvent, type Ref } from "react"
+import { useState, type MouseEvent } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import brandmark from "../../assets/design/assets/brandmark-white.png"
 import wordmark from "../../assets/brand/transubtil-wordmark-white.svg"
-// Yellow swirl traced to SVG from the "10 Years" artwork (no central figure, no text),
-// with a soft circular edge so the rotation never shows a corner. Sharp at any density.
-import spiral from "../../assets/design/assets/spiral-yellow.svg"
+import flames from "../../assets/design/assets/hero-flames.svg"
 import DecryptedText from "../DecryptedText"
 import { glowFlashProps } from "../site/glowFlash"
 import { useHoverCount } from "../../hooks/useHoverCount"
 
-// Spinning yellow spiral, dark vignette and yellow halo, behind the home hero, all
-// centred on `center` (the logo, in hero pixels) so the circle is coaxial with it.
-export function HeroBackground({ center }: { center?: { x: number; y: number } }) {
-  const at = center ? `${center.x}px ${center.y}px` : "50% 45%"
-  const pos = center ? { left: center.x, top: center.y } : { left: "50%", top: "45%" }
+// Static flames from the "10 Years" artwork, mirrored so both sides are identical, cut
+// into ~120 "atoms" that appear layer by layer from the bottom and then each breathe at
+// their own pace (CSS animation inside hero-flames.svg). Dark vignette and yellow halo on top.
+export function HeroBackground() {
   return (
     <>
-      <div className="absolute -translate-x-1/2 -translate-y-1/2" style={pos}>
-        <img
-          src={spiral}
-          alt=""
-          className="max-w-none animate-spin-slow opacity-60"
-          style={{ width: "clamp(900px, 224vw, 2600px)" }}
-        />
-      </div>
+      <img
+        src={flames}
+        alt=""
+        className="absolute bottom-0 left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60"
+        style={{ width: "max(100%, min(125svh, 160vw))" }}
+      />
       <div
         className="absolute inset-0"
         style={{
-          background: `radial-gradient(circle at ${at}, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)`,
+          background:
+            "radial-gradient(circle at 50% 45%, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)",
         }}
       />
       <div
-        className="absolute h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full md:h-[520px] md:w-[520px]"
-        style={{ ...pos, background: "radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)" }}
+        className="absolute left-1/2 top-[38%] h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full md:h-[520px] md:w-[520px]"
+        style={{ background: "radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)" }}
       />
     </>
   )
@@ -68,16 +64,13 @@ function HeroAction({
 export default function HeroContent({
   hovered,
   onNavigate,
-  logoRef,
 }: {
   hovered: boolean
   onNavigate: (e: MouseEvent<HTMLAnchorElement>, to: string) => void
-  logoRef?: Ref<HTMLImageElement>
 }) {
   return (
     <div className="relative flex w-full max-w-[960px] flex-col items-center gap-5 px-8 text-center md:gap-7 md:px-4">
       <motion.img
-        ref={logoRef}
         src={brandmark}
         alt=""
         animate={{ scale: hovered ? 0.88 : 1 }}
