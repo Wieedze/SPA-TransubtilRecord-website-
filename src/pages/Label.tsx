@@ -69,8 +69,8 @@ export default function Label() {
   return (
     <div className="flex flex-col">
       <Seo
-        title="About the label — Transubtil Records, psytrance from Marseille"
-        description="Transubtil Records is a psychedelic-trance label from Marseille, France: darkpsy, forest and night sounds, ten years of releases. Our story, and how to send us your demo."
+        title="About the label — Transubtil Records, international psytrance from France"
+        description="Transubtil Records is an international psychedelic-trance label from France: darkpsy, forest and night sounds, artists from all over the world, ten years of releases. Our story, and how to send us your demo."
         path="/label"
         jsonLd={[labelLd(), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Label", path: "/label" }])]}
       />
@@ -87,11 +87,11 @@ export default function Label() {
             <h1 className="font-display text-[30px] uppercase leading-[1.1] md:text-[46px]">
               <DecryptedText text="Ten years of subtle trance" animateOn="view" speed={50} maxIterations={8} />
             </h1>
-            <p className="meta">Marseille · Psytrance · Darkpsy · Forest</p>
+            <p className="meta">France · International · Psytrance · Darkpsy · Forest</p>
           </div>
           <div className="flex max-w-[62ch] flex-col gap-4 text-[17px] leading-[1.7] text-body">
             <p>
-              Transubtil Records is a Marseille-based psychedelic-trance label born from a passion for underground sound
+              Transubtil Records is a French psychedelic-trance label born from a passion for underground sound
               and collective spirit. What began as a local association dedicated to supporting emerging DJs and producers
               has evolved into a fully active label shaping the next generation of psytrance.
             </p>
@@ -101,7 +101,7 @@ export default function Label() {
             </p>
             <p>
               Specialized in psychedelic trance, darkpsy, forest and night-oriented sounds, Transubtil Records embraces
-              deep grooves, experimental textures and the raw energy of the underground, connecting Marseille's creative
+              deep grooves, experimental textures and the raw energy of the underground, connecting the French scene's creative
               pulse to the global psytrance movement.
             </p>
           </div>

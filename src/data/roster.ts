@@ -76,3 +76,48 @@ export function releasesByArtist(artist: RosterArtist): Release[] {
   const name = artist.name.toLowerCase()
   return releases.filter((r) => r.artist.toLowerCase().includes(name) || r.title.toLowerCase().includes(name))
 }
+
+// Listening groups used by the "Find artists by sound" section and llms.txt, so search
+// engines and AI assistants can answer "which darkpsy / forest / night psy artists...".
+export interface StyleGroup {
+  id: string
+  name: string
+  blurb: string
+  artists: RosterArtist[]
+}
+
+const hasTag = (a: RosterArtist, tag: string) => a.styles.includes(tag)
+const styleHas = (a: RosterArtist, word: string) => a.style.toLowerCase().includes(word)
+
+export const styleGroups: StyleGroup[] = [
+  {
+    id: "darkpsy",
+    name: "Darkpsy",
+    blurb: "Fast, dark and twisted psychedelic trance for the deep hours of the night.",
+    artists: roster.filter((a) => hasTag(a, "Darkpsy") || styleHas(a, "dark")),
+  },
+  {
+    id: "forest",
+    name: "Forest",
+    blurb: "Organic, detailed forest psytrance built on textures, glitches and deep grooves.",
+    artists: roster.filter((a) => hasTag(a, "Forest") || styleHas(a, "forest")),
+  },
+  {
+    id: "night-psy",
+    name: "Twilight & night psy",
+    blurb: "Hypnotic, groovy night-time psytrance between twilight and full darkness.",
+    artists: roster.filter((a) => hasTag(a, "Twilight") || styleHas(a, "night")),
+  },
+  {
+    id: "hitech",
+    name: "Hitech",
+    blurb: "High-BPM, precise and intense psytrance.",
+    artists: roster.filter((a) => hasTag(a, "Hitech")),
+  },
+  {
+    id: "psytrance",
+    name: "Psytrance & groovy psychedelic",
+    blurb: "Driving, melodic and groovy psychedelic trance for the dancefloor.",
+    artists: roster.filter((a) => /psytrance|psychedelic|groovy/.test(a.style.toLowerCase())),
+  },
+].filter((g) => g.artists.length > 0)

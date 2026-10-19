@@ -28,7 +28,7 @@ export function artistPlace(artist: RosterArtist) {
 export function artistSummary(artist: RosterArtist) {
   const kind = artist.format === "Live" ? "live act" : "DJ"
   const place = artistPlace(artist)
-  return `${artist.name} is a ${artist.style.toLowerCase()} ${kind}${place ? ` from ${place}` : ""} on Transubtil Records, a psytrance label from Marseille, France.`
+  return `${artist.name} is a ${artist.style.toLowerCase()} ${kind}${place ? ` from ${place}` : ""} on Transubtil Records, an international psytrance label from France.`
 }
 
 export function labelLd() {
@@ -41,8 +41,8 @@ export function labelLd() {
     url: SITE_URL,
     logo: absoluteUrl(LOGO_URL),
     description:
-      "Independent psychedelic trance label from Marseille, France, releasing psytrance, darkpsy, forest and night psy, and booking its DJs and live acts for parties and festivals.",
-    address: { "@type": "PostalAddress", addressLocality: "Marseille", addressCountry: "FR" },
+      "Independent international psychedelic trance label from France, releasing psytrance, darkpsy, forest and night psy, and booking its DJs and live acts for parties and festivals worldwide.",
+    address: { "@type": "PostalAddress", addressCountry: "FR" },
     areaServed: "Worldwide",
     knowsAbout: GENRES,
     sameAs: labelSameAs,
@@ -61,6 +61,13 @@ export function websiteLd() {
   }
 }
 
+// Genres of a release, from the roster artists named in it (falls back to psytrance)
+function releaseGenres(release: Release) {
+  const text = `${release.artist} ${release.title}`.toLowerCase()
+  const tags = roster.filter((a) => text.includes(a.name.toLowerCase())).flatMap((a) => a.styles)
+  return [...new Set(["Psytrance", ...tags])]
+}
+
 function releaseNode(release: Release) {
   return {
     "@type": "MusicAlbum",
@@ -72,7 +79,7 @@ function releaseNode(release: Release) {
     recordLabel: labelRef,
     albumReleaseType: RELEASE_TYPE[release.type],
     ...(release.type === "compilation" ? { albumProductionType: "https://schema.org/CompilationAlbum" } : {}),
-    genre: "Psytrance",
+    genre: releaseGenres(release),
   }
 }
 

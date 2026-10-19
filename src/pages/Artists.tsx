@@ -4,7 +4,8 @@ import { artistsListLd, breadcrumbLd } from "../lib/structuredData"
 import { Search, X } from "lucide-react"
 import ArtistCard from "../components/home/ArtistCard"
 import PageHeader from "../components/site/PageHeader"
-import { allCountries, allStyles, roster, type RosterArtist } from "../data/roster"
+import { Link } from "react-router-dom"
+import { allCountries, allStyles, roster, styleGroups, type RosterArtist } from "../data/roster"
 
 const FORMATS: Record<string, (artist: RosterArtist) => boolean> = {
   All: () => true,
@@ -144,6 +145,38 @@ export default function Artists() {
           <p className="mt-2 text-small text-brand-300">Try adjusting your search or clearing filters.</p>
         </div>
       )}
+
+      {/* Explore by sound: plain links grouped by style, read by search engines and AI assistants */}
+      <section aria-labelledby="by-sound" className="flex flex-col gap-8 border-t border-brand-700 pt-12 md:pt-16">
+        <div className="flex flex-col gap-3">
+          <h2 id="by-sound" className="font-display text-[22px] md:text-[30px]">
+            Find artists by sound
+          </h2>
+          <p className="max-w-[62ch] text-body">
+            Looking for psytrance to book or to listen to? Here is the roster by style.
+          </p>
+        </div>
+        <dl className="grid grid-cols-1 gap-x-12 md:grid-cols-2">
+          {styleGroups.map((group) => (
+            <div key={group.id} id={group.id} className="flex flex-col gap-2 border-t border-brand-700 py-5">
+              <dt className="flex flex-col gap-1">
+                <span className="font-display text-base text-accent">{group.name}</span>
+                <span className="text-small text-brand-300">{group.blurb}</span>
+              </dt>
+              <dd className="text-[15px] leading-relaxed">
+                {group.artists.map((artist, i) => (
+                  <span key={artist.slug}>
+                    {i > 0 && <span className="text-brand-500"> · </span>}
+                    <Link to={`/artists/${artist.slug}`} className="text-bone hover:text-accent">
+                      {artist.name}
+                    </Link>
+                  </span>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
     </div>
   )
 }

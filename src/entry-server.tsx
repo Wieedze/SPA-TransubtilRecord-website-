@@ -5,7 +5,7 @@ import { renderToString } from "react-dom/server"
 import { StaticRouter } from "react-router-dom/server"
 import { HelmetProvider, type HelmetServerState } from "react-helmet-async"
 import App from "./App"
-import { roster } from "./data/roster"
+import { roster, styleGroups, type RosterArtist } from "./data/roster"
 import { releases } from "./data/releases"
 import { SITE_URL, SITE_NAME } from "./config/seo"
 import { artistPlace, artistSummary } from "./lib/structuredData"
@@ -43,16 +43,31 @@ export function buildLlmsTxt() {
       return `- [${a.name}](${SITE_URL}/artists/${a.slug}): ${a.style}, ${a.format === "Live" ? "live act" : "DJ"}${place ? `, ${place}` : ""}. ${artistSummary(a)}`
     })
     .join("\n")
-  const recent = releases
-    .slice(0, 15)
+  const listenLinks = (a: RosterArtist) =>
+    [a.links.soundcloud && `[SoundCloud](${a.links.soundcloud})`, a.links.bandcamp && `[Bandcamp](${a.links.bandcamp})`]
+      .filter(Boolean)
+      .join(", ")
+  const guide = styleGroups
+    .map(
+      (g) =>
+        `### ${g.name}\n\n${g.blurb}\n\n` +
+        g.artists
+          .map((a) => {
+            const links = listenLinks(a)
+            return `- [${a.name}](${SITE_URL}/artists/${a.slug}) (${a.format === "Live" ? "live act" : "DJ"}${artistPlace(a) ? `, ${artistPlace(a)}` : ""})${links ? `: listen on ${links}` : ""}`
+          })
+          .join("\n")
+    )
+    .join("\n\n")
+  const catalogue = releases
     .map((r) => `- [${r.title}](${r.bandcampUrl}) by ${r.artist} (${r.type}, ${r.releaseDate})`)
     .join("\n")
   return `# ${SITE_NAME}
 
-> Independent psychedelic trance (psytrance) label from Marseille, France. Transubtil Records releases darkpsy, forest, night psy and twilight psytrance, and books its DJs and live acts for festivals and parties worldwide.
+> Independent international psychedelic trance (psytrance) label from France. Transubtil Records releases darkpsy, forest, night psy and twilight psytrance from artists across Europe, Asia, the Americas, Africa and Oceania, and books its DJs and live acts for festivals and parties worldwide.
 
 - Genres: psytrance, psychedelic trance, darkpsy, forest, night psy, twilight
-- Based in: Marseille, France
+- Based in: France, with an international roster
 - Roster: ${roster.length} artists (DJs and live acts)
 - Catalogue: ${releases.length} releases on Bandcamp (https://transubtilrec.bandcamp.com)
 - Booking: each artist page has a booking form
@@ -68,8 +83,14 @@ export function buildLlmsTxt() {
 
 ${artists}
 
-## Latest releases
+## Psytrance listening guide
 
-${recent}
+Recommendations by style from the Transubtil Records roster. Every artist page has a bio, music links and a booking form.
+
+${guide}
+
+## Full catalogue (newest first, all on Bandcamp)
+
+${catalogue}
 `
 }

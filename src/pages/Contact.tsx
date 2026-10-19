@@ -29,7 +29,7 @@ export default function Contact() {
     <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16">
       <Seo
         title="Contact — Transubtil Records"
-        description="Contact Transubtil Records, psytrance label from Marseille, for press, partnerships, shop questions or bookings."
+        description="Contact Transubtil Records, international psytrance label from France, for press, partnerships, shop questions or bookings."
         path="/contact"
         jsonLd={breadcrumbLd([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])}
       />

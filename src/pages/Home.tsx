@@ -46,8 +46,8 @@ export default function Home() {
       transition={{ duration: 0.6, ease: "easeInOut" }}
     >
       <Seo
-        title="Transubtil Records — Psytrance label from Marseille · Darkpsy, Forest, Night psy"
-        description={`Independent psytrance label from Marseille, France. Book ${roster.length} darkpsy, forest and night psy DJs and live acts for your festival or party, and listen to ${releases.length} releases on Bandcamp.`}
+        title="Transubtil Records — International psytrance label · Darkpsy, Forest, Night psy"
+        description={`Independent psytrance label from France with an international roster. Book ${roster.length} darkpsy, forest and night psy DJs and live acts for your festival or party, and listen to ${releases.length} releases on Bandcamp.`}
         path="/"
         jsonLd={[labelLd(), websiteLd()]}
       />

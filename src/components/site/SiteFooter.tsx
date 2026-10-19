@@ -17,7 +17,7 @@ function NewsletterBand() {
       <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-8 px-4 py-10 md:px-6 md:py-14">
         <div className="flex flex-[1_1_380px] flex-col gap-2.5">
           <h2 className="font-display text-xl leading-tight md:text-[26px]">Stay in touch.</h2>
-          <p className="text-[17px] leading-normal">Releases, gigs and free downloads. One email a month, no more.</p>
+          <p className="text-[17px] leading-normal">Releases, gifts and free downloads.</p>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-[1_1_420px] flex-wrap gap-3">
           <label htmlFor="nl-email" className="sr-only">
@@ -54,9 +54,6 @@ export default function SiteFooter() {
         <div className="flex flex-wrap justify-between gap-10">
           <div className="flex flex-[1_1_280px] flex-col gap-4">
             <img src={logo} alt="Transubtil Records" className="h-12 self-start" />
-            <p className="max-w-[340px] text-[15px] leading-relaxed text-brand-300">
-              Independent psychedelic music label. Ten years of psytrance, darkpsy and forest from Marseille, France.
-            </p>
           </div>
 
           <nav aria-label="Footer" className="flex flex-wrap gap-16 text-[15px]">
