@@ -87,8 +87,7 @@ export default function Label() {
           </p>
           <p>
             Specialized in psychedelic trance, darkpsy, forest and night-oriented sounds, Transubtil Records embraces deep
-            grooves, experimental textures and the raw energy of the underground, connecting the French scene's creative
-            pulse to the global psytrance movement.
+            grooves, experimental textures and the raw energy of the underground.
           </p>
         </div>
       </motion.section>
