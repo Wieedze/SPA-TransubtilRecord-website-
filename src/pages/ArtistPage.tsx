@@ -9,9 +9,7 @@ import DecryptedText from "../components/DecryptedText"
 import HubArtisteAnimated from "../components/artists/HubArtisteAnimated"
 import SoundCloudPlayer from "../components/SoundCloudPlayer"
 import SocialIcons from "../components/site/SocialIcons"
-
-const fieldClass =
-  "h-12 rounded-field border border-brand-700 bg-brand-900 px-4 text-base text-bone placeholder:text-[#8C8995] [color-scheme:dark]"
+import { fieldClass, textareaClass } from "../components/site/formStyles"
 
 const BOOKING_FIELDS = [
   { id: "bk-name", name: "name", label: "Name *", type: "text", placeholder: "First and last name", required: true, autoComplete: "name" },
@@ -121,7 +119,7 @@ function BookingForm({ artist }: { artist: RosterArtist }) {
           name="message"
           rows={5}
           placeholder="Line-up, set times, accommodation, travel…"
-          className="resize-y rounded-field border border-brand-700 bg-brand-900 px-4 py-3.5 text-base leading-normal text-bone placeholder:text-[#8C8995]"
+          className={textareaClass}
         />
       </div>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-span-2">

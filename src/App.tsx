@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import { HelmetProvider } from "react-helmet-async"
 import { AuthProvider } from "./contexts/AuthContext.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx"
@@ -22,7 +22,8 @@ import AuthCallback from "./pages/AuthCallback.tsx"
 import Artists from "./pages/Artists.tsx"
 import ArtistPage from "./pages/ArtistPage.tsx"
 import Releases from "./pages/Releases.tsx"
-import About from "./pages/About.tsx"
+import Label from "./pages/Label.tsx"
+import Contact from "./pages/Contact.tsx"
 import InstagramGenerator from "./pages/InstagramGenerator.tsx"
 import CatalogueManager from "./pages/admin/CatalogueManager.tsx"
 import NotFound from "./pages/NotFound.tsx"
@@ -139,10 +140,10 @@ function App() {
             <Route path="/artists" element={<Artists />} />
             <Route path="/artists/:slug" element={<ArtistPage />} />
             <Route path="/releases" element={<Releases />} />
-            <Route path="/about" element={<About />} />
-            {/* TODO(v2 pages): dedicated Label and Contact pages */}
-            <Route path="/label" element={<About />} />
-            <Route path="/contact" element={<About />} />
+            <Route path="/label" element={<Label />} />
+            <Route path="/contact" element={<Contact />} />
+            {/* v1 URL */}
+            <Route path="/about" element={<Navigate to="/label" replace />} />
             {FEATURE_AUTH && (
               <>
                 <Route
