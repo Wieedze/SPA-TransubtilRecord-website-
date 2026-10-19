@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useState, type RefObject } from "react"
 import { animate, useMotionValue } from "framer-motion"
 
 // useLayoutEffect warns when the page is prerendered on the server
@@ -38,9 +38,8 @@ function markIntroPlayed() {
   }
 }
 
-export function useIntroZoom() {
+export function useIntroZoom(heroRef: RefObject<HTMLElement>) {
   const [phase, setPhase] = useState<IntroPhase>(() => (shouldPlayIntro() ? "intro" : "done"))
-  const heroRef = useRef<HTMLElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const scale = useMotionValue(1)
@@ -113,7 +112,6 @@ export function useIntroZoom() {
 
   return {
     phase,
-    heroRef,
     heroStyle: { x, y, scale },
     backgroundStyle: { scale: backgroundScale },
   }

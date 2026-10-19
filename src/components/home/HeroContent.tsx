@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from "react"
+import { useState, type MouseEvent, type Ref } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import brandmark from "../../assets/design/assets/brandmark-white.png"
@@ -10,27 +10,30 @@ import DecryptedText from "../DecryptedText"
 import { glowFlashProps } from "../site/glowFlash"
 import { useHoverCount } from "../../hooks/useHoverCount"
 
-// Spinning yellow spiral, dark vignette and yellow halo, behind the home hero.
-export function HeroBackground() {
+// Spinning yellow spiral, dark vignette and yellow halo, behind the home hero, all
+// centred on `center` (the logo, in hero pixels) so the circle is coaxial with it.
+export function HeroBackground({ center }: { center?: { x: number; y: number } }) {
+  const at = center ? `${center.x}px ${center.y}px` : "50% 45%"
+  const pos = center ? { left: center.x, top: center.y } : { left: "50%", top: "45%" }
   return (
     <>
-      <div className="absolute inset-[-30%] flex items-center justify-center">
+      <div className="absolute -translate-x-1/2 -translate-y-1/2" style={pos}>
         <img
           src={spiral}
           alt=""
-          className="w-[140%] min-w-[900px] max-w-[2600px] animate-spin-slow opacity-60"
+          className="max-w-none animate-spin-slow opacity-60"
+          style={{ width: "clamp(900px, 224vw, 2600px)" }}
         />
       </div>
       <div
         className="absolute inset-0"
         style={{
-          background:
-            "radial-gradient(circle at 50% 45%, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)",
+          background: `radial-gradient(circle at ${at}, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)`,
         }}
       />
       <div
-        className="absolute left-1/2 top-[38%] -ml-[160px] -mt-[160px] h-[320px] w-[320px] animate-halo rounded-full md:-ml-[260px] md:-mt-[260px] md:h-[520px] md:w-[520px]"
-        style={{ background: "radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)" }}
+        className="absolute h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full md:h-[520px] md:w-[520px]"
+        style={{ ...pos, background: "radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)" }}
       />
     </>
   )
@@ -65,13 +68,16 @@ function HeroAction({
 export default function HeroContent({
   hovered,
   onNavigate,
+  logoRef,
 }: {
   hovered: boolean
   onNavigate: (e: MouseEvent<HTMLAnchorElement>, to: string) => void
+  logoRef?: Ref<HTMLImageElement>
 }) {
   return (
     <div className="relative flex w-full max-w-[960px] flex-col items-center gap-5 px-8 text-center md:gap-7 md:px-4">
       <motion.img
+        ref={logoRef}
         src={brandmark}
         alt=""
         animate={{ scale: hovered ? 0.88 : 1 }}
