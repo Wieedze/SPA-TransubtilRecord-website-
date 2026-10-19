@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { animate, useMotionValue } from "framer-motion"
 
+// useLayoutEffect warns when the page is prerendered on the server
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect
+
 // Home intro: the hero content starts scaled up so the hero fills the whole viewport,
 // then "pulls back" (camera dezoom) to its place in the page while the fixed background
 // eases back too. Plays once per session, starts after AUTO_DELAY_MS or as soon as the
@@ -44,7 +47,9 @@ export function useIntroZoom() {
   const start = useCallback(() => setPhase((p) => (p === "intro" ? "zooming" : p)), [])
 
   // Before first paint: scale the hero from its final box up to fill the viewport
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
+    // The prerendered page is hidden until the intro is in place (see index.html)
+    document.documentElement.classList.remove("intro-pending")
     if (phase !== "intro" || !heroRef.current) return
     window.scrollTo(0, 0)
     const box = heroRef.current.getBoundingClientRect()

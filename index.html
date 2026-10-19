@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>Transubtil Records</title>
     <meta name="theme-color" content="#07060B" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,11 +10,18 @@
       href="https://fonts.googleapis.com/css2?family=Michroma&family=Instrument+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <meta
-      name="description"
-      content="Transubtil Records — independent psychedelic music label from Marseille. Psytrance, darkpsy and forest artists to book, and ten years of releases."
-    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-friendly summary" />
+    <!-- Home intro: hide the prerendered page until React has set the intro up (avoids a flash); failsafe after 3 s -->
+    <style>.intro-pending #root { visibility: hidden; }</style>
+    <script>
+      try {
+        if (location.pathname === "/" && !matchMedia("(prefers-reduced-motion: reduce)").matches && sessionStorage.getItem("tr-intro-played") !== "1") {
+          document.documentElement.classList.add("intro-pending")
+          setTimeout(function () { document.documentElement.classList.remove("intro-pending") }, 3000)
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

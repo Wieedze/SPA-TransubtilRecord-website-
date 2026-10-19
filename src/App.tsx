@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom"
-import { HelmetProvider } from "react-helmet-async"
 import { AuthProvider } from "./contexts/AuthContext.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx"
 import Layout from "./components/Layout.tsx"
@@ -32,8 +31,7 @@ import ScrollToTop from "./components/site/ScrollToTop.tsx"
 
 function App() {
   return (
-    <HelmetProvider>
-      <AuthProvider>
+    <AuthProvider>
         <ScrollToTop />
         <Routes>
           {/* Home renders its own nav and footer (fullscreen intro) */}
@@ -167,8 +165,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
-      </AuthProvider>
-    </HelmetProvider>
+    </AuthProvider>
   )
 }
 

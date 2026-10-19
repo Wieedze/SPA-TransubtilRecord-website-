@@ -11,7 +11,7 @@ Transubtil Record — a music label website with React frontend (Vite + TypeScri
 Package manager / script runner: **Bun** (`bun.lock`). Vite remains the bundler.
 
 - `bun run dev` — Vite dev server (frontend only, proxies `/api` to port 8788)
-- `bun run build` — Production build (Vite) into `dist/`
+- `bun run build` — Production build into `dist/`: client build, SSR build of `src/entry-server.tsx`, then `scripts/prerender.ts` (static HTML per public route + `sitemap.xml` + `llms.txt`)
 - `bun run preview` — Preview production build
 - `bun run dev:api` — Build, then serve `dist/` + Cloudflare Pages Functions + local D1 via wrangler (port 8788)
 - `bun run db:migrate:local` / `db:migrate:remote` — Apply `db/migrations/` to D1
@@ -24,6 +24,13 @@ No test runner or linter is configured. Typecheck with `bunx tsc --noEmit -p tsc
 ## Feature flags
 
 `src/config/features.ts`: `VITE_FEATURE_STUDIO` and `VITE_FEATURE_AUTH` (off unless `"true"`) gate the studio, auth, dashboard and admin routes and UI. When auth is off, `AuthProvider` never calls Supabase.
+
+## SEO
+
+- Every public page renders `<Seo>` (`src/components/site/Seo.tsx`): title, description, canonical, Open Graph/Twitter, schema.org JSON-LD from `src/lib/structuredData.ts`. Site URL in `src/config/seo.ts`.
+- Pages are prerendered at build time so crawlers that don't run JS (AI assistants) get full HTML. New public routes must be added to `routes` in `src/entry-server.tsx`. Prerendered files are written as `route.html` (Cloudflare Pages serves them without a trailing-slash redirect).
+- `HelmetProvider` lives in `main.tsx` / `entry-server.tsx`, not in `App`. Code that touches `window`/`document` must stay inside effects (the app is rendered with `renderToString`).
+- `public/robots.txt` explicitly allows AI crawlers; `public/og-default.jpg` is the default social preview.
 
 ## Cloudflare (v2 target)
 

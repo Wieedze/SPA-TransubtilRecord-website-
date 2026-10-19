@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react"
-import { Helmet } from "react-helmet-async"
+import Seo from "../components/site/Seo"
+import { artistsListLd, breadcrumbLd } from "../lib/structuredData"
 import { Search, X } from "lucide-react"
 import ArtistCard from "../components/home/ArtistCard"
 import PageHeader from "../components/site/PageHeader"
@@ -39,13 +40,12 @@ export default function Artists() {
 
   return (
     <div className="flex flex-col gap-10">
-      <Helmet>
-        <title>Artists — Transubtil Records</title>
-        <meta
-          name="description"
-          content="Psytrance, darkpsy and forest DJs and live acts from the Transubtil Records roster. Press kits, riders and direct booking."
-        />
-      </Helmet>
+      <Seo
+        title="Psytrance DJs & live acts to book — Transubtil Records artists"
+        description={`${roster.length} psytrance artists from ${allCountries.length} countries: darkpsy, forest, night psy and twilight DJs and live acts on Transubtil Records. Press kits, music and direct booking.`}
+        path="/artists"
+        jsonLd={[artistsListLd(), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Artists", path: "/artists" }])]}
+      />
 
       <PageHeader
         title="Artists"

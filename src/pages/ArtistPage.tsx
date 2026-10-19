@@ -1,5 +1,4 @@
 import { useState, type FormEvent, type ReactNode } from "react"
-import { Helmet } from "react-helmet-async"
 import { Link, useParams } from "react-router-dom"
 import { motion } from "framer-motion"
 import { ExternalLink } from "lucide-react"
@@ -9,6 +8,8 @@ import DecryptedText from "../components/DecryptedText"
 import HubArtisteAnimated from "../components/artists/HubArtisteAnimated"
 import SoundCloudPlayer from "../components/SoundCloudPlayer"
 import SocialIcons from "../components/site/SocialIcons"
+import Seo from "../components/site/Seo"
+import { artistLd, artistSummary, breadcrumbLd } from "../lib/structuredData"
 import { fieldClass, textareaClass } from "../components/site/formStyles"
 
 const BOOKING_FIELDS = [
@@ -150,13 +151,22 @@ export default function ArtistPage() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>{`${artist.name} — Book with Transubtil Records`}</title>
-        <meta
-          name="description"
-          content={`${artist.name}, ${artist.style.toLowerCase()} ${formatLabel(artist).toLowerCase()} on Transubtil Records. Bio, music and booking.`}
-        />
-      </Helmet>
+      <Seo
+        title={`${artist.name} — ${artist.style} ${artist.format === "Live" ? "live act" : "DJ"} · Transubtil Records`}
+        description={`${artistSummary(artist)} Bio, music and booking for your festival or party.`}
+        path={`/artists/${artist.slug}`}
+        image={artist.photo}
+        imageAlt={`${artist.name}, ${artist.style} ${artist.format === "Live" ? "live act" : "DJ"}`}
+        type="profile"
+        jsonLd={[
+          artistLd(artist, artist.photo),
+          breadcrumbLd([
+            { name: "Home", path: "/" },
+            { name: "Artists", path: "/artists" },
+            { name: artist.name, path: `/artists/${artist.slug}` },
+          ]),
+        ]}
+      />
 
       {/* Hero */}
       <section className="flex flex-col gap-8">

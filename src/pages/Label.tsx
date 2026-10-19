@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react"
-import { Helmet } from "react-helmet-async"
+import Seo from "../components/site/Seo"
+import { breadcrumbLd, labelLd } from "../lib/structuredData"
 import { motion } from "framer-motion"
 import DecryptedText from "../components/DecryptedText"
 import { fieldClass, labelClass, textareaClass } from "../components/site/formStyles"
@@ -67,13 +68,12 @@ function DemoForm() {
 export default function Label() {
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Label — Transubtil Records</title>
-        <meta
-          name="description"
-          content="Transubtil Records, a Marseille psychedelic-trance label: darkpsy, forest and night sounds. Our story, and how to send us your demo."
-        />
-      </Helmet>
+      <Seo
+        title="About the label — Transubtil Records, psytrance from Marseille"
+        description="Transubtil Records is a psychedelic-trance label from Marseille, France: darkpsy, forest and night sounds, ten years of releases. Our story, and how to send us your demo."
+        path="/label"
+        jsonLd={[labelLd(), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Label", path: "/label" }])]}
+      />
 
       {/* Story */}
       <section className="grid grid-cols-1 items-start gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-16">

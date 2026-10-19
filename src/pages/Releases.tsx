@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react"
-import { Helmet } from "react-helmet-async"
+import Seo from "../components/site/Seo"
+import { breadcrumbLd, releasesListLd } from "../lib/structuredData"
 import { motion } from "framer-motion"
 import { ExternalLink, Play, Search, X } from "lucide-react"
 import PageHeader from "../components/site/PageHeader"
@@ -51,13 +52,12 @@ export default function Releases() {
 
   return (
     <div className="flex flex-col gap-10">
-      <Helmet>
-        <title>Releases — Transubtil Records</title>
-        <meta
-          name="description"
-          content="The full Transubtil Records discography: darkpsy, forest and twilight EPs, albums and compilations, newest first."
-        />
-      </Helmet>
+      <Seo
+        title="Psytrance releases — Transubtil Records discography"
+        description={`The full Transubtil Records discography: ${releases.length} darkpsy, forest and night psy EPs, albums and compilations (${yearSpan}). Listen and buy on Bandcamp.`}
+        path="/releases"
+        jsonLd={[releasesListLd(), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Releases", path: "/releases" }])]}
+      />
 
       <PageHeader
         title="Releases"

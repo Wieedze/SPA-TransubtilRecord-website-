@@ -1,5 +1,7 @@
 import { useState, type MouseEvent } from "react"
-import { Helmet } from "react-helmet-async"
+import Seo from "../components/site/Seo"
+import { labelLd, websiteLd } from "../lib/structuredData"
+import { releases } from "../data/releases"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import SiteNav from "../components/site/SiteNav"
@@ -43,13 +45,12 @@ export default function Home() {
       animate={{ opacity: leaving ? 0 : 1 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
     >
-      <Helmet>
-        <title>Transubtil Records — Psychedelic label, Marseille</title>
-        <meta
-          name="description"
-          content="Independent psychedelic music label from Marseille. Psytrance, darkpsy and forest artists to book for your festival, and ten years of releases."
-        />
-      </Helmet>
+      <Seo
+        title="Transubtil Records — Psytrance label from Marseille · Darkpsy, Forest, Night psy"
+        description={`Independent psytrance label from Marseille, France. Book ${roster.length} darkpsy, forest and night psy DJs and live acts for your festival or party, and listen to ${releases.length} releases on Bandcamp.`}
+        path="/"
+        jsonLd={[labelLd(), websiteLd()]}
+      />
 
       <motion.div
         className="sticky top-0 z-30"

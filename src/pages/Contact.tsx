@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react"
-import { Helmet } from "react-helmet-async"
+import Seo from "../components/site/Seo"
+import { breadcrumbLd } from "../lib/structuredData"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import DecryptedText from "../components/DecryptedText"
@@ -26,10 +27,12 @@ export default function Contact() {
 
   return (
     <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16">
-      <Helmet>
-        <title>Contact — Transubtil Records</title>
-        <meta name="description" content="Contact Transubtil Records for press, partnerships, shop questions or anything else." />
-      </Helmet>
+      <Seo
+        title="Contact — Transubtil Records"
+        description="Contact Transubtil Records, psytrance label from Marseille, for press, partnerships, shop questions or bookings."
+        path="/contact"
+        jsonLd={breadcrumbLd([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])}
+      />
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}

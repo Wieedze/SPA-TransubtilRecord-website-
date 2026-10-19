@@ -1,21 +1,20 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
+import Seo from "../components/site/Seo"
 
 export default function NotFound() {
+  const { pathname } = useLocation()
   return (
-    <section className="min-h-[50vh] flex items-center justify-center">
-      <div className="text-center space-y-4">
-        <p className="text-xs uppercase tracking-[0.35em] text-white/40">
-          Error 404
-        </p>
-        <h1 className="text-3xl font-semibold">Page not found</h1>
-        <p className="text-sm text-white/60">
-          The page you&apos;re looking for doesn&apos;t exist.
-        </p>
-        <Link
-          to="/"
-          className="inline-flex text-xs uppercase tracking-[0.3em] border border-white/40 px-4 py-2 rounded-full hover:border-brand-300 hover:text-brand-300 transition-colors"
-        >
+    <section className="flex min-h-[50vh] flex-col items-start justify-center gap-5">
+      <Seo title="Page not found — Transubtil Records" description="This page does not exist." path={pathname} noindex />
+      <p className="meta">Error 404</p>
+      <h1 className="font-display text-[30px] uppercase leading-[1.1] md:text-[46px]">Page not found</h1>
+      <p className="text-body">The page you are looking for does not exist.</p>
+      <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+        <Link to="/" className="btn-primary">
           Back to home
+        </Link>
+        <Link to="/artists" className="text-link">
+          See the artists
         </Link>
       </div>
     </section>
