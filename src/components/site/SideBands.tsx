@@ -6,7 +6,9 @@ import bandRight from "../../assets/design/assets/band-right.svg"
 // from the edges of the "10 Years" artwork (band-*.svg: a traced 360 px slice plus its
 // vertical mirror, so it repeats without a seam). Vector, so it stays sharp on
 // high-density screens. Wide screens only.
-const BAND = "max(20px, calc((100vw - 1280px) / 2))"
+// Free space beside the 1280 px content, capped at the pattern's 360 px width: on very
+// wide screens the dark centre widens instead, so its edge meets the flames exactly.
+const BAND = "min(360px, max(20px, calc((100vw - 1280px) / 2)))"
 
 function Strip({ side }: { side: "left" | "right" }) {
   const motif: CSSProperties = {
