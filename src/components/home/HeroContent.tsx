@@ -3,8 +3,9 @@ import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import brandmark from "../../assets/design/assets/brandmark-white.png"
 import wordmark from "../../assets/brand/transubtil-wordmark-white.svg"
-// Yellow swirl extracted from the "10 Years" artwork (no central figure, no text)
-import spiral from "../../assets/design/assets/spiral-yellow.webp"
+// Yellow swirl traced to SVG from the "10 Years" artwork (no central figure, no text),
+// with a soft circular edge so the rotation never shows a corner. Sharp at any density.
+import spiral from "../../assets/design/assets/spiral-yellow.svg"
 import DecryptedText from "../DecryptedText"
 import { glowFlashProps } from "../site/glowFlash"
 import { useHoverCount } from "../../hooks/useHoverCount"
