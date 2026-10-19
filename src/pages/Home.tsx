@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import SiteNav from "../components/site/SiteNav"
 import SiteFooter from "../components/site/SiteFooter"
-import HeroContent from "../components/home/HeroContent"
+import HeroContent, { HeroBackground } from "../components/home/HeroContent"
 import ArtistCard from "../components/home/ArtistCard"
 import { useIntroZoom, ZOOM_DURATION } from "../components/home/useIntroZoom"
 import { getRosterArtist, roster, type RosterArtist } from "../data/roster"
@@ -15,9 +15,9 @@ const featured = FEATURED_SLUGS.map(getRosterArtist).filter((a): a is RosterArti
 const bandcampUrl = SOCIAL_LINKS.find((l) => l.label === "Bandcamp")?.href ?? null
 
 export default function Home() {
-  const { phase, cardRef, cardStyle } = useIntroZoom()
+  const { phase, heroRef, heroStyle, backgroundStyle } = useIntroZoom()
   const intro = phase === "intro"
-  // Nav and page content arrive while the card pulls back
+  // Nav and page content arrive while the hero pulls back
   const reveal = {
     initial: false as const,
     animate: intro ? { opacity: 0, y: 32 } : { opacity: 1, y: 0 },
@@ -25,7 +25,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-950 text-bone">
+    <div className="relative min-h-screen text-bone">
       <Helmet>
         <title>Transubtil Records — Psychedelic label, Marseille</title>
         <meta
@@ -33,6 +33,15 @@ export default function Home() {
           content="Independent psychedelic music label from Marseille. Psytrance, darkpsy and forest artists to book for your festival, and ten years of releases."
         />
       </Helmet>
+
+      {/* Animated hero background, fixed behind the whole page */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-brand-950"
+        style={backgroundStyle}
+      >
+        <HeroBackground />
+      </motion.div>
 
       <motion.div
         className="sticky top-0 z-30"
@@ -44,24 +53,19 @@ export default function Home() {
         <SiteNav />
       </motion.div>
 
-      <main>
-        <div className="px-3 pt-3 md:px-6 md:pt-6">
-          <motion.section
-            ref={cardRef}
-            aria-label="Transubtil Records"
-            style={cardStyle}
-            className={[
-              "relative isolate mx-auto flex max-w-[1600px] items-center justify-center overflow-hidden bg-brand-950",
-              // Mobile keeps a near-viewport ratio so the intro scale doesn't crop the text
-              "h-[calc(100svh-68px-12px-6svh)] min-h-[560px] md:h-[calc(100svh-96px-24px-12svh)] md:min-h-[640px]",
-              phase === "done" ? "" : "z-40",
-            ].join(" ")}
-          >
-            <HeroContent />
-            {/* Border drawn above the content so the spinning artwork never bleeds over the rounded edge */}
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 rounded-[inherit] border border-brand-700" />
-          </motion.section>
-        </div>
+      <main className="relative z-10">
+        <motion.section
+          ref={heroRef}
+          aria-label="Transubtil Records"
+          style={heroStyle}
+          className={[
+            "relative flex items-center justify-center",
+            // Leaves the start of the next section visible once the hero has landed
+            "h-[calc(100svh-68px-6svh)] min-h-[560px] md:h-[calc(100svh-96px-10svh)] md:min-h-[600px]",
+          ].join(" ")}
+        >
+          <HeroContent />
+        </motion.section>
 
         <motion.div {...reveal}>
           {/* Latest release */}
@@ -93,7 +97,7 @@ export default function Home() {
           </section>
 
           {/* Featured artists */}
-          <section className="border-y border-brand-700 bg-brand-900">
+          <section className="border-y border-brand-700 bg-brand-900/85 backdrop-blur-sm">
             <div className="mx-auto flex max-w-page flex-col gap-10 px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-[72px]">
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div className="flex flex-col gap-3">
