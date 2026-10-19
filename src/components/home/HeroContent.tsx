@@ -5,7 +5,6 @@ import brandmark from "../../assets/design/assets/brandmark-white.png"
 import wordmark from "../../assets/brand/transubtil-wordmark-white.svg"
 // Yellow swirl extracted from the "10 Years" artwork (no central figure, no text)
 import spiral from "../../assets/design/assets/spiral-yellow.webp"
-import { BOOKING_PATH } from "../../config/site"
 import DecryptedText from "../DecryptedText"
 import { glowFlashProps } from "../site/glowFlash"
 import { useHoverCount } from "../../hooks/useHoverCount"
@@ -36,16 +35,14 @@ export function HeroBackground() {
   )
 }
 
-// Hero action: the one primary button, or a quiet text link. Labels scramble on hover.
+// Hero link (Artists, Releases). Labels scramble on hover.
 function HeroAction({
   to,
   label,
-  primary = false,
   onNavigate,
 }: {
   to: string
   label: string
-  primary?: boolean
   onNavigate: (e: MouseEvent<HTMLAnchorElement>, to: string) => void
 }) {
   const { count, hoverProps } = useHoverCount()
@@ -55,7 +52,7 @@ function HeroAction({
       onClick={(e) => onNavigate(e, to)}
       {...hoverProps}
       {...glowFlashProps}
-      className={primary ? "btn-primary h-12 px-7" : "text-link"}
+      className="text-link text-lg"
     >
       <DecryptedText text={label} trigger={count} speed={90} maxIterations={5} />
     </Link>
@@ -87,7 +84,6 @@ export default function HeroContent({
         Psytrance, darkpsy and forest. Artists to book for your festival, releases to play tonight.
       </p>
       <div className="mt-3 flex flex-wrap items-center justify-center gap-x-8 gap-y-5">
-        <HeroAction to={BOOKING_PATH} label="Book an artist" primary onNavigate={onNavigate} />
         <HeroAction to="/artists" label="Artists" onNavigate={onNavigate} />
         <HeroAction to="/releases" label="Releases" onNavigate={onNavigate} />
       </div>
