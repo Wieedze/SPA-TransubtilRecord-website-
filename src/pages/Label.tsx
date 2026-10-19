@@ -73,12 +73,8 @@ export default function Label() {
         transition={{ duration: 0.7 }}
         className="mx-auto flex max-w-[720px] flex-col items-center gap-6 text-center"
       >
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="font-display text-[30px] uppercase leading-[1.1] text-balance md:text-[46px]">
-            <DecryptedText text="Ten years of subtle trance" animateOn="view" speed={50} maxIterations={8} />
-          </h1>
-          <p className="meta">France · International · Psytrance · Darkpsy · Forest</p>
-        </div>
+        {/* No visible title: the h1 stays for search engines and screen readers */}
+        <h1 className="sr-only">Transubtil Records, international psytrance label from France</h1>
         <div className="flex flex-col gap-4 text-[17px] leading-[1.7] text-body">
           <p>
             Transubtil Records is a French psychedelic-trance label born from a passion for underground sound and
