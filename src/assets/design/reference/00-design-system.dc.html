@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Transubtil · Design system</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07060B}
+a{color:#F9BC14}a:hover{color:#FFD24D}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 2900px; box-sizing: border-box; padding: 80px; background: #07060B; color: #F3EFE4; font-family: 'Instrument Sans', sans-serif; display: flex; flex-direction: column; gap: 88px">
+
+<header style="display: flex; align-items: center; gap: 32px; border-bottom: 1px solid #2C2A36; padding-bottom: 48px">
+<img src="../assets/brandmark-white.png" alt="Transubtil brandmark" style="width: 140px; height: auto">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #F9BC14">Art direction 2026</div>
+<h1 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 800; font-size: 56px; line-height: 1; letter-spacing: 0.02em; text-transform: uppercase">Transubtil Records</h1>
+<p style="margin: 0; font-size: 18px; color: #A8A5B0; max-width: 720px">Deep black, bone and solar gold, taken from the “10 Years of Transubtil” artwork. Yellow is only for actions and landmarks: a promoter follows it straight to booking.</p>
+</div>
+</header>
+
+<section style="display: flex; flex-direction: column; gap: 28px">
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 600; font-size: 28px">Colour</h2>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px">
+<sc-for list="{{swatches}}" as="s" hint-placeholder-count="10">
+<div style="display: flex; flex-direction: column; border: 1px solid #2C2A36; border-radius: 12px; overflow: hidden; background: #100F16">
+<div style="height: 112px; background: {{s.hex}}"></div>
+<div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 4px">
+<div style="font-weight: 700; font-size: 15px">{{s.token}}</div>
+<div style="font-family: ui-monospace, monospace; font-size: 13px; color: #F9BC14">{{s.hex}}</div>
+<div style="font-size: 13px; color: #A8A5B0; line-height: 1.4">{{s.use}}</div>
+</div>
+</div>
+</sc-for>
+</div>
+<p style="margin: 0; font-size: 14px; color: #A8A5B0">Contrast: bone on brand-950 17.6:1 · brand-300 on brand-950 8.3:1 · accent on brand-950 11.8:1 · brand-950 on accent (button text) 11.8:1. Everything passes WCAG AA; brand-500 is for decoration only.</p>
+</section>
+
+<section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px">
+<div style="display: flex; flex-direction: column; gap: 28px">
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 600; font-size: 28px">Typography</h2>
+<p style="margin: 0; color: #A8A5B0; font-size: 15px; line-height: 1.5">Unbounded (headings) replaces Eras ITC: wide and geometric, it echoes the TRANSUBTIL wordmark. Instrument Sans (body) replaces Acumin: legible and calm. Both are free on Google Fonts.</p>
+<div style="display: flex; flex-direction: column; gap: 22px; border-top: 1px solid #2C2A36; padding-top: 24px">
+<div style="display: flex; align-items: baseline; gap: 20px"><span style="width: 120px; flex-shrink: 0; font-size: 12px; color: #A8A5B0; font-family: ui-monospace, monospace">display 72/76 · 800</span><span style="font-family: Unbounded, sans-serif; font-weight: 800; font-size: 72px; line-height: 1.05; text-transform: uppercase">Trance</span></div>
+<div style="display: flex; align-items: baseline; gap: 20px"><span style="width: 120px; flex-shrink: 0; font-size: 12px; color: #A8A5B0; font-family: ui-monospace, monospace">h1 48/54 · 700</span><span style="font-family: Unbounded, sans-serif; font-weight: 700; font-size: 48px; line-height: 1.1">Artists</span></div>
+<div style="display: flex; align-items: baseline; gap: 20px"><span style="width: 120px; flex-shrink: 0; font-size: 12px; color: #A8A5B0; font-family: ui-monospace, monospace">h2 32/40 · 600</span><span style="font-family: Unbounded, sans-serif; font-weight: 600; font-size: 32px">Latest release</span></div>
+<div style="display: flex; align-items: baseline; gap: 20px"><span style="width: 120px; flex-shrink: 0; font-size: 12px; color: #A8A5B0; font-family: ui-monospace, monospace">h3 22/30 · 600</span><span style="font-family: Unbounded, sans-serif; font-weight: 600; font-size: 22px">Technical rider</span></div>
+<div style="display: flex; align-items: baseline; gap: 20px"><span style="width: 120px; flex-shrink: 0; font-size: 12px; color: #A8A5B0; font-family: ui-monospace, monospace">body-lg 18/28 · 400</span><span style="font-size: 18px; line-height: 1.55">A psychedelic music label from Marseille.</span></div>
+<div style="display: flex; align-items: baseline; gap: 20px"><span style="width: 120px; flex-shrink: 0; font-size: 12px; color: #A8A5B0; font-family: ui-monospace, monospace">body 16/26 · 400</span><span style="font-size: 16px; line-height: 1.6">Body copy, bios, release notes.</span></div>
+<div style="display: flex; align-items: baseline; gap: 20px"><span style="width: 120px; flex-shrink: 0; font-size: 12px; color: #A8A5B0; font-family: ui-monospace, monospace">small 14/20 · 500</span><span style="font-size: 14px; font-weight: 500; color: #A8A5B0">Metadata, field hints</span></div>
+<div style="display: flex; align-items: baseline; gap: 20px"><span style="width: 120px; flex-shrink: 0; font-size: 12px; color: #A8A5B0; font-family: ui-monospace, monospace">label 12 · 600 · +16%</span><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #F9BC14">Psytrance · Live</span></div>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 28px">
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 600; font-size: 28px">Buttons</h2>
+<div style="display: grid; grid-template-columns: 110px repeat(3, minmax(0, 1fr)); gap: 16px; align-items: center">
+<span></span><span style="font-size: 12px; color: #A8A5B0; text-transform: uppercase; letter-spacing: 0.12em">Normal</span><span style="font-size: 12px; color: #A8A5B0; text-transform: uppercase; letter-spacing: 0.12em">Hover</span><span style="font-size: 12px; color: #A8A5B0; text-transform: uppercase; letter-spacing: 0.12em">Disabled</span>
+<span style="font-size: 14px; color: #A8A5B0">Primary</span>
+<button type="button" style="height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: #F9BC14; color: #07060B; font: 700 15px 'Instrument Sans', sans-serif">Book</button>
+<button type="button" style="height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: #FFD24D; color: #07060B; font: 700 15px 'Instrument Sans', sans-serif; box-shadow: 0 0 0 4px rgba(249,188,20,0.25)">Booker</button>
+<button type="button" disabled style="height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: #2C2A36; color: #6F6C7A; font: 700 15px 'Instrument Sans', sans-serif">Booker</button>
+<span style="font-size: 14px; color: #A8A5B0">Secondary</span>
+<button type="button" style="height: 48px; padding: 0 22px; border: 1.5px solid #F3EFE4; border-radius: 999px; background: transparent; color: #F3EFE4; font: 600 15px 'Instrument Sans', sans-serif">Listen</button>
+<button type="button" style="height: 48px; padding: 0 22px; border: 1.5px solid #F9BC14; border-radius: 999px; background: rgba(249,188,20,0.08); color: #F9BC14; font: 600 15px 'Instrument Sans', sans-serif">Écouter</button>
+<button type="button" disabled style="height: 48px; padding: 0 22px; border: 1.5px solid #2C2A36; border-radius: 999px; background: transparent; color: #6F6C7A; font: 600 15px 'Instrument Sans', sans-serif">Écouter</button>
+<span style="font-size: 14px; color: #A8A5B0">Link</span>
+<span style="font-weight: 600; font-size: 15px; color: #F3EFE4; border-bottom: 1.5px solid #F9BC14; justify-self: start; padding-bottom: 2px">Press kit →</span>
+<span style="font-weight: 600; font-size: 15px; color: #F9BC14; border-bottom: 1.5px solid #F9BC14; justify-self: start; padding-bottom: 2px">Press kit →</span>
+<span style="font-weight: 600; font-size: 15px; color: #6F6C7A; border-bottom: 1.5px solid #2C2A36; justify-self: start; padding-bottom: 2px">Press kit →</span>
+</div>
+
+<h2 style="margin: 24px 0 0; font-family: Unbounded, sans-serif; font-weight: 600; font-size: 28px">Fields</h2>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="f1" style="font-size: 14px; font-weight: 600">Email</label>
+<input id="f1" type="email" placeholder="you@festival.com" style="height: 48px; box-sizing: border-box; padding: 0 14px; border-radius: 10px; border: 1.5px solid #2C2A36; background: #100F16; color: #F3EFE4; font: 16px 'Instrument Sans', sans-serif">
+<span style="font-size: 13px; color: #A8A5B0">Normal</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="f2" style="font-size: 14px; font-weight: 600">Email</label>
+<input id="f2" type="email" value="you@festival" style="height: 48px; box-sizing: border-box; padding: 0 14px; border-radius: 10px; border: 1.5px solid #FF7A66; background: #100F16; color: #F3EFE4; font: 16px 'Instrument Sans', sans-serif">
+<span style="font-size: 13px; color: #FF7A66">Email address is incomplete.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="f3" style="font-size: 14px; font-weight: 600">Email</label>
+<input id="f3" type="email" value="you@festival.com" style="height: 48px; box-sizing: border-box; padding: 0 14px; border-radius: 10px; border: 1.5px solid #6FDB8F; background: #100F16; color: #F3EFE4; font: 16px 'Instrument Sans', sans-serif">
+<span style="font-size: 13px; color: #6FDB8F">✓ Looks good.</span>
+</div>
+</div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 28px">
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 600; font-size: 28px">Artist hub</h2>
+<div style="display: flex; gap: 32px; align-items: center; border: 1px solid #2C2A36; border-radius: 14px; background: #100F16; padding: 28px">
+<img src="../assets/hub-artiste.svg" alt="" style="width: 160px; height: auto">
+<p style="margin: 0; font-size: 15px; color: #A8A5B0; line-height: 1.6; max-width: 640px">The only mecha element on the site. It frames the artist photo on each artist page, in accent yellow, with a second ring turning slowly behind it. Decorative only (aria-hidden).</p>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 28px">
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 600; font-size: 28px">Cards</h2>
+<div style="display: flex; gap: 32px; align-items: flex-start">
+<a href="Artiste.dc.html" style="width: 300px; text-decoration: none; color: #F3EFE4; display: flex; flex-direction: column; gap: 14px">
+<div style="position: relative; aspect-ratio: 4 / 5; border-radius: 6px; background: #1B1A23; overflow: hidden">
+<img src="../assets/artists/thehorrids.jpg" alt="The Horrids" style="width: 100%; height: 100%; object-fit: cover; display: block">
+<span style="position: absolute; right: 10px; top: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #07060B; background: #F9BC14; padding: 5px 9px; border-radius: 4px">Live</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-family: Unbounded, sans-serif; font-weight: 600; font-size: 20px">The Horrids</div>
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #F9BC14">Psychedelic · Live</div>
+</div>
+</a>
+<a href="Sorties.dc.html" style="width: 300px; text-decoration: none; color: #F3EFE4; display: flex; flex-direction: column; gap: 14px">
+<img src="../assets/artwork-10-years.jpg" alt="10 Years of Transubtil artwork" style="width: 300px; height: 300px; object-fit: cover; border-radius: 14px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 13px; color: #A8A5B0">Compilation · [date]</div>
+<div style="font-family: Unbounded, sans-serif; font-weight: 600; font-size: 18px">10 Years of Transubtil</div>
+<div style="display: flex; gap: 16px; font-size: 14px; font-weight: 600"><span style="color: #F3EFE4; border-bottom: 1.5px solid #F9BC14">Listen</span><span style="color: #F3EFE4; border-bottom: 1.5px solid #F9BC14">Buy</span></div>
+</div>
+</a>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 28px; border: 1px solid #2C2A36; border-radius: 14px; background: #100F16">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #F9BC14">Rules</div>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A8A5B0">Radii: 10 px for fields, 6 px for artist photos, 14 px for panels, pill for buttons. Spacing in multiples of 4 (Tailwind default). Minimum touch target 44 px. Keyboard focus: 2 px yellow ring, 3 px offset.</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A8A5B0">On card hover the photo zooms 4% and the name turns yellow (200 ms transition).</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A8A5B0">Desktop and mobile navigation: see the components on the right and the “Mobile menu” board. The whole site is in English.</p>
+</div>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {
+swatches: [
+{ token: 'brand-950', hex: '#07060B', use: 'Main background' },
+{ token: 'brand-900', hex: '#100F16', use: 'Surfaces, fields' },
+{ token: 'brand-800', hex: '#1B1A23', use: 'Cards, alternate sections' },
+{ token: 'brand-700', hex: '#2C2A36', use: 'Borders, dividers' },
+{ token: 'brand-500', hex: '#6F6C7A', use: 'Decoration, disabled (no text)' },
+{ token: 'brand-300', hex: '#A8A5B0', use: 'Secondary text' },
+{ token: 'bone', hex: '#F3EFE4', use: 'Primary text, logo' },
+{ token: 'accent', hex: '#F9BC14', use: 'Actions, landmarks, links' },
+{ token: 'accent-hover', hex: '#FFD24D', use: 'Action hover' },
+{ token: 'error / success', hex: '#FF7A66', use: 'Error · success #6FDB8F' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Transubtil · Artists</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07060B}
+a{color:#F9BC14}a:hover{color:#FFD24D}
+:focus-visible{outline:2px solid #F9BC14;outline-offset:3px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:36px 24px}
+.card-img{transition:transform .25s ease, filter .25s ease;filter:saturate(.85)}
+a:hover .card-img{transform:scale(1.04);filter:saturate(1.1)}
+a:hover .card-name{color:#F9BC14}
+@media(max-width:1000px){.g4{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:820px){.nav-links,.nav-cta{display:none!important}.nav-burger{display:inline-flex!important}.g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}.h-page{font-size:36px!important}.hud-top{display:none}}
+</style>
+</helmet>
+<div style="width: 100%; background: #07060B; color: #F3EFE4; font-family: 'Instrument Sans', sans-serif">
+<dc-import name="Nav" active="artists" hint-size="100%,96px"></dc-import>
+
+<section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 96px; box-sizing: border-box; display: flex; flex-direction: column; gap: 40px">
+<div style="position: relative; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 600px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #F9BC14">Roster · {{total}} artists</div>
+<h1 class="h-page" style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 800; font-size: 56px; line-height: 1.05; text-transform: uppercase">Artists</h1>
+<p style="margin: 0; font-size: 18px; line-height: 1.6; color: #A8A5B0">DJs and live acts from France, Portugal, Japan, Mexico, Brazil, Australia and beyond. Each page has a press kit, a rider and a direct booking form.</p>
+</div>
+</div>
+
+<div role="group" aria-label="Filter by format" style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="3">
+<sc-if value="{{c.on}}" hint-placeholder-val="{{ false }}"><button type="button" aria-pressed="true" onClick="{{c.pick}}" style="height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #F9BC14; background: #F9BC14; color: #07060B; font: 700 14px 'Instrument Sans', sans-serif">{{c.label}}</button></sc-if>
+<sc-if value="{{c.off}}" hint-placeholder-val="{{ true }}"><button type="button" aria-pressed="false" onClick="{{c.pick}}" style="height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #2C2A36; background: transparent; color: #F3EFE4; font: 600 14px 'Instrument Sans', sans-serif">{{c.label}}</button></sc-if>
+</sc-for>
+<span style="margin-left: auto; font-size: 14px; color: #A8A5B0">{{count}} shown</span>
+</div>
+
+<div class="g4">
+<sc-for list="{{artists}}" as="a" hint-placeholder-count="8">
+<a href="Artiste.dc.html" style="text-decoration: none; color: #F3EFE4; display: flex; flex-direction: column; gap: 14px">
+<div style="position: relative; aspect-ratio: 4 / 5; border-radius: 6px; background: #1B1A23; overflow: hidden">
+<img class="card-img" src="{{a.img}}" alt="{{a.name}}" style="width: 100%; height: 100%; object-fit: cover; display: block">
+<span style="position: absolute; right: 10px; top: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #07060B; background: #F9BC14; padding: 5px 9px; border-radius: 4px">{{a.format}}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div class="card-name" style="font-family: Unbounded, sans-serif; font-weight: 600; font-size: 19px; transition: color .2s">{{a.name}}</div>
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #F9BC14">{{a.style}}</div>
+<div style="font-size: 14px; color: #A8A5B0">{{a.from}}</div>
+</div>
+</a>
+</sc-for>
+</div>
+</section>
+
+<dc-import name="Footer" hint-size="100%,640px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3500}}'>
+class Component extends DCLogic {
+renderVals() {
+const pick = (this.state && this.state.pick) || 'All';
+const B = '../assets/artists/';
+const all = [
+['The Horrids', 'thehorrids.jpg', 'Psychedelic', 'Live', 'France'],
+['Anchronorium', 'anchronorium.jpg', 'Darkpsy', 'Live', 'Portugal'],
+['Balku', 'balku.jpg', 'Forest · Darkpsy', 'Live', 'Coimbra, Portugal'],
+['La Marquise', 'lamarquise.jpg', 'Night psy', 'Live', '[Location]'],
+['Opsuruus', 'opsuruus.jpg', 'Darkforest', 'Live', 'Portugal'],
+['Warp Drive', 'warpdrive.jpg', 'Night psy', 'Live', 'Sydney, Australia'],
+['Xipe Totecs', 'xipetotecs.jpg', 'Psytrance', 'Live', 'Japan'],
+['Zeo', 'zeo.jpg', 'Dark · Forest', 'Live', '[Location]'],
+['Agop', 'agop.jpg', 'Psytrance', 'DJ', '[Location]'],
+['Akhaba', 'akhaba.jpg', 'Night psytrance', 'DJ', 'South of France'],
+['Art2Fly', 'art2fly.jpg', 'Psytrance', 'DJ', 'Yucatán, Mexico'],
+['DJ Lazzzy', 'lazzzy.jpg', 'Psytrance', 'DJ', 'Japan'],
+['Fiorenza', 'fiorenza.jpg', 'Forest · Dark', 'DJ', 'Cerrado, Brazil'],
+['Heavy Fawn', 'heavyfawn.jpg', 'Night psy', 'DJ', 'Marseille, France'],
+['Jive', 'jive.jpg', 'Forest', 'DJ', 'East coast, Australia'],
+['Kanaloa', 'kanaloa.jpg', 'Dark night‑time', 'DJ', 'United Kingdom'],
+['Mekanorms', 'mekanorms.jpg', 'Psytrance', 'DJ', '[Location]'],
+['Pakkun', 'pakkun.jpg', 'Groovy to darkpsy', 'DJ', '[Location]'],
+['Rajax', 'rajax.jpg', 'Darkpsy', 'DJ', '[Location]'],
+['Wild Track', 'wildtrack.jpg', 'Groovy psychedelic', 'DJ', 'Morocco'],
+['Yagsa', 'yagsa.jpg', 'Forest', 'DJ', '[Location]']
+].map(([name, id, style, format, from]) => ({ name, img: B + id, style, format, from }));
+const filt = { 'All': () => true, 'Live acts': (a) => a.format === 'Live', 'DJ sets': (a) => a.format === 'DJ' };
+const artists = all.filter(filt[pick]);
+return {
+artists,
+total: all.length,
+count: artists.length,
+chips: Object.keys(filt).map((l) => ({ label: l, on: l === pick, off: l !== pick, pick: () => this.setState({ pick: l }) }))
+};
+}
+}
+</script>
+</body>
+</html>

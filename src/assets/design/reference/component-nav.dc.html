@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Navigation</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<header style="width: 100%; box-sizing: border-box; background: rgba(7,6,11,0.92); border-bottom: 1px solid #2C2A36; font-family: 'Instrument Sans', sans-serif; color: #F3EFE4">
+<nav aria-label="Main navigation" style="max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 96px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px">
+<a href="Accueil.dc.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F3EFE4">
+<img src="../assets/brandmark-white.png" alt="" style="width: 52px; height: auto">
+<span style="display: flex; flex-direction: column; line-height: 1">
+<span style="font-family: Unbounded, sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.08em">TRANSUBTIL</span>
+<span style="font-size: 10px; font-weight: 600; letter-spacing: 0.42em; color: #A8A5B0; margin-top: 4px">RECORDS</span>
+</span>
+</a>
+<div class="nav-links" style="display: flex; align-items: center; gap: 32px; font-size: 15px; font-weight: 600">
+<sc-for list="{{links}}" as="l" hint-placeholder-count="5">
+<sc-if value="{{l.on}}" hint-placeholder-val="{{ false }}"><a href="{{l.href}}" aria-current="page" style="color: #F9BC14; text-decoration: none; border-bottom: 2px solid #F9BC14; padding: 6px 0">{{l.label}}</a></sc-if>
+<sc-if value="{{l.off}}" hint-placeholder-val="{{ true }}"><a href="{{l.href}}" style="color: #F3EFE4; text-decoration: none; border-bottom: 2px solid transparent; padding: 6px 0">{{l.label}}</a></sc-if>
+</sc-for>
+</div>
+<a class="nav-cta" href="Artiste.dc.html#booking" style="display: inline-flex; align-items: center; height: 44px; padding: 0 20px; border-radius: 999px; background: #F9BC14; color: #07060B; font-weight: 700; font-size: 15px; text-decoration: none">Book an artist</a>
+<a class="nav-burger" href="Mobile-Menu.dc.html" aria-label="Open menu" style="display: none; width: 44px; height: 44px; align-items: center; justify-content: center; border: 1.5px solid #2C2A36; border-radius: 999px; color: #F3EFE4">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"></path></svg>
+</a>
+</nav>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["home","artists","releases","label","contact"],"default":"home"},"$preview":{"width":1440,"height":96}}'>
+class Component extends DCLogic {
+renderVals() {
+const active = this.props.active ?? 'home';
+const items = [
+['home', 'Home', 'Accueil.dc.html'],
+['artists', 'Artists', 'Artistes.dc.html'],
+['releases', 'Releases', 'Sorties.dc.html'],
+['label', 'Label', 'Label.dc.html'],
+['contact', 'Contact', 'Contact.dc.html']
+];
+return {
+links: items.map(([id, label, href]) => ({
+label, href, on: id === active, off: id !== active
+}))
+};
+}
+}
+</script>
+</body>
+</html>

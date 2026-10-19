@@ -3,7 +3,7 @@ import { HelmetProvider } from "react-helmet-async"
 import { AuthProvider } from "./contexts/AuthContext.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx"
 import Layout from "./components/Layout.tsx"
-import Landing from "./pages/Landing.tsx"
+import Home from "./pages/Home.tsx"
 import Studio from "./pages/Studio.tsx"
 import StudioRequest from "./pages/StudioRequest.tsx"
 import MyProjects from "./pages/MyProjects.tsx"
@@ -33,8 +33,8 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <Routes>
-          {/* Landing page without Layout (fullscreen) */}
-          <Route path="/" element={<Landing />} />
+          {/* Home renders its own nav and footer (fullscreen intro) */}
+          <Route path="/" element={<Home />} />
 
           {FEATURE_AUTH && (
             <>
@@ -138,6 +138,9 @@ function App() {
             <Route path="/artists/:slug" element={<ArtistProfile />} />
             <Route path="/releases" element={<Releases />} />
             <Route path="/about" element={<About />} />
+            {/* TODO(v2 pages): dedicated Label and Contact pages */}
+            <Route path="/label" element={<About />} />
+            <Route path="/contact" element={<About />} />
             {FEATURE_AUTH && (
               <>
                 <Route

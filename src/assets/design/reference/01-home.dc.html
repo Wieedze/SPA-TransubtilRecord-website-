@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Transubtil · Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07060B}
+a{color:#F9BC14}a:hover{color:#FFD24D}
+:focus-visible{outline:2px solid #F9BC14;outline-offset:3px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}
+.card-img{transition:transform .25s ease}a:hover .card-img{transform:scale(1.04)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes halo{0%,100%{opacity:.35}50%{opacity:.6}}
+.spin{animation:spin 90s linear infinite}.spin-r{animation:spin 140s linear infinite reverse}.breathe{animation:breathe 6s ease-in-out infinite}.halo{animation:halo 6s ease-in-out infinite}
+@media(max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:820px){.nav-links,.nav-cta{display:none!important}.nav-burger{display:inline-flex!important}.split{grid-template-columns:minmax(0,1fr);gap:32px}.g3{grid-template-columns:minmax(0,1fr)}.h-hero{font-size:40px!important}.hide-m{display:none}}
+@media(prefers-reduced-motion:reduce){.spin,.spin-r,.breathe,.halo{animation:none}}
+</style>
+</helmet>
+<div style="width: 100%; background: #07060B; color: #F3EFE4; font-family: 'Instrument Sans', sans-serif">
+<div style="position: sticky; top: 0; z-index: 10">
+<dc-import name="Nav" active="home" hint-size="100%,96px"></dc-import>
+</div>
+
+<section style="position: relative; overflow: hidden; min-height: 880px; display: flex; align-items: center; justify-content: center; padding: 80px 24px; box-sizing: border-box">
+<div aria-hidden="true" style="position: absolute; inset: -30%; display: flex; align-items: center; justify-content: center">
+<img class="spin" src="../assets/artwork-10-years.jpg" alt="" style="width: 140%; max-width: 2000px; opacity: 0.38">
+</div>
+<div aria-hidden="true" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, rgba(7,6,11,0.55) 0%, rgba(7,6,11,0.92) 55%, #07060B 85%)"></div>
+<div aria-hidden="true" class="halo" style="position: absolute; left: 50%; top: 38%; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; background: radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)"></div>
+<div style="position: relative; max-width: 960px; display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center">
+<img class="breathe" src="../assets/brandmark-white.png" alt="Transubtil Records" style="width: 300px; max-width: 70%; height: auto">
+<div style="font-size: 13px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: #F9BC14">Psychedelic label · Marseille · 10 years</div>
+<h1 class="h-hero" style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 800; font-size: 64px; line-height: 1.05; text-transform: uppercase; letter-spacing: 0.01em">Transubtil Records</h1>
+<p style="margin: 0; font-size: 19px; line-height: 1.55; color: #D6D2C8; max-width: 620px">Psytrance, darkpsy and forest. Artists to book for your festival, releases to play tonight.</p>
+<div class="g3" style="width: 100%; max-width: 820px; margin-top: 12px">
+<a href="Artistes.dc.html" style="display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 22px; border-radius: 14px; border: 1.5px solid #2C2A36; background: rgba(16,15,22,0.8); color: #F3EFE4; text-decoration: none; font-weight: 700; font-size: 17px">Artists <span aria-hidden="true" style="color: #F9BC14">→</span></a>
+<a href="Sorties.dc.html" style="display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 22px; border-radius: 14px; border: 1.5px solid #2C2A36; background: rgba(16,15,22,0.8); color: #F3EFE4; text-decoration: none; font-weight: 700; font-size: 17px">Releases <span aria-hidden="true" style="color: #F9BC14">→</span></a>
+<a href="Artiste.dc.html#booking" style="display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 22px; border-radius: 14px; background: #F9BC14; color: #07060B; text-decoration: none; font-weight: 700; font-size: 17px">Booking <span aria-hidden="true">→</span></a>
+</div>
+</div>
+</section>
+
+<section style="max-width: 1280px; margin: 0 auto; padding: 96px 24px; box-sizing: border-box">
+<div class="split">
+<img src="../assets/artwork-10-years.jpg" alt="10 Years of Transubtil compilation artwork" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 18px">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #F9BC14">Latest release · [date]</div>
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 700; font-size: 44px; line-height: 1.1">10 Years of Transubtil</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.6; color: #A8A5B0">Anniversary compilation. [Number] tracks from [number] label artists. [One line about the compilation.]</p>
+<div style="border: 1px solid #2C2A36; border-radius: 14px; background: #100F16; padding: 18px 20px; display: flex; align-items: center; gap: 16px">
+<button type="button" aria-label="Play preview" style="width: 52px; height: 52px; flex-shrink: 0; border-radius: 999px; border: 0; background: #F9BC14; color: #07060B; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 600">[Track 01] · [Artist]</span>
+<div aria-hidden="true" style="height: 4px; border-radius: 4px; background: #2C2A36"><div style="width: 34%; height: 4px; border-radius: 4px; background: #F9BC14"></div></div>
+</div>
+<span style="font-size: 13px; color: #A8A5B0">Bandcamp player</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a href="https://bandcamp.com" style="display: inline-flex; align-items: center; height: 48px; padding: 0 22px; border-radius: 999px; background: #F9BC14; color: #07060B; font-weight: 700; text-decoration: none">Buy on Bandcamp</a>
+<a href="Sorties.dc.html" style="display: inline-flex; align-items: center; height: 48px; padding: 0 22px; border-radius: 999px; border: 1.5px solid #F3EFE4; color: #F3EFE4; font-weight: 600; text-decoration: none">Full catalogue</a>
+</div>
+</div>
+</div>
+</section>
+
+<section style="background: #100F16; border-top: 1px solid #2C2A36; border-bottom: 1px solid #2C2A36">
+<div style="max-width: 1280px; margin: 0 auto; padding: 72px 24px 96px; box-sizing: border-box; display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #F9BC14">The roster</div>
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 700; font-size: 40px">Artists to book</h2>
+</div>
+<a href="Artistes.dc.html" style="font-weight: 600; color: #F3EFE4; text-decoration: none; border-bottom: 1.5px solid #F9BC14; padding-bottom: 2px">See all 21 artists →</a>
+</div>
+<div class="g4">
+<sc-for list="{{artists}}" as="a" hint-placeholder-count="4">
+<a href="Artiste.dc.html" style="text-decoration: none; color: #F3EFE4; display: flex; flex-direction: column; gap: 14px">
+<div style="position: relative; aspect-ratio: 4 / 5; border-radius: 6px; background: #1B1A23; overflow: hidden">
+<img class="card-img" src="{{a.img}}" alt="{{a.name}}" style="width: 100%; height: 100%; object-fit: cover; display: block">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-family: Unbounded, sans-serif; font-weight: 600; font-size: 19px">{{a.name}}</div>
+<div style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #F9BC14">{{a.style}}</div>
+</div>
+</a>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section style="max-width: 1280px; margin: 0 auto; padding: 96px 24px; box-sizing: border-box">
+<div style="border-radius: 22px; border: 1.5px solid #F9BC14; padding: 56px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px">
+<div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 700; font-size: 34px; line-height: 1.15">Running a party or a festival?</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.6; color: #A8A5B0">Pick an artist, send your date, capacity and budget. Reply within [48 h].</p>
+</div>
+<a href="Artiste.dc.html#booking" style="display: inline-flex; align-items: center; height: 56px; padding: 0 30px; border-radius: 999px; background: #F9BC14; color: #07060B; font-weight: 700; font-size: 17px; text-decoration: none">Send a booking request</a>
+</div>
+</section>
+
+<dc-import name="Footer" hint-size="100%,640px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3100}}'>
+class Component extends DCLogic {
+renderVals() {
+return {
+artists: [
+{ name: 'The Horrids', style: 'Psychedelic · Live', img: '../assets/artists/thehorrids.jpg' },
+{ name: 'Heavy Fawn', style: 'Night psy · DJ', img: '../assets/artists/heavyfawn.jpg' },
+{ name: 'Xipe Totecs', style: 'Psytrance · Live', img: '../assets/artists/xipetotecs.jpg' },
+{ name: 'Fiorenza', style: 'Forest · Dark · DJ', img: '../assets/artists/fiorenza.jpg' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

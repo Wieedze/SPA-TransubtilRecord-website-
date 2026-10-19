@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Newsletter and footer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<footer style="width: 100%; box-sizing: border-box; background: #07060B; color: #F3EFE4; font-family: 'Instrument Sans', sans-serif">
+<section id="newsletter" style="background: #F9BC14; color: #07060B">
+<div style="max-width: 1280px; margin: 0 auto; padding: 56px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px">
+<div style="flex: 1 1 380px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: Unbounded, sans-serif; font-weight: 700; font-size: 32px; line-height: 1.15">Stay in touch.</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.5">Releases, gigs and free downloads. One email a month, no more.</p>
+</div>
+<form style="flex: 1 1 420px; display: flex; flex-wrap: wrap; gap: 12px" onSubmit="{{noop}}">
+<label for="nl-email" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Email</label>
+<input id="nl-email" type="email" placeholder="your@email.com" style="flex: 1 1 240px; min-width: 0; height: 52px; box-sizing: border-box; padding: 0 18px; border: 2px solid #07060B; border-radius: 999px; background: #F9BC14; color: #07060B; font: 500 16px 'Instrument Sans', sans-serif">
+<button type="submit" style="height: 52px; padding: 0 26px; border: 0; border-radius: 999px; background: #07060B; color: #F9BC14; font: 700 16px 'Instrument Sans', sans-serif">Subscribe</button>
+</form>
+</div>
+</section>
+<div style="max-width: 1280px; margin: 0 auto; padding: 56px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 44px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px">
+<div style="display: flex; flex-direction: column; gap: 16px; flex: 1 1 280px">
+<div style="display: flex; align-items: center; gap: 12px">
+<img src="../assets/brandmark-white.png" alt="" style="width: 56px; height: auto">
+<span style="font-family: Unbounded, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.08em">TRANSUBTIL</span>
+</div>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #A8A5B0; max-width: 340px">Independent psychedelic music label. Ten years of psytrance, darkpsy and forest from Marseille, France.</p>
+</div>
+<nav aria-label="Footer" style="display: flex; gap: 64px; flex-wrap: wrap; font-size: 15px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #A8A5B0">Label</span>
+<a href="Artistes.dc.html" style="color: #F3EFE4; text-decoration: none">Artists</a>
+<a href="Sorties.dc.html" style="color: #F3EFE4; text-decoration: none">Releases</a>
+<a href="Label.dc.html#demo" style="color: #F3EFE4; text-decoration: none">Send a demo</a>
+<a href="Contact.dc.html" style="color: #F3EFE4; text-decoration: none">Contact</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #A8A5B0">Follow</span>
+<a href="https://soundcloud.com" style="color: #F3EFE4; text-decoration: none">SoundCloud</a>
+<a href="https://bandcamp.com" style="color: #F3EFE4; text-decoration: none">Bandcamp</a>
+<a href="https://youtube.com" style="color: #F3EFE4; text-decoration: none">YouTube</a>
+<a href="https://instagram.com" style="color: #F3EFE4; text-decoration: none">Instagram</a>
+<a href="https://tiktok.com" style="color: #F3EFE4; text-decoration: none">TikTok</a>
+</div>
+</nav>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; border-top: 1px solid #2C2A36; padding-top: 24px; font-size: 13px; color: #A8A5B0">
+<span>© 2026 Transubtil Records</span>
+<span style="display: flex; gap: 24px"><a href="#" style="color: #A8A5B0">Legal notice</a><a href="#" style="color: #A8A5B0">Privacy</a></span>
+</div>
+</div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":640}}'>
+class Component extends DCLogic {
+renderVals() {
+return { noop: (e) => e.preventDefault() };
+}
+}
+</script>
+</body>
+</html>

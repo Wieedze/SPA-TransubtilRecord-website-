@@ -2,35 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Primary Font - Acumin Variable Concept */
-@font-face {
-  font-family: 'Acumin Variable';
-  src: url('./assets/Fonts/Acumin Variable Concept.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+@layer base {
+  html,
+  body {
+    @apply bg-brand-950 text-bone font-sans antialiased;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    /* clip (not hidden) so position: sticky keeps working */
+    overflow-x: clip;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  a {
+    @apply text-accent transition-colors hover:text-accent-hover;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-[3px] outline-accent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
-/* Secondary Font - Eras ITC Bold */
-@font-face {
-  font-family: 'Eras ITC';
-  src: url('./assets/Fonts/eras-itc-bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+@layer components {
+  .btn-primary {
+    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-6 font-bold text-brand-950 transition-colors hover:bg-accent-hover hover:text-brand-950 disabled:bg-brand-700 disabled:text-brand-500;
+  }
 
-html, body {
-  @apply bg-brand-900 text-white font-sans;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-}
+  .btn-secondary {
+    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full border-[1.5px] border-bone px-6 font-semibold text-bone transition-colors hover:border-accent hover:text-accent;
+  }
 
-#root {
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
+  .eyebrow {
+    @apply text-label uppercase text-accent;
+  }
 }

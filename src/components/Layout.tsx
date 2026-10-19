@@ -1,26 +1,17 @@
 import { Outlet } from "react-router-dom"
-import Navbar from "./Navbar.tsx"
-import Footer from "./Footer.tsx"
-import PageFrame from "./PageFrame.tsx"
-import GridBackground from "./GridBackground.tsx"
+import SiteNav from "./site/SiteNav.tsx"
+import SiteFooter from "./site/SiteFooter.tsx"
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col bg-brand-900 text-white overflow-x-hidden">
-      {/* Animated Grid Background */}
-      <GridBackground />
-
-      {/* SVG Frame Border */}
-      <PageFrame />
-
-      {/* Content with margins to fit inside the frame */}
-      <div className="mx-4 sm:mx-8 md:mx-12 my-6 sm:my-8 md:my-12 flex flex-col flex-1">
-        <Navbar />
-        <main className="flex-1 px-4 md:px-8 lg:px-16 py-10">
-          <Outlet />
-        </main>
-        <Footer />
+    <div className="flex min-h-screen flex-col bg-brand-950 text-bone">
+      <div className="sticky top-0 z-30">
+        <SiteNav />
       </div>
+      <main className="mx-auto w-full max-w-page flex-1 px-4 py-10 md:px-6">
+        <Outlet />
+      </main>
+      <SiteFooter />
     </div>
   )
 }
