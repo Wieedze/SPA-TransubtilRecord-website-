@@ -16,7 +16,7 @@ function NewsletterBand() {
     <section id="newsletter" className="bg-accent text-brand-950">
       <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-8 px-4 py-10 md:px-6 md:py-14">
         <div className="flex flex-[1_1_380px] flex-col gap-2.5">
-          <h2 className="font-display text-2xl font-bold leading-tight md:text-[32px]">Stay in touch.</h2>
+          <h2 className="font-display text-xl leading-tight md:text-[26px]">Stay in touch.</h2>
           <p className="text-[17px] leading-normal">Releases, gigs and free downloads. One email a month, no more.</p>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-[1_1_420px] flex-wrap gap-3">

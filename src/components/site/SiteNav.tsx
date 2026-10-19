@@ -63,7 +63,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
             {...glowFlashProps}
             className={({ isActive }) =>
               [
-                "border-b border-brand-700 py-[18px] font-display text-[30px] font-bold",
+                "border-b border-brand-700 py-[18px] font-display text-[22px]",
                 isActive ? "text-accent" : "text-bone hover:text-accent",
               ].join(" ")
             }

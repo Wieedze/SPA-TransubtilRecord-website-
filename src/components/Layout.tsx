@@ -1,10 +1,12 @@
 import { Outlet } from "react-router-dom"
 import SiteNav from "./site/SiteNav.tsx"
 import SiteFooter from "./site/SiteFooter.tsx"
+import SideBands from "./site/SideBands.tsx"
 
 export default function Layout() {
   return (
     <div className="flex min-h-screen flex-col bg-brand-950 text-bone">
+      <SideBands />
       <div className="sticky top-0 z-30">
         <SiteNav />
       </div>

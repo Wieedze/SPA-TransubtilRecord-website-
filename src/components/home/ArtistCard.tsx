@@ -29,7 +29,7 @@ export default function ArtistCard({ artist, showDetails = false }: { artist: Ro
           />
         </div>
         <div className="flex flex-col gap-1.5 px-1">
-          <span className="font-display text-[15px] font-semibold uppercase transition-colors group-hover:text-accent md:text-[19px]">
+          <span className="font-display text-[13px] uppercase transition-colors group-hover:text-accent md:text-[15px]">
             <DecryptedText text={artist.name} trigger={count} speed={50} maxIterations={6} />
           </span>
           <span className="text-[11px] uppercase tracking-[0.12em] text-brand-300 md:text-xs">

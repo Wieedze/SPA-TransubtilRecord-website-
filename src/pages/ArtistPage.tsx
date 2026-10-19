@@ -65,7 +65,7 @@ function FadeUp({ children, delay = 0, className = "" }: { children: ReactNode; 
 
 function SectionTitle({ children }: { children: string }) {
   return (
-    <h2 className="font-display text-[28px] font-semibold">
+    <h2 className="font-display text-[22px]">
       <DecryptedText text={children} animateOn="view" speed={60} maxIterations={5} />
     </h2>
   )
@@ -176,7 +176,7 @@ export default function ArtistPage() {
           <ArtistHub artist={artist} />
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
-              <h1 className="font-display text-[40px] font-extrabold uppercase leading-none md:text-[72px]">{artist.name}</h1>
+              <h1 className="font-display text-[30px] uppercase leading-[1.05] md:text-[52px]">{artist.name}</h1>
               <p className="meta">
                 <DecryptedText text={artist.styles.join(" · ")} animateOn="view" speed={120} maxIterations={10} />
               </p>
@@ -281,7 +281,7 @@ export default function ArtistPage() {
                 <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
                   {release.type} · {release.releaseDate}
                 </span>
-                <span className="font-display text-[15px] font-semibold leading-snug group-hover:text-accent">{release.title}</span>
+                <span className="font-display text-[13px] leading-snug group-hover:text-accent">{release.title}</span>
                 <span className="flex items-center gap-1.5 text-small text-brand-300">
                   View on Bandcamp <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                 </span>
@@ -295,7 +295,7 @@ export default function ArtistPage() {
       <section id="booking" className="scroll-mt-28 pt-16 md:pt-24">
         <FadeUp className="flex flex-col gap-8 border-t border-brand-700 pt-10 md:pt-14">
           <div className="flex max-w-[680px] flex-col gap-3">
-            <h2 className="font-display text-[28px] font-bold leading-tight md:text-[40px]">
+            <h2 className="font-display text-[22px] leading-tight md:text-[30px]">
               <DecryptedText text={`Book ${artist.name}`} animateOn="view" speed={60} maxIterations={5} />
             </h2>
             <p className="text-[17px] leading-relaxed text-brand-300">

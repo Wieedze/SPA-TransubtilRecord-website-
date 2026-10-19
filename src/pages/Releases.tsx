@@ -76,7 +76,7 @@ export default function Releases() {
           className="scroll-mt-28 border-b border-brand-700 pb-10"
         >
           <div className="mb-6 flex flex-col gap-3">
-            <h2 className="font-display text-xl font-semibold md:text-[28px]">
+            <h2 className="font-display text-lg md:text-[22px]">
               <DecryptedText key={selected.id} text={selected.title} animateOn="view" speed={40} maxIterations={6} />
             </h2>
             <p className="meta">
@@ -181,7 +181,7 @@ export default function Releases() {
                       {release.catalogNumber && `${release.catalogNumber} · `}
                       {TYPE_LABELS[release.type]} · {release.releaseDate}
                     </span>
-                    <h3 className="font-display text-[15px] font-semibold leading-snug md:text-lg">{release.title}</h3>
+                    <h3 className="font-display text-[13px] leading-snug md:text-[15px]">{release.title}</h3>
                     <span className="text-small text-brand-300 md:text-[15px]">{release.artist}</span>
                   </div>
                   <a
@@ -215,7 +215,7 @@ export default function Releases() {
           className="flex flex-col gap-5 border-t border-brand-700 pt-10 md:pt-14"
         >
           <div className="flex max-w-[620px] flex-col gap-2">
-            <h2 className="font-display text-2xl font-bold md:text-[32px]">Support the label</h2>
+            <h2 className="font-display text-xl md:text-[26px]">Support the label</h2>
             <p className="text-body">
               All releases are available on Bandcamp. Buying music there supports the artists and the label directly.
             </p>

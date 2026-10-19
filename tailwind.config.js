@@ -23,7 +23,7 @@ export default {
         success: "#6FDB8F",
       },
       fontFamily: {
-        display: ["Unbounded", "sans-serif"], // headings, artist names
+        display: ["Michroma", "Instrument Sans", "sans-serif"], // headings, artist names (single weight, wide)
         sans: ['"Instrument Sans"', "sans-serif"], // everything else
       },
       fontSize: {

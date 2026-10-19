@@ -99,7 +99,7 @@ export default function Home() {
                 className="aspect-square w-full object-cover"
               />
               <div className="flex flex-col gap-5">
-                <h2 className="font-display text-2xl font-bold leading-tight md:text-[44px]">10 Years of Transubtil</h2>
+                <h2 className="font-display text-[22px] leading-tight md:text-[34px]">10 Years of Transubtil</h2>
                 <p className="meta">Latest release · Compilation</p>
                 <p className="text-[15px] leading-relaxed text-body md:text-lg">Anniversary compilation.</p>
                 {/* TODO(content): release date, track count and Bandcamp player embed */}
@@ -121,7 +121,7 @@ export default function Home() {
           <section className="border-y border-brand-700 bg-brand-900">
             <div className="mx-auto flex max-w-page flex-col gap-10 px-4 py-16 md:px-6 md:py-24">
               <div className="flex flex-col gap-3">
-                <h2 className="font-display text-2xl font-bold md:text-[40px] md:leading-tight">Artists to book</h2>
+                <h2 className="font-display text-[22px] md:text-[30px] md:leading-tight">Artists to book</h2>
                 <p className="meta">
                   {roster.length} artists · {allCountries.length} countries
                 </p>
@@ -140,7 +140,7 @@ export default function Home() {
           {/* Booking call to action: a full-width band, no boxed card */}
           <section className="mx-auto max-w-page px-4 py-16 md:px-6 md:py-24">
             <div className="flex max-w-[720px] flex-col gap-5">
-              <h2 className="font-display text-2xl font-bold leading-tight md:text-[40px]">Running a party or a festival?</h2>
+              <h2 className="font-display text-[22px] leading-tight md:text-[30px]">Running a party or a festival?</h2>
               <p className="text-[15px] leading-relaxed text-body md:text-lg">
                 Pick an artist, send your date, capacity and budget.
               </p>
