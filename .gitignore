@@ -30,3 +30,6 @@ dist-ssr
 
 #Folder
 
+
+# Build archives
+dist.zip
