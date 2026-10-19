@@ -3,7 +3,6 @@ import Seo from "../components/site/Seo"
 import { artistsListLd, breadcrumbLd } from "../lib/structuredData"
 import { Search, X } from "lucide-react"
 import ArtistCard from "../components/home/ArtistCard"
-import PageHeader from "../components/site/PageHeader"
 import { Link } from "react-router-dom"
 import { allCountries, allStyles, roster, styleGroups, type RosterArtist } from "../data/roster"
 
@@ -48,11 +47,8 @@ export default function Artists() {
         jsonLd={[artistsListLd(), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Artists", path: "/artists" }])]}
       />
 
-      <PageHeader
-        title="Artists"
-        meta={`${roster.length} artists · ${allCountries.length} countries`}
-        intro="DJs and live acts from France, Portugal, Japan, Mexico, Brazil, Australia and beyond. Each page has a press kit, a rider and a direct booking form."
-      />
+      {/* No visible header: the page opens on the filters. The h1 stays for search engines and screen readers */}
+      <h1 className="sr-only">Psytrance artists: DJs and live acts on Transubtil Records</h1>
 
       <div className="flex flex-col gap-4">
         <div role="group" aria-label="Filter by format" className="flex flex-wrap items-center gap-7">
