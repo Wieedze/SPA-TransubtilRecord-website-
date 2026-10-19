@@ -2,6 +2,7 @@ import { createPortal } from "react-dom"
 import { NavLink, Link } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, User } from "lucide-react"
+import { FEATURE_AUTH } from "../config/features"
 
 interface MobileMenuModalProps {
   isOpen: boolean
@@ -254,6 +255,7 @@ export default function MobileMenuModal({
             </nav>
 
             {/* Auth Section */}
+            {FEATURE_AUTH && (
             <div className="border-t border-white/20 pt-8 flex flex-col items-center gap-4 w-full max-w-xs">
               {user ? (
                 <>
@@ -292,6 +294,7 @@ export default function MobileMenuModal({
                 </div>
               )}
             </div>
+            )}
           </motion.div>
         </>
       )}

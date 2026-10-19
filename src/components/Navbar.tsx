@@ -3,6 +3,7 @@ import { NavLink, Link } from "react-router-dom"
 import { User, ChevronDown, Menu } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "../contexts/AuthContext"
+import { FEATURE_AUTH } from "../config/features"
 import logoWhite from "../assets/transubtil_logo_white.png"
 import MobileMenuModal from "./MobileMenuModal"
 import NotificationBell from "./NotificationBell"
@@ -243,6 +244,7 @@ export default function Navbar() {
           </nav>
 
           {/* Auth Section - Desktop */}
+          {FEATURE_AUTH && (
           <div className="hidden md:flex items-center gap-4">
             {/* Notification Bell - Only for admin */}
             {user && isAdmin && (
@@ -274,6 +276,7 @@ export default function Navbar() {
               </div>
             )}
           </div>
+          )}
 
           {/* Mobile Burger Menu Button */}
           <button

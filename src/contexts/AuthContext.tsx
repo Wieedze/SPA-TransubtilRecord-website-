@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { User, Session, AuthError } from "@supabase/supabase-js"
 import { supabase, Profile } from "../lib/supabase"
+import { FEATURE_AUTH } from "../config/features"
 
 interface AuthContextType {
   user: User | null
@@ -31,6 +32,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Auth disabled: stay logged out and never contact Supabase
+    if (!FEATURE_AUTH) {
+      setLoading(false)
+      return
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)

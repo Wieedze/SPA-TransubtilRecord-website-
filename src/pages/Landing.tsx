@@ -6,6 +6,7 @@ import logoCircle from "../assets/transubtil_logo_circle.png"
 import LandingSpinner from "../components/LandingSpinner"
 import AnimatedBackground from "../components/AnimatedBackground"
 import DecryptedText from "../components/DecryptedText"
+import { FEATURE_STUDIO } from "../config/features"
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -110,6 +111,7 @@ export default function Landing() {
               pointerEvents: isHovered ? "auto" : "none",
             }}
           >
+          {FEATURE_STUDIO && (
           <button
             onClick={() => handleNavigation("/studio")}
             className="px-6 py-2 text-white uppercase tracking-[0.25em] text-[11px] font-medium
@@ -127,6 +129,7 @@ export default function Landing() {
           >
             <DecryptedText text="Studio" speed={90} maxIterations={5} />
           </button>
+          )}
 
           <button
             onClick={() => handleNavigation("/artists")}
