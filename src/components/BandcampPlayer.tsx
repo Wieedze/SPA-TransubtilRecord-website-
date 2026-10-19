@@ -1,7 +1,7 @@
 interface BandcampPlayerProps {
   albumId: string
   type?: "album" | "track"
-  artwork?: "small" | "large"
+  artwork?: "small" | "large" | "none"
   size?: "small" | "large"
 }
 
@@ -11,8 +11,9 @@ export default function BandcampPlayer({
   artwork = "large",
   size = "large",
 }: BandcampPlayerProps) {
-  const height = size === "large" ? 470 : 120
-  const artworkSize = artwork === "large" ? "large" : "small"
+  // Large size is 470 px tall with the big artwork, 120 px without it
+  const height = size === "large" && artwork === "large" ? 470 : 120
+  const artworkSize = artwork
   const embedType = type === "track" ? "track" : "album"
 
   return (

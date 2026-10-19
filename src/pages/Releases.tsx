@@ -75,18 +75,34 @@ export default function Releases() {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="scroll-mt-28 border-b border-brand-700 pb-10"
         >
-          <div className="mb-6 flex flex-col gap-3">
-            <h2 className="font-display text-lg md:text-[22px]">
-              <DecryptedText key={selected.id} text={selected.title} animateOn="view" speed={40} maxIterations={6} />
-            </h2>
-            <p className="meta">
-              Now playing · {selected.artist} · {TYPE_LABELS[selected.type]} · {selected.releaseDate}
-            </p>
-            <a href={selected.bandcampUrl} target="_blank" rel="noreferrer" className="btn-primary mt-2 self-start">
-              Buy on Bandcamp <ExternalLink className="h-4 w-4" aria-hidden="true" />
-            </a>
+          {/* Our own square cover (always shown whole) + Bandcamp's compact player without artwork */}
+          <div className="grid grid-cols-1 items-start gap-6 sm:grid-cols-[minmax(0,240px)_minmax(0,1fr)] md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:gap-10">
+            <img
+              key={selected.id}
+              src={selected.coverUrl}
+              alt={`${selected.title} artwork`}
+              className="aspect-square w-full max-w-[420px] bg-brand-800 object-contain"
+            />
+            <div className="flex min-w-0 flex-col gap-3">
+              <h2 className="font-display text-lg md:text-[22px]">
+                <DecryptedText key={selected.id} text={selected.title} animateOn="view" speed={40} maxIterations={6} />
+              </h2>
+              <p className="meta">
+                Now playing · {selected.artist} · {TYPE_LABELS[selected.type]} · {selected.releaseDate}
+              </p>
+              <a href={selected.bandcampUrl} target="_blank" rel="noreferrer" className="btn-primary mt-2 self-start">
+                Buy on Bandcamp <ExternalLink className="h-4 w-4" aria-hidden="true" />
+              </a>
+              <div className="mt-4">
+                <BandcampPlayer
+                  key={selected.id}
+                  albumId={selected.bandcampId}
+                  type={selected.type === "track" ? "track" : "album"}
+                  artwork="none"
+                />
+              </div>
+            </div>
           </div>
-          <BandcampPlayer key={selected.id} albumId={selected.bandcampId} type={selected.type === "track" ? "track" : "album"} />
         </motion.section>
       )}
 
@@ -152,7 +168,7 @@ export default function Releases() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: (index % PAGE_SIZE) * 0.05 }}
-                  className="flex flex-col gap-3.5"
+                  className="group/card flex flex-col gap-3.5"
                 >
                   <button
                     type="button"
@@ -188,7 +204,7 @@ export default function Releases() {
                     href={release.bandcampUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-link self-start text-sm"
+                    className="text-link self-start text-sm opacity-0 transition-opacity focus-visible:opacity-100 group-hover/card:opacity-100"
                   >
                     View on Bandcamp
                   </a>

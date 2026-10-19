@@ -290,7 +290,7 @@ export default function ArtistPage() {
                   {release.type} · {release.releaseDate}
                 </span>
                 <span className="font-display text-[13px] leading-snug group-hover:text-accent">{release.title}</span>
-                <span className="flex items-center gap-1.5 text-small text-brand-300">
+                <span className="flex items-center gap-1.5 text-small text-brand-300 opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                   View on Bandcamp <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                 </span>
               </motion.a>
