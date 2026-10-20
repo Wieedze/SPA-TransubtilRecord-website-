@@ -11,15 +11,13 @@ import { useFormSubmit } from "../hooks/useFormSubmit"
 
 // Each subject changes the message placeholder (06-contact mockup)
 const SUBJECTS: Record<string, string> = {
-  Press: "Outlet, publication date, what you need…",
-  Partnership: "Your project, dates, what you offer…",
   Booking: "For a faster reply, use the form on the artist page.",
-  Shop: "Order number and question…",
+  Partnership: "Your project, dates, what you offer…",
   Other: "Tell us everything.",
 }
 
 export default function Contact() {
-  const [subject, setSubject] = useState("Press")
+  const [subject, setSubject] = useState("Booking")
   const { state, message, submit, sending, attempt } = useFormSubmit(
     "/api/contact",
     "Message sent. Check your inbox: we've sent you a confirmation."
@@ -29,7 +27,7 @@ export default function Contact() {
     <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16">
       <Seo
         title="Contact — Transubtil Records"
-        description="Contact Transubtil Records, international psytrance label from France, for press, partnerships, shop questions or bookings."
+        description="Contact Transubtil Records, international psytrance label from France, for bookings, partnerships or anything else."
         path="/contact"
         jsonLd={breadcrumbLd([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])}
       />
@@ -44,7 +42,7 @@ export default function Contact() {
           <DecryptedText text="Talk to us" animateOn="view" speed={60} maxIterations={8} />
         </h1>
         <p className="max-w-[48ch] text-[17px] leading-[1.7] text-body">
-          Press, partnerships, a question about an order. For bookings, use the artist page: it is faster.
+          Partnerships or anything else. For bookings, the artist page is faster.
         </p>
         <Link to="/artists" className="text-link self-start">
           Find an artist to book

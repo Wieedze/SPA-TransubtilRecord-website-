@@ -4,7 +4,7 @@ import { sendTemplate } from "../../cf/resend"
 import { verifyTurnstile } from "../../cf/turnstile"
 import { logSubmission } from "../../cf/submissions"
 
-const SUBJECTS = new Set(["Press", "Partnership", "Booking", "Shop", "Other"])
+const SUBJECTS = new Set(["Booking", "Partnership", "Other"])
 
 // POST /api/contact — Contact page form
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
