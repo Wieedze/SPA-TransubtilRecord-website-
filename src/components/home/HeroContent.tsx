@@ -12,10 +12,30 @@ import { useHoverCount } from "../../hooks/useHoverCount"
 // into ~120 "atoms" that appear layer by layer from the bottom and then each breathe at
 // their own pace (CSS animation inside hero-flames.svg). Dark vignette and yellow halo on top.
 // Everything is placed from --logo-y (the brandmark's centre in the hero, set by
-// useLogoAnchor): the logo sits at --logo-at of the artwork's height, 0.636 on desktop
-// (the reference look) and 0.406 on phones, where the artwork sits 23% lower; its bottom fades out there.
+// useLogoAnchor). Desktop: the logo sits at 63.6% of the artwork's height (the reference
+// look). Phones: the part of the artwork below its 40.6% line is shown under the logo and
+// mirrored above it, so the screen is filled symmetrically around the logo.
 const FLAMES_SIZE = "max(100vw, min(125svh, 180vw))"
+const DESKTOP_LOGO_AT = 0.636
+const MOBILE_LOGO_AT = 0.406
 export const LOGO_Y = "var(--logo-y, 40%)"
+
+// The lower half of the phone layout: artwork from the logo line down. Flipped, it is the upper half.
+function MobileFlamesHalf({ mirrored }: { mirrored?: boolean }) {
+  return (
+    <div
+      className="absolute inset-x-0 bottom-0 overflow-hidden md:hidden"
+      style={{ top: LOGO_Y, transform: mirrored ? "scaleY(-1)" : undefined, transformOrigin: "top" }}
+    >
+      <img
+        src={flames}
+        alt=""
+        className="absolute left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60 [mask-image:linear-gradient(to_bottom,black_85%,transparent)]"
+        style={{ width: FLAMES_SIZE, top: `calc(-${MOBILE_LOGO_AT} * ${FLAMES_SIZE})` }}
+      />
+    </div>
+  )
+}
 
 export function HeroBackground() {
   return (
@@ -23,9 +43,11 @@ export function HeroBackground() {
       <img
         src={flames}
         alt=""
-        className="absolute left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60 [--logo-at:0.406] [mask-image:linear-gradient(to_bottom,black_85%,transparent)] md:[--logo-at:0.636] md:[mask-image:none]"
-        style={{ width: FLAMES_SIZE, top: `calc(${LOGO_Y} - var(--logo-at) * ${FLAMES_SIZE})` }}
+        className="absolute left-1/2 hidden aspect-square max-w-none -translate-x-1/2 opacity-60 md:block"
+        style={{ width: FLAMES_SIZE, top: `calc(${LOGO_Y} - ${DESKTOP_LOGO_AT} * ${FLAMES_SIZE})` }}
       />
+      <MobileFlamesHalf />
+      <MobileFlamesHalf mirrored />
       <div
         className="absolute inset-0"
         style={{
