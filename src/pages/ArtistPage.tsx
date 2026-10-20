@@ -315,7 +315,7 @@ export default function ArtistPage() {
       </section>
 
       {/* Mobile sticky booking bar */}
-      <div className="sticky bottom-0 z-20 mx-[calc(50%-50vw)] mt-10 flex items-center gap-3 border-t border-brand-700 bg-brand-950/95 px-4 py-3 md:hidden">
+      <div className="sticky bottom-[var(--player-h,0px)] z-20 mx-[calc(50%-50vw)] mt-10 flex items-center gap-3 border-t border-brand-700 bg-brand-950/95 px-4 py-3 md:hidden">
         <span className="flex-1 text-[15px] font-bold">{artist.name}</span>
         <a href="#booking" className="btn-primary">
           Book

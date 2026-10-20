@@ -1,10 +1,10 @@
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import Seo from "../components/site/Seo"
 import { breadcrumbLd, releasesListLd } from "../lib/structuredData"
 import { motion } from "framer-motion"
 import { ExternalLink, Play, Search, X } from "lucide-react"
 import PageHeader from "../components/site/PageHeader"
-import BandcampPlayer from "../components/BandcampPlayer"
+import { usePlayer } from "../contexts/PlayerContext"
 import DecryptedText from "../components/DecryptedText"
 import { releases } from "../data/releases"
 import { SOCIAL_LINKS } from "../config/site"
@@ -36,7 +36,6 @@ export default function Releases() {
   const [query, setQuery] = useState("")
   const [visible, setVisible] = useState(PAGE_SIZE)
   const [selected, setSelected] = useState<Release | undefined>(releases[0])
-  const playerRef = useRef<HTMLDivElement>(null)
 
   const list = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -45,9 +44,11 @@ export default function Releases() {
     )
   }, [sort, query])
 
+  const player = usePlayer()
+  // Shows the release on top of the page and loads it in the site-wide player bar
   const play = (release: Release) => {
     setSelected(release)
-    playerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    player.play(release)
   }
 
   return (
@@ -65,17 +66,16 @@ export default function Releases() {
         intro="EPs, albums and compilations from the label, newest first."
       />
 
-      {/* Now playing */}
+      {/* Selected release */}
       {selected && (
         <motion.section
-          ref={playerRef}
-          aria-label="Now playing"
+          aria-label="Selected release"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
           className="scroll-mt-28 border-b border-brand-700 pb-10"
         >
-          {/* Our own square cover (always shown whole) + Bandcamp's compact player without artwork */}
+          {/* Selected release: cover shown whole; it plays in the site-wide player bar */}
           <div className="grid grid-cols-1 items-start gap-6 sm:grid-cols-[minmax(0,240px)_minmax(0,1fr)] md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:gap-10">
             <img
               key={selected.id}
@@ -88,18 +88,16 @@ export default function Releases() {
                 <DecryptedText key={selected.id} text={selected.title} animateOn="view" speed={40} maxIterations={6} />
               </h2>
               <p className="meta">
-                Now playing · {selected.artist} · {TYPE_LABELS[selected.type]} · {selected.releaseDate}
+                {selected.artist} · {TYPE_LABELS[selected.type]} · {selected.releaseDate}
               </p>
-              <a href={selected.bandcampUrl} target="_blank" rel="noreferrer" className="btn-primary mt-2 self-start">
-                Buy on Bandcamp <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              </a>
-              <div className="mt-4">
-                <BandcampPlayer
-                  key={selected.id}
-                  albumId={selected.bandcampId}
-                  type={selected.type === "track" ? "track" : "album"}
-                  artwork="none"
-                />
+              <div className="mt-2 flex flex-wrap items-center gap-x-8 gap-y-4">
+                <button type="button" onClick={() => play(selected)} className="btn-primary">
+                  <Play className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true" />
+                  {player.current?.id === selected.id ? "In the player" : "Play"}
+                </button>
+                <a href={selected.bandcampUrl} target="_blank" rel="noreferrer" className="text-link">
+                  Buy on Bandcamp <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
               </div>
             </div>
           </div>
@@ -161,7 +159,7 @@ export default function Releases() {
         ) : (
           <div className="grid grid-cols-2 gap-x-3.5 gap-y-8 lg:grid-cols-4 lg:gap-6">
             {list.slice(0, visible).map((release, index) => {
-              const isSelected = release.id === selected?.id
+              const isSelected = release.id === (player.current?.id ?? selected?.id)
               return (
                 <motion.article
                   key={release.id}
