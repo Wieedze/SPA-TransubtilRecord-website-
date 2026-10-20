@@ -8,3 +8,11 @@ binding = "DB"
 database_name = "transubtil-db"
 database_id = "d04725a8-8b60-43ad-9d18-ccc8b95ecbd9"
 migrations_dir = "db/migrations"
+
+# Plain settings for the Pages Functions (secrets go through `wrangler pages secret put`)
+[vars]
+LABEL_EMAIL = "transubtilrec@gmail.com"
+SITE_URL = "https://transubtil-record.com"
+MAIL_FROM = "Transubtil Records <hello@mail.transubtil-record.com>"
+NEWS_FROM = "Transubtil Records <news@news.transubtil-record.com>"
+RESEND_SEGMENT_ID = "0dcad3d1-427d-4f0d-be5c-b9f782ae8a8c"

@@ -1,10 +1,12 @@
-import { useState, type FormEvent } from "react"
+import { useState } from "react"
 import Seo from "../components/site/Seo"
 import { breadcrumbLd } from "../lib/structuredData"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import DecryptedText from "../components/DecryptedText"
 import { fieldClass, labelClass, textareaClass } from "../components/site/formStyles"
+import Honeypot from "../components/site/Honeypot"
+import { useFormSubmit } from "../hooks/useFormSubmit"
 
 // Each subject changes the message placeholder (06-contact mockup)
 const SUBJECTS: Record<string, string> = {
@@ -17,13 +19,10 @@ const SUBJECTS: Record<string, string> = {
 
 export default function Contact() {
   const [subject, setSubject] = useState("Press")
-  const [notice, setNotice] = useState<string | null>(null)
-
-  // TODO(forms phase): POST to /api/contact (email to the label + D1 log)
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    setNotice("The contact form opens very soon. Thanks for your patience!")
-  }
+  const { state, message, submit, sending } = useFormSubmit(
+    "/api/contact",
+    "Message sent. Check your inbox: we've sent you a confirmation."
+  )
 
   return (
     <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16">
@@ -53,12 +52,13 @@ export default function Contact() {
       </motion.div>
 
       <motion.form
-        onSubmit={handleSubmit}
+        onSubmit={(e) => submit(e)}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.15 }}
-        className="flex flex-col gap-6 border-t border-brand-700 pt-8 md:border-t-0 md:pt-0"
+        className="relative flex flex-col gap-6 border-t border-brand-700 pt-8 md:border-t-0 md:pt-0"
       >
+        <Honeypot />
         <fieldset className="flex flex-col gap-3">
           <legend className={`${labelClass} mb-3`}>Subject *</legend>
           <div className="flex flex-wrap gap-x-7 gap-y-2">
@@ -106,11 +106,11 @@ export default function Contact() {
         </div>
 
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-          <button type="submit" className="btn-primary">
-            Send
+          <button type="submit" disabled={sending} className="btn-primary">
+            {sending ? "Sending…" : "Send"}
           </button>
-          <p role="status" className="text-small text-brand-300">
-            {notice ?? "We reply within a few days."}
+          <p role="status" className={`text-small ${state === "error" ? "text-error" : state === "sent" ? "text-success" : "text-brand-300"}`}>
+            {message ?? "We reply within a few days."}
           </p>
         </div>
       </motion.form>

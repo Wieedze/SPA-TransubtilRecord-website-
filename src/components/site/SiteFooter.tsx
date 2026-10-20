@@ -1,16 +1,26 @@
-import { useState, type FormEvent } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import logo from "../../assets/brand/transubtil-logo-white.svg"
 import { activeSocialLinks } from "../../config/site"
+import { useFormSubmit } from "../../hooks/useFormSubmit"
+import Honeypot from "./Honeypot"
+
+// Messages for the double opt-in link (/api/confirm redirects to /?newsletter=…)
+const CONFIRM_MESSAGES: Record<string, string> = {
+  confirmed: "You're subscribed. Welcome to Transubtil Records!",
+  invalid: "This confirmation link is invalid or has already been used.",
+}
 
 function NewsletterBand() {
-  const [notice, setNotice] = useState<string | null>(null)
-
-  // TODO(newsletter phase): POST to /api/subscribe (D1 + double opt-in)
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    setNotice("Sign-ups open very soon. Thanks for your patience!")
-  }
+  const { message, submit, sending } = useFormSubmit(
+    "/api/subscribe",
+    "Almost done: check your inbox and confirm your email."
+  )
+  const [confirmNotice, setConfirmNotice] = useState<string | null>(null)
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get("newsletter")
+    if (value && CONFIRM_MESSAGES[value]) setConfirmNotice(CONFIRM_MESSAGES[value])
+  }, [])
 
   return (
     <section id="newsletter" className="bg-accent text-brand-950">
@@ -19,12 +29,14 @@ function NewsletterBand() {
           <h2 className="font-display text-xl leading-tight md:text-[26px]">Stay in touch.</h2>
           <p className="text-[17px] leading-normal">Releases, gifts and free downloads.</p>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-[1_1_420px] flex-wrap gap-3">
+        <form onSubmit={(e) => submit(e, { source: "footer" })} className="relative flex flex-[1_1_420px] flex-wrap gap-3">
+          <Honeypot />
           <label htmlFor="nl-email" className="sr-only">
             Email
           </label>
           <input
             id="nl-email"
+            name="email"
             type="email"
             required
             autoComplete="email"
@@ -33,12 +45,13 @@ function NewsletterBand() {
           />
           <button
             type="submit"
+            disabled={sending}
             className="h-10 rounded-[2px] bg-brand-950 px-4 text-xs font-medium uppercase tracking-[0.16em] text-accent focus-visible:outline-brand-950"
           >
-            Subscribe
+            {sending ? "Sending…" : "Subscribe"}
           </button>
           <p role="status" className="w-full text-small font-semibold">
-            {notice}
+            {message ?? confirmNotice}
           </p>
         </form>
       </div>

@@ -1,9 +1,10 @@
-import { useState, type FormEvent } from "react"
 import Seo from "../components/site/Seo"
 import { breadcrumbLd, labelLd } from "../lib/structuredData"
 import { motion } from "framer-motion"
 import DecryptedText from "../components/DecryptedText"
 import { fieldClass, labelClass, textareaClass } from "../components/site/formStyles"
+import Honeypot from "../components/site/Honeypot"
+import { useFormSubmit } from "../hooks/useFormSubmit"
 
 const DEMO_FIELDS = [
   { id: "dm-name", name: "artist", label: "Artist name *", type: "text", placeholder: "Your alias", required: true, span: false },
@@ -13,16 +14,14 @@ const DEMO_FIELDS = [
 ] as const
 
 function DemoForm() {
-  const [notice, setNotice] = useState<string | null>(null)
-
-  // TODO(forms phase): POST to /api/demo (email to the label + D1 log)
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    setNotice("Demo submissions open very soon. Thanks for your patience!")
-  }
+  const { state, message, submit, sending } = useFormSubmit(
+    "/api/demo",
+    "Demo sent. Check your inbox: we've sent you a confirmation."
+  )
 
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 md:grid-cols-2">
+    <form onSubmit={(e) => submit(e)} className="relative grid grid-cols-1 gap-5 md:grid-cols-2">
+      <Honeypot />
       {DEMO_FIELDS.map((field) => (
         <div key={field.id} className={`flex flex-col gap-2 ${field.span ? "md:col-span-2" : ""}`}>
           <label htmlFor={field.id} className={labelClass}>
@@ -45,11 +44,11 @@ function DemoForm() {
         <textarea id="dm-msg" name="message" rows={5} placeholder="Your background, style, projects…" className={textareaClass} />
       </div>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-span-2">
-        <button type="submit" className="btn-primary">
-          Send my demo
+        <button type="submit" disabled={sending} className="btn-primary">
+          {sending ? "Sending…" : "Send my demo"}
         </button>
-        <p role="status" className="text-small text-brand-300">
-          {notice}
+        <p role="status" className={`text-small ${state === "error" ? "text-error" : state === "sent" ? "text-success" : "text-brand-300"}`}>
+          {message}
         </p>
       </div>
     </form>

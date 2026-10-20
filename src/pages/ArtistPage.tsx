@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from "react"
+import type { ReactNode } from "react"
 import { Link, useParams } from "react-router-dom"
 import { motion } from "framer-motion"
 import { ExternalLink } from "lucide-react"
@@ -9,6 +9,8 @@ import HubArtisteAnimated from "../components/artists/HubArtisteAnimated"
 import SoundCloudPlayer from "../components/SoundCloudPlayer"
 import SocialIcons from "../components/site/SocialIcons"
 import Seo from "../components/site/Seo"
+import Honeypot from "../components/site/Honeypot"
+import { useFormSubmit } from "../hooks/useFormSubmit"
 import { artistLd, artistSummary, breadcrumbLd } from "../lib/structuredData"
 import { fieldClass, textareaClass } from "../components/site/formStyles"
 
@@ -71,17 +73,14 @@ function SectionTitle({ children }: { children: string }) {
 }
 
 function BookingForm({ artist }: { artist: RosterArtist }) {
-  const [notice, setNotice] = useState<string | null>(null)
-
-  // TODO(forms phase): POST to /api/booking (email to the label + D1 log)
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    setNotice("Online booking opens very soon. Thanks for your patience!")
-  }
+  const { state, message, submit, sending } = useFormSubmit(
+    "/api/booking",
+    "Request sent. Check your inbox: we've sent you a confirmation."
+  )
 
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 md:grid-cols-2">
-      <input type="hidden" name="artist" value={artist.slug} />
+    <form onSubmit={(e) => submit(e, { artist: artist.name })} className="relative grid grid-cols-1 gap-5 md:grid-cols-2">
+      <Honeypot />
       {BOOKING_FIELDS.map((field) => (
         <div key={field.id} className="flex flex-col gap-2">
           <label htmlFor={field.id} className="text-sm font-semibold">
@@ -124,11 +123,11 @@ function BookingForm({ artist }: { artist: RosterArtist }) {
         />
       </div>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-span-2">
-        <button type="submit" className="btn-primary">
-          Send request
+        <button type="submit" disabled={sending} className="btn-primary">
+          {sending ? "Sending…" : "Send request"}
         </button>
-        <p role="status" className="text-small text-brand-300">
-          {notice ?? "Your details are only used to handle this request."}
+        <p role="status" className={`text-small ${state === "error" ? "text-error" : state === "sent" ? "text-success" : "text-brand-300"}`}>
+          {message ?? "Your details are only used to handle this request."}
         </p>
       </div>
     </form>
