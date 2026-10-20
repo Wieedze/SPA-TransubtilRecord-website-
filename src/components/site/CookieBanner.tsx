@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion"
+import { Link } from "react-router-dom"
 import { useConsent } from "../../contexts/ConsentContext"
 
 // Small consent bar above the player bar. Accept and Decline weigh the same, and
@@ -24,7 +25,10 @@ export default function CookieBanner() {
           <div className="mx-auto flex max-w-[760px] flex-wrap items-center gap-x-6 gap-y-4 rounded-[2px] border border-brand-700 bg-brand-950/95 px-5 py-4 backdrop-blur">
             <p className="min-w-0 flex-[1_1_320px] text-small leading-relaxed text-body">
               We don't track you. The Bandcamp and SoundCloud players set their own cookies, so they only load if you
-              allow them.
+              allow them.{" "}
+              <Link to="/legal#cookies" className="underline underline-offset-2 hover:text-accent">
+                Privacy
+              </Link>
             </p>
             <div className="flex shrink-0 gap-3">
               <button type="button" onClick={() => setChoice("denied")} className="btn-secondary">

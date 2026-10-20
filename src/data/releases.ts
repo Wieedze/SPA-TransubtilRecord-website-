@@ -2,6 +2,61 @@ import type { Release } from "../types/release"
 
 export const releases: Release[] = [
   {
+    id: 42,
+    title: "VA Acantharians",
+    artist: "Various Artists",
+    type: "compilation",
+    releaseDate: "2026",
+    catalogNumber: "",
+    coverUrl: "https://f4.bcbits.com/img/a0523637526_10.jpg",
+    bandcampUrl: "https://transubtilrec.bandcamp.com/album/va-acantharians",
+    bandcampId: "2609253755",
+  },
+  {
+    id: 41,
+    title: "Akhaba - The Evil Rising",
+    artist: "Akhaba",
+    type: "ep",
+    releaseDate: "2026",
+    catalogNumber: "",
+    coverUrl: "https://f4.bcbits.com/img/a2780506552_10.jpg",
+    bandcampUrl: "https://transubtilrec.bandcamp.com/album/akhaba-the-evil-rising",
+    bandcampId: "821251500",
+  },
+  {
+    id: 40,
+    title: "V.A Resibtilation",
+    artist: "Various Artists",
+    type: "compilation",
+    releaseDate: "2026",
+    catalogNumber: "",
+    coverUrl: "https://f4.bcbits.com/img/a3250529588_10.jpg",
+    bandcampUrl: "https://transubtilrec.bandcamp.com/album/v-a-resibtilation",
+    bandcampId: "4258543405",
+  },
+  {
+    id: 39,
+    title: "Warp Drive - Forever Album",
+    artist: "Warp Drive",
+    type: "album",
+    releaseDate: "2026",
+    catalogNumber: "",
+    coverUrl: "https://f4.bcbits.com/img/a1901319406_10.jpg",
+    bandcampUrl: "https://transubtilrec.bandcamp.com/album/warp-drive-forever-album",
+    bandcampId: "3960527549",
+  },
+  {
+    id: 38,
+    title: "Best of 8 Years",
+    artist: "Various Artists",
+    type: "compilation",
+    releaseDate: "2026",
+    catalogNumber: "",
+    coverUrl: "https://f4.bcbits.com/img/a3302426479_10.jpg",
+    bandcampUrl: "https://transubtilrec.bandcamp.com/album/best-of-8-years",
+    bandcampId: "2562471120",
+  },
+  {
     id: 1,
     title: "V.A Nightmare Cage",
     artist: "Various Artists",
@@ -432,4 +487,14 @@ export function getReleasesByType(type: Release["type"]): Release[] {
 
 export function getReleasesByYear(year: string): Release[] {
   return releases.filter((release) => release.releaseDate.includes(year))
+}
+
+/** Newest first: the list above is kept in release order, latest at the top. */
+export const latestRelease: Release = releases[0]
+
+export const RELEASE_TYPE_LABELS: Record<Release["type"], string> = {
+  album: "Album",
+  ep: "EP",
+  track: "Single",
+  compilation: "Compilation",
 }

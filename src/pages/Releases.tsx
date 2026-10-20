@@ -6,7 +6,7 @@ import { ExternalLink, Play, Search, X } from "lucide-react"
 import PageHeader from "../components/site/PageHeader"
 import { usePlayer } from "../contexts/PlayerContext"
 import DecryptedText from "../components/DecryptedText"
-import { releases } from "../data/releases"
+import { RELEASE_TYPE_LABELS, releases } from "../data/releases"
 import { SOCIAL_LINKS } from "../config/site"
 import type { Release } from "../types/release"
 
@@ -15,12 +15,7 @@ const years = releases.map((r) => Number(r.releaseDate)).filter(Boolean)
 const yearSpan = `${Math.min(...years)}–${Math.max(...years)}`
 const bandcampStore = SOCIAL_LINKS.find((l) => l.label === "Bandcamp")?.href ?? null
 
-const TYPE_LABELS: Record<Release["type"], string> = {
-  album: "Album",
-  ep: "EP",
-  track: "Single",
-  compilation: "Compilation",
-}
+const TYPE_LABELS = RELEASE_TYPE_LABELS
 
 type Sort = "newest" | "artist" | "compilations"
 
