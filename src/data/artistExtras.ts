@@ -7,6 +7,9 @@ export interface ArtistExtras {
   country: string
   styles: string[]
   soundcloud: string | null
+  /** What the artist page player shows instead of the profile's latest uploads: a track,
+   *  a set or a playlist URL, also on another account (e.g. a set the artist reposts) */
+  listen?: string
   instagram: string | null
   facebook: string | null
 }
