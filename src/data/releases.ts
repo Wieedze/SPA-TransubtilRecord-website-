@@ -433,3 +433,13 @@ export function getReleasesByType(type: Release["type"]): Release[] {
 export function getReleasesByYear(year: string): Release[] {
   return releases.filter((release) => release.releaseDate.includes(year))
 }
+
+/** Newest first: the list above is kept in release order, latest at the top. */
+export const latestRelease: Release = releases[0]
+
+export const RELEASE_TYPE_LABELS: Record<Release["type"], string> = {
+  album: "Album",
+  ep: "EP",
+  track: "Single",
+  compilation: "Compilation",
+}

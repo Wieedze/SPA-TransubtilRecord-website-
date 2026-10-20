@@ -1,7 +1,9 @@
 import { useRef, useState, type MouseEvent } from "react"
 import Seo from "../components/site/Seo"
 import { labelLd, websiteLd } from "../lib/structuredData"
-import { releases } from "../data/releases"
+import { latestRelease, RELEASE_TYPE_LABELS, releases } from "../data/releases"
+import { Play } from "lucide-react"
+import { usePlayer } from "../contexts/PlayerContext"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import SiteNav from "../components/site/SiteNav"
@@ -10,15 +12,14 @@ import HeroContent, { HeroBackground, useHeroHover } from "../components/home/He
 import ArtistCard from "../components/home/ArtistCard"
 import { useIntroZoom, ZOOM_DURATION } from "../components/home/useIntroZoom"
 import { getRosterArtist, roster, type RosterArtist } from "../data/roster"
-import { BOOKING_PATH, SOCIAL_LINKS } from "../config/site"
-import artwork from "../assets/design/assets/artwork-10-years.jpg"
+import { BOOKING_PATH } from "../config/site"
 
 const FEATURED_SLUGS = ["thehorrids", "heavyfawn", "xipetotecs", "fiorenza"]
 const featured = FEATURED_SLUGS.map(getRosterArtist).filter((a): a is RosterArtist => Boolean(a))
-const bandcampUrl = SOCIAL_LINKS.find((l) => l.label === "Bandcamp")?.href ?? null
 
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null)
+  const player = usePlayer()
   const { phase, heroStyle, backgroundStyle } = useIntroZoom(heroRef)
   const intro = phase === "intro"
   const { hovered, hoverProps } = useHeroHover()
@@ -99,30 +100,34 @@ export default function Home() {
         </motion.section>
 
         <motion.div {...reveal}>
-          {/* Latest release */}
+          {/* Latest release: always the newest entry of src/data/releases.ts */}
           <section className="mx-auto max-w-page px-4 py-16 md:px-6 md:py-24">
             <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16">
               <img
-                src={artwork}
-                alt="10 Years of Transubtil compilation artwork"
+                src={latestRelease.coverUrl}
+                alt={`${latestRelease.title} artwork`}
                 loading="lazy"
-                className="aspect-square w-full object-cover"
+                className="aspect-square w-full bg-brand-800 object-cover"
               />
-              <div className="flex flex-col gap-5">
-                <h2 className="font-display text-[22px] leading-tight md:text-[34px]">10 Years of Transubtil</h2>
-                <p className="meta">Latest release · Compilation</p>
-                <p className="text-[15px] leading-relaxed text-body md:text-lg">Anniversary compilation.</p>
-                {/* TODO(content): release date, track count and Bandcamp player embed */}
-                {bandcampUrl && (
-                  <div className="mt-2 flex flex-wrap items-center gap-x-8 gap-y-4">
-                    <a href={bandcampUrl} target="_blank" rel="noreferrer" className="btn-primary">
-                      Buy on Bandcamp
-                    </a>
-                    <Link to="/releases" className="text-link">
-                      Full catalogue
-                    </Link>
-                  </div>
-                )}
+              <div className="flex flex-col gap-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-accent">Latest release</p>
+                <h2 className="font-display text-[22px] leading-tight md:text-[34px]">{latestRelease.title}</h2>
+                <p className="text-[17px] text-bone">{latestRelease.artist}</p>
+                <p className="text-xs text-brand-300">
+                  {RELEASE_TYPE_LABELS[latestRelease.type]} · {latestRelease.releaseDate}
+                </p>
+                <div className="mt-4 flex flex-wrap items-center gap-x-8 gap-y-4">
+                  <button type="button" onClick={() => player.play(latestRelease)} className="btn-primary">
+                    <Play className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true" />
+                    {player.current?.id === latestRelease.id ? "In the player" : "Play"}
+                  </button>
+                  <a href={latestRelease.bandcampUrl} target="_blank" rel="noreferrer" className="text-link">
+                    Buy on Bandcamp
+                  </a>
+                  <Link to="/releases" className="text-link">
+                    Full catalogue
+                  </Link>
+                </div>
               </div>
             </div>
           </section>
