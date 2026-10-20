@@ -83,8 +83,9 @@ export default function Releases() {
               <h2 className="font-display text-lg md:text-[22px]">
                 <DecryptedText key={selected.id} text={selected.title} animateOn="view" speed={40} maxIterations={6} />
               </h2>
-              <p className="meta">
-                {selected.artist} · {TYPE_LABELS[selected.type]} · {selected.releaseDate}
+              <p className="text-[17px] text-bone">{selected.artist}</p>
+              <p className="text-xs text-brand-300">
+                {TYPE_LABELS[selected.type]} · {selected.releaseDate}
               </p>
               <div className="mt-2 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <button type="button" onClick={() => play(selected)} className="btn-primary">
@@ -187,12 +188,12 @@ export default function Releases() {
                     </span>
                   </button>
                   <div className="flex flex-col gap-1">
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent md:text-xs">
+                    <h3 className="font-display text-[13px] leading-snug md:text-[15px]">{release.title}</h3>
+                    <span className="text-small text-bone/80 md:text-[15px]">{release.artist}</span>
+                    <span className="text-xs text-brand-300">
                       {release.catalogNumber && `${release.catalogNumber} · `}
                       {TYPE_LABELS[release.type]} · {release.releaseDate}
                     </span>
-                    <h3 className="font-display text-[13px] leading-snug md:text-[15px]">{release.title}</h3>
-                    <span className="text-small text-brand-300 md:text-[15px]">{release.artist}</span>
                   </div>
                   <a
                     href={release.bandcampUrl}
