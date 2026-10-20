@@ -11,7 +11,7 @@ interface PlayerState {
 
 const PlayerContext = createContext<PlayerState>({ current: null, play: () => {}, close: () => {} })
 
-export const PLAYER_BAR_HEIGHT = 64 // px, mirrored in --player-h for sticky elements
+export const PLAYER_BAR_HEIGHT = 136 // px (Bandcamp player 120 px + padding), mirrored in --player-h
 
 export function PlayerProvider({ children }: { children: ReactNode }) {
   const [current, setCurrent] = useState<Release | null>(null)

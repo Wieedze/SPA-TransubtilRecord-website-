@@ -123,7 +123,8 @@ export default function Artists() {
               Clear filters
             </button>
           )}
-          <span className="ml-auto text-small text-brand-300" aria-live="polite">
+          {/* Result count for screen readers only */}
+          <span className="sr-only" aria-live="polite">
             {shown.length} {shown.length === 1 ? "artist" : "artists"} shown
           </span>
         </div>
