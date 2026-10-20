@@ -19,6 +19,7 @@ export const routes = [
   "/releases",
   "/label",
   "/contact",
+  "/legal",
 ]
 
 export function render(url: string) {

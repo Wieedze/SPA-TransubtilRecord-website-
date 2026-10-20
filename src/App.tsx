@@ -23,6 +23,7 @@ import ArtistPage from "./pages/ArtistPage.tsx"
 import Releases from "./pages/Releases.tsx"
 import Label from "./pages/Label.tsx"
 import Contact from "./pages/Contact.tsx"
+import Legal from "./pages/Legal.tsx"
 import InstagramGenerator from "./pages/InstagramGenerator.tsx"
 import CatalogueManager from "./pages/admin/CatalogueManager.tsx"
 import NotFound from "./pages/NotFound.tsx"
@@ -148,6 +149,7 @@ function App() {
                 <Route path="/releases" element={<Releases />} />
                 <Route path="/label" element={<Label />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/legal" element={<Legal />} />
                 {/* v1 URL */}
                 <Route path="/about" element={<Navigate to="/label" replace />} />
                 {FEATURE_AUTH && (

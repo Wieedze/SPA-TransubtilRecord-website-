@@ -16,7 +16,7 @@ export const releases: Release[] = [
     id: 41,
     title: "Akhaba - The Evil Rising",
     artist: "Akhaba",
-    type: "album",
+    type: "ep",
     releaseDate: "2026",
     catalogNumber: "",
     coverUrl: "https://f4.bcbits.com/img/a2780506552_10.jpg",

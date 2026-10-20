@@ -96,10 +96,14 @@ export default function SiteFooter() {
 
         <div className="flex flex-wrap justify-between gap-4 border-t border-brand-700 pt-6 text-[13px] text-brand-300">
           <span>© {new Date().getFullYear()} Transubtil Records</span>
-          {/* TODO: legal notice and privacy pages (content phase) */}
-          <button type="button" onClick={openSettings} className="hover:text-accent">
-            Cookie settings
-          </button>
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <Link to="/legal" className="hover:text-accent">
+              Legal notice & privacy
+            </Link>
+            <button type="button" onClick={openSettings} className="hover:text-accent">
+              Cookie settings
+            </button>
+          </div>
         </div>
       </div>
     </footer>
