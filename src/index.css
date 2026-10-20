@@ -3,6 +3,27 @@
 @tailwind utilities;
 
 @layer base {
+  /* Scrollbar space is always reserved, so locking the scroll during the home intro
+     never shifts the page; thin dark scrollbar in the site's colours */
+  html {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #2c2a36 #07060b;
+  }
+  html::-webkit-scrollbar {
+    width: 8px;
+  }
+  html::-webkit-scrollbar-track {
+    background: #07060b;
+  }
+  html::-webkit-scrollbar-thumb {
+    background: #2c2a36;
+    border-radius: 4px;
+  }
+  html::-webkit-scrollbar-thumb:hover {
+    background: #6f6c7a;
+  }
+
   html,
   body {
     @apply bg-brand-950 text-bone font-sans antialiased;

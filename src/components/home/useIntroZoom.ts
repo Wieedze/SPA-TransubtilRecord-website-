@@ -12,12 +12,12 @@ const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayout
 export type IntroPhase = "intro" | "zooming" | "done"
 
 const SESSION_KEY = "tr-intro-played"
-const AUTO_DELAY_MS = 2500
-export const ZOOM_DURATION = 1.3 // seconds
+const AUTO_DELAY_MS = 1600
+export const ZOOM_DURATION = 1.8 // seconds
 const BACKGROUND_START_SCALE = 1.2
 // The hero can be taller than the screen: always start at least this zoomed in
 const MIN_START_SCALE = 1.2
-const ZOOM_EASE = [0.76, 0, 0.24, 1] as const
+const ZOOM_EASE = [0.65, 0, 0.35, 1] as const // gentle ease-in-out, no hard snap
 const SKIP_KEYS = new Set([" ", "ArrowDown", "PageDown", "End", "Enter", "Escape"])
 
 function shouldPlayIntro(): boolean {

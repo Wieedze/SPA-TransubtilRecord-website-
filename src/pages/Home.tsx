@@ -35,8 +35,9 @@ export default function Home() {
   // Nav and page content arrive while the hero pulls back
   const reveal = {
     initial: false as const,
-    animate: intro ? { opacity: 0, y: 32 } : { opacity: 1, y: 0 },
-    transition: { duration: ZOOM_DURATION * 0.7, delay: ZOOM_DURATION * 0.35, ease: "easeOut" as const },
+    animate: intro ? { opacity: 0, y: 16 } : { opacity: 1, y: 0 },
+    // Arrives during the second half of the dezoom, so both finish together
+    transition: { duration: ZOOM_DURATION * 0.55, delay: ZOOM_DURATION * 0.45, ease: [0.22, 1, 0.36, 1] as const },
   }
 
   return (
@@ -56,7 +57,7 @@ export default function Home() {
       <motion.div
         className="sticky top-0 z-30"
         initial={false}
-        animate={intro ? { opacity: 0, y: -24 } : { opacity: 1, y: 0 }}
+        animate={intro ? { opacity: 0, y: -12 } : { opacity: 1, y: 0 }}
         transition={reveal.transition}
         style={{ pointerEvents: intro ? "none" : "auto" }}
       >
@@ -68,6 +69,10 @@ export default function Home() {
           ref={heroRef}
           aria-label="Transubtil Records"
           style={heroStyle}
+          // Fades in on arrival instead of popping in when the page is revealed
+          initial={intro ? { opacity: 0 } : false}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className={[
             // clip-path as well as overflow: Chrome lets the spinning layer bleed 1px past the edge
             "relative overflow-hidden [clip-path:inset(0)]",
