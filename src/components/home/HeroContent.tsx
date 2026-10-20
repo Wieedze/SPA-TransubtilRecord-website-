@@ -12,10 +12,9 @@ import { useHoverCount } from "../../hooks/useHoverCount"
 // into ~120 "atoms" that appear layer by layer from the bottom and then each breathe at
 // their own pace (CSS animation inside hero-flames.svg). Dark vignette and yellow halo on top.
 // Everything is placed from --logo-y (the brandmark's centre in the hero, set by
-// useLogoAnchor): the logo sits at LOGO_AT of the artwork's height on every screen size.
-// On phones the artwork is narrower than the logo stack is tall, so its bottom fades out.
+// useLogoAnchor): the logo sits at --logo-at of the artwork's height, 0.636 on desktop
+// (the reference look) and 0.406 on phones, where the artwork sits 23% lower; its bottom fades out there.
 const FLAMES_SIZE = "max(100vw, min(125svh, 180vw))"
-const LOGO_AT = 0.636 // where the logo sits on desktop, the reference look
 export const LOGO_Y = "var(--logo-y, 40%)"
 
 export function HeroBackground() {
@@ -24,8 +23,8 @@ export function HeroBackground() {
       <img
         src={flames}
         alt=""
-        className="absolute left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60 [mask-image:linear-gradient(to_bottom,black_82%,transparent)] md:[mask-image:none]"
-        style={{ width: FLAMES_SIZE, top: `calc(${LOGO_Y} - ${LOGO_AT} * ${FLAMES_SIZE})` }}
+        className="absolute left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60 [--logo-at:0.406] [mask-image:linear-gradient(to_bottom,black_85%,transparent)] md:[--logo-at:0.636] md:[mask-image:none]"
+        style={{ width: FLAMES_SIZE, top: `calc(${LOGO_Y} - var(--logo-at) * ${FLAMES_SIZE})` }}
       />
       <div
         className="absolute inset-0"
