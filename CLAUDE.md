@@ -17,6 +17,8 @@ Package manager / script runner: **Bun** (`bun.lock`). Vite remains the bundler.
 - `bun run db:migrate:local` / `db:migrate:remote` — Apply `db/migrations/` to D1
 - `bun run deploy` — Build and deploy a preview of the current git branch to Cloudflare Pages
 - `bun run deploy:prod` — Build and deploy to production (Pages production branch: `main`)
+- `bun run newsletter <newsletters/file.md> [--preview | --test email | --send]` — branded Resend broadcast from a Markdown file (draft by default; see `newsletters/_example.md`)
+- `bun run newsletter:releases [--dry-run | --send | --mark-all]` — broadcast for each release in `src/data/releases.ts` not yet in D1 `announced_releases` (draft unless `--send` or `NEWSLETTER_AUTO_SEND=true` in `.dev.vars`). Needs the full-access `RESEND_API_KEY` in `.dev.vars`
 - Legacy Express backend (studio/auth, feature-flagged off): `bun run dev:server`, `bun run server`
 
 No test runner or linter is configured. Typecheck with `bunx tsc --noEmit -p tsconfig.json` (app) and `bunx tsc --noEmit -p functions/tsconfig.json` (Pages Functions).

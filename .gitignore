@@ -38,3 +38,6 @@ dist.zip
 .wrangler/
 .dev.vars
 dist-ssr
+
+# Newsletter previews (bun run newsletter <file> --preview)
+newsletters/*.preview.html
