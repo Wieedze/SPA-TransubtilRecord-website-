@@ -49,6 +49,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     from: env.NEWS_FROM,
     to: email,
     template: "newsletter-confirm",
+    replyTo: env.CONTACT_EMAIL,
     idempotencyKey: `subscribe-${confirmToken}`,
     variables: { CONFIRM_URL: `${env.SITE_URL}/api/confirm?token=${confirmToken}` },
   })

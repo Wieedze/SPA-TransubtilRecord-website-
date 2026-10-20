@@ -12,6 +12,10 @@ migrations_dir = "db/migrations"
 # Plain settings for the Pages Functions (secrets go through `wrangler pages secret put`)
 [vars]
 LABEL_EMAIL = "transubtilrec@gmail.com"
+# Public addresses (Cloudflare Email Routing -> label Gmail), used as reply-to on receipts
+BOOKING_EMAIL = "booking@transubtil-record.com"
+DEMOS_EMAIL = "demos@transubtil-record.com"
+CONTACT_EMAIL = "contact@transubtil-record.com"
 SITE_URL = "https://transubtil-record.com"
 MAIL_FROM = "Transubtil Records <hello@mail.transubtil-record.com>"
 NEWS_FROM = "Transubtil Records <news@news.transubtil-record.com>"

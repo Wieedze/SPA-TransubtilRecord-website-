@@ -60,6 +60,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     from: env.MAIL_FROM,
     to: form.email,
     template: "booking-confirmation",
+    replyTo: env.BOOKING_EMAIL,
     subject: `We received your booking request for ${form.artist}`,
     idempotencyKey: `booking-${logged.ref}-receipt`,
     variables: {

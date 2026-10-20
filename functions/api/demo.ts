@@ -56,6 +56,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     from: env.MAIL_FROM,
     to: form.email,
     template: "demo-confirmation",
+    replyTo: env.DEMOS_EMAIL,
     idempotencyKey: `demo-${logged.ref}-receipt`,
     variables: { ARTIST_NAME: escapeHtml(form.artist), TRACK: escapeHtml(form.track) },
   })

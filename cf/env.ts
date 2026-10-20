@@ -8,6 +8,9 @@ export interface Env {
   TURNSTILE_SECRET?: string // anti-bot check on forms; unset locally = check skipped
   // Plain settings ([vars] in wrangler.toml)
   LABEL_EMAIL: string
+  BOOKING_EMAIL: string
+  DEMOS_EMAIL: string
+  CONTACT_EMAIL: string
   SITE_URL: string
   MAIL_FROM: string
   NEWS_FROM: string
