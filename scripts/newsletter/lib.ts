@@ -155,3 +155,28 @@ export function releaseEmail(release: Release) {
     body,
   })
 }
+
+export interface NewsletterFields {
+  subject: string
+  eyebrow?: string
+  title: string
+  image?: string
+  imageLink?: string
+  text: string
+  button?: string
+  buttonLink?: string
+  preheader?: string
+}
+
+/** Free-form newsletter written in the editor (bun run newsletter). */
+export function newsletterHtml(f: NewsletterFields) {
+  return layout({
+    title: f.title,
+    eyebrow: f.eyebrow,
+    preheader: f.preheader,
+    body:
+      (f.image ? image(f.image, f.title, f.imageLink || f.buttonLink) : "") +
+      markdownToHtml(f.text) +
+      (f.button && f.buttonLink ? button(f.button, f.buttonLink) : ""),
+  })
+}

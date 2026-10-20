@@ -18,7 +18,7 @@
     "db:migrate:remote": "wrangler d1 migrations apply transubtil-db --remote",
     "deploy": "bun run build && wrangler pages deploy",
     "deploy:prod": "bun run build && wrangler pages deploy --branch main",
-    "newsletter": "bun scripts/newsletter/draft.ts",
+    "newsletter": "bun scripts/newsletter/editor.ts",
     "newsletter:releases": "bun scripts/newsletter/releases.ts"
   },
   "dependencies": {

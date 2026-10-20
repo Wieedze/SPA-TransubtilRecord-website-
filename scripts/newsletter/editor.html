@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newsletter editor · Transubtil Records</title>
+<style>
+  :root { --bg: #07060B; --panel: #0F0E15; --line: #2C2A36; --text: #F3EFE4; --body: #D6D2C8; --muted: #A8A5B0; --accent: #F9BC14; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--body); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--line); }
+  header h1 { margin: 0; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--text); font-weight: 600; }
+  header span { color: var(--muted); font-size: 12px; }
+  main { display: grid; grid-template-columns: minmax(340px, 460px) 1fr; height: calc(100vh - 53px); }
+  form { overflow-y: auto; padding: 20px; border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
+  fieldset { border: 0; margin: 0; padding: 0 0 14px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+  legend { padding: 0 0 8px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  label { display: flex; flex-direction: column; gap: 5px; font-size: 12px; color: var(--muted); }
+  input, textarea, select { width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; color: var(--text); font: inherit; padding: 8px 10px; }
+  input:focus, textarea:focus, select:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
+  textarea { min-height: 220px; resize: vertical; line-height: 1.6; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .toolbar { display: flex; gap: 6px; }
+  .hint { font-size: 11px; color: var(--muted); margin: 0; }
+  button { cursor: pointer; font: inherit; border-radius: 2px; }
+  .tool { background: var(--panel); border: 1px solid var(--line); color: var(--text); padding: 3px 10px; font-size: 12px; }
+  .tool:hover { border-color: var(--accent); }
+  .actions { display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; }
+  .btn { height: 38px; padding: 0 16px; font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; border: 1px solid var(--accent); }
+  .btn-primary { background: var(--accent); color: var(--bg); }
+  .btn-secondary { background: transparent; color: var(--accent); }
+  .btn:disabled { opacity: .5; cursor: wait; }
+  .test { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+  #status { min-height: 20px; margin: 0; font-size: 13px; }
+  #status.ok { color: var(--accent); }
+  #status.err { color: #FF7A6B; }
+  #status a { color: var(--accent); }
+  .preview { display: flex; flex-direction: column; min-width: 0; }
+  .preview-bar { display: flex; justify-content: flex-end; gap: 6px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+  .preview-bar .tool[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+  .frame-wrap { flex: 1; overflow: auto; display: flex; justify-content: center; background: #000; }
+  iframe { border: 0; width: 700px; max-width: 100%; height: 100%; background: var(--bg); transition: width .2s; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; height: auto; } form { border-right: 0; } .frame-wrap { height: 80vh; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Transubtil · Newsletter</h1>
+  <span>Saved automatically in this browser</span>
+</header>
+<main>
+  <form id="form" autocomplete="off">
+    <fieldset>
+      <legend>Email</legend>
+      <label>Subject (inbox line) <input name="subject" required placeholder="A free download for you"></label>
+      <label>Preview text (shown after the subject in the inbox) <input name="preheader" placeholder="A thank-you track for ten years of Transubtil."></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Header</legend>
+      <label>Small label above the title <input name="eyebrow" placeholder="Gift · News · New release"></label>
+      <label>Title <input name="title" required placeholder="Ten years, one free track"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Image</legend>
+      <label>Use a release cover
+        <select id="release"><option value="">Choose a release…</option></select>
+      </label>
+      <label>Image address (https://…) <input name="image" type="url" placeholder="https://f4.bcbits.com/img/…_10.jpg"></label>
+      <label>Link when the image is clicked <input name="imageLink" type="url" placeholder="Same as the button if empty"></label>
+      <p class="hint">Tip: on Bandcamp, right-click a cover → “Copy image address”.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Text</legend>
+      <div class="toolbar">
+        <button type="button" class="tool" data-wrap="**"><b>B</b></button>
+        <button type="button" class="tool" data-wrap="*"><i>I</i></button>
+        <button type="button" class="tool" id="link">Link</button>
+      </div>
+      <textarea name="text" placeholder="Hi,&#10;&#10;Write your message here.&#10;&#10;See you on the dancefloor,&#10;Transubtil Records"></textarea>
+      <p class="hint">Empty line = new paragraph. Select words, then B / I / Link.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Button</legend>
+      <div class="row">
+        <label>Text <input name="button" placeholder="Download for free"></label>
+        <label>Link <input name="buttonLink" type="url" placeholder="https://…"></label>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <div class="test">
+        <input id="to" type="email" placeholder="your@email.com" aria-label="Email for the test">
+        <button type="button" class="btn btn-secondary" id="test">Send me a test</button>
+      </div>
+      <button type="button" class="btn btn-primary" id="draft">Create draft in Resend</button>
+      <p class="hint">The draft goes to the Newsletter list only when you press Send on resend.com.</p>
+      <button type="button" class="tool" id="reset" style="align-self:flex-start">Start a new email</button>
+      <p id="status" role="status"></p>
+    </div>
+  </form>
+
+  <section class="preview">
+    <div class="preview-bar">
+      <button type="button" class="tool" data-width="700" aria-pressed="true">Desktop</button>
+      <button type="button" class="tool" data-width="390" aria-pressed="false">Mobile</button>
+    </div>
+    <div class="frame-wrap"><iframe id="frame" title="Email preview"></iframe></div>
+  </section>
+</main>
+
+<script>
+  const form = document.getElementById("form")
+  const frame = document.getElementById("frame")
+  const status = document.getElementById("status")
+  const to = document.getElementById("to")
+  const text = form.elements.text
+  const KEY = "tr-newsletter-draft"
+
+  const values = () => Object.fromEntries(new FormData(form))
+  const save = () => {
+    try { localStorage.setItem(KEY, JSON.stringify({ ...values(), to: to.value })) } catch {}
+  }
+  function load() {
+    try {
+      const data = JSON.parse(localStorage.getItem(KEY) || "{}")
+      for (const [k, v] of Object.entries(data)) {
+        if (k === "to") to.value = v
+        else if (form.elements[k]) form.elements[k].value = v
+      }
+    } catch {}
+  }
+
+  let timer
+  async function render() {
+    const res = await fetch("/render", { method: "POST", body: JSON.stringify(values()) })
+    const scroll = frame.contentWindow?.scrollY || 0
+    frame.srcdoc = await res.text()
+    frame.onload = () => frame.contentWindow.scrollTo(0, scroll)
+  }
+  const update = () => { save(); clearTimeout(timer); timer = setTimeout(render, 250) }
+  form.addEventListener("input", update)
+
+  // B / I: wrap the selection in ** or *; Link: [selection](url)
+  function wrap(before, after) {
+    const { selectionStart: s, selectionEnd: e, value } = text
+    const selected = value.slice(s, e) || "text"
+    text.setRangeText(before + selected + after, s, e, "end")
+    text.focus()
+    update()
+  }
+  document.querySelectorAll("[data-wrap]").forEach((b) => b.addEventListener("click", () => wrap(b.dataset.wrap, b.dataset.wrap)))
+  document.getElementById("link").addEventListener("click", () => {
+    const url = prompt("Link address (https://…)")
+    if (url) wrap("[", "](" + url.trim() + ")")
+  })
+
+  // Release picker fills the image and its link
+  fetch("/releases").then((r) => r.json()).then((list) => {
+    const select = document.getElementById("release")
+    list.forEach((r, i) => select.add(new Option(r.title, i)))
+    select.addEventListener("change", () => {
+      const r = list[select.value]
+      if (!r) return
+      form.elements.image.value = r.cover
+      form.elements.imageLink.value = r.link
+      if (!form.elements.buttonLink.value) form.elements.buttonLink.value = r.link
+      select.value = ""
+      update()
+    })
+  })
+
+  document.querySelectorAll("[data-width]").forEach((b) => b.addEventListener("click", () => {
+    frame.style.width = b.dataset.width + "px"
+    document.querySelectorAll("[data-width]").forEach((x) => x.setAttribute("aria-pressed", x === b))
+  }))
+
+  function say(msg, ok, url) {
+    status.className = ok ? "ok" : "err"
+    status.textContent = msg + " "
+    if (url) {
+      const a = Object.assign(document.createElement("a"), { href: url, target: "_blank", textContent: "Open it in Resend" })
+      status.append(a)
+    }
+  }
+  async function call(path, extra, button) {
+    if (!form.reportValidity()) return
+    button.disabled = true
+    say("Working…", true)
+    try {
+      const res = await fetch(path, { method: "POST", body: JSON.stringify({ ...values(), ...extra }) })
+      const data = await res.json()
+      res.ok ? say(data.message, true, data.url) : say(data.error, false)
+    } catch (e) {
+      say("The editor is not running anymore (restart: bun run newsletter).", false)
+    } finally {
+      button.disabled = false
+    }
+  }
+  document.getElementById("test").addEventListener("click", (e) => call("/test", { to: to.value }, e.currentTarget))
+  document.getElementById("draft").addEventListener("click", (e) => {
+    if (confirm("Create this draft in Resend? It will not be sent until you press Send there.")) call("/draft", {}, e.currentTarget)
+  })
+  document.getElementById("reset").addEventListener("click", () => {
+    if (!confirm("Clear every field and start a new email?")) return
+    const keep = to.value
+    form.reset(); to.value = keep; status.textContent = ""; update()
+  })
+
+  load()
+  render()
+</script>
+</body>
+</html>
