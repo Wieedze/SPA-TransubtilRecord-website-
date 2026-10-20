@@ -60,11 +60,7 @@ export default function Releases() {
         jsonLd={[releasesListLd(), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Releases", path: "/releases" }])]}
       />
 
-      <PageHeader
-        title="Releases"
-        meta={`${releases.length} releases · ${yearSpan}`}
-        intro="EPs, albums and compilations from the label, newest first."
-      />
+      <PageHeader title="Releases" />
 
       {/* Selected release */}
       {selected && (
