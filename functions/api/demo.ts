@@ -32,7 +32,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     replyTo: form.email,
     template: "demo-notification",
     subject: `New demo: ${form.track} by ${form.artist}`,
-    idempotencyKey: `demo-${logged.id}-label`,
+    idempotencyKey: `demo-${logged.ref}-label`,
     variables: {
       ARTIST_NAME: escapeHtml(form.artist),
       SENDER_EMAIL: escapeHtml(form.email),
@@ -48,7 +48,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     from: env.MAIL_FROM,
     to: form.email,
     template: "demo-confirmation",
-    idempotencyKey: `demo-${logged.id}-receipt`,
+    idempotencyKey: `demo-${logged.ref}-receipt`,
     variables: { ARTIST_NAME: escapeHtml(form.artist), TRACK: escapeHtml(form.track) },
   })
   return json({ ok: true })

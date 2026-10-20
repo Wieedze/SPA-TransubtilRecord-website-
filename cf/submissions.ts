@@ -10,7 +10,7 @@ export async function logSubmission(
   email: string,
   ipHash: string,
   payload: Record<string, string>
-): Promise<{ ok: true; id: number } | { ok: false; reason: "rate_limited" }> {
+): Promise<{ ok: true; id: number; ref: string } | { ok: false; reason: "rate_limited" }> {
   const recent = await env.DB.prepare(
     "SELECT COUNT(*) AS n FROM submissions WHERE json_extract(payload, '$.ip') = ? AND created_at > datetime('now', '-1 hour')"
   )
@@ -21,5 +21,7 @@ export async function logSubmission(
   const result = await env.DB.prepare("INSERT INTO submissions (type, name, email, payload) VALUES (?, ?, ?, ?)")
     .bind(type, name, email, JSON.stringify({ ...payload, ip: ipHash }))
     .run()
-  return { ok: true, id: Number(result.meta.last_row_id) }
+  // Random reference for Resend idempotency keys: row ids restart at 1 in every
+  // database (local, preview), and Resend rejects a reused key with a new payload
+  return { ok: true, id: Number(result.meta.last_row_id), ref: crypto.randomUUID() }
 }

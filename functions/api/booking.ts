@@ -36,7 +36,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     replyTo: form.email,
     template: "booking-notification",
     subject: `New booking request: ${form.artist}`,
-    idempotencyKey: `booking-${logged.id}-label`,
+    idempotencyKey: `booking-${logged.ref}-label`,
     variables: {
       ARTIST_NAME: escapeHtml(form.artist),
       NAME: escapeHtml(form.name),
@@ -57,7 +57,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     to: form.email,
     template: "booking-confirmation",
     subject: `We received your booking request for ${form.artist}`,
-    idempotencyKey: `booking-${logged.id}-receipt`,
+    idempotencyKey: `booking-${logged.ref}-receipt`,
     variables: {
       NAME: escapeHtml(form.name),
       ARTIST_NAME: escapeHtml(form.artist),
