@@ -2,6 +2,7 @@ import type { Env } from "../../cf/env"
 import { escapeHtml, escapeMultiline, field, hashIp, isBot, isEmail, json, readJson } from "../../cf/http"
 import { sendTemplate } from "../../cf/resend"
 import { verifyTurnstile } from "../../cf/turnstile"
+import { MAX_LINKS, checkEmailDomain, countLinks } from "../../cf/checks"
 import { logSubmission } from "../../cf/submissions"
 
 // POST /api/booking — booking request from an artist page
@@ -25,6 +26,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!form.artist || !form.name || !isEmail(form.email) || !form.event || !form.date || !form.venue) {
     return json({ error: "missing_fields" }, 422)
   }
+  if (countLinks(form.message) > MAX_LINKS) return json({ error: "too_many_links" }, 422)
+  const emailProblem = await checkEmailDomain(form.email)
+  if (emailProblem) return json({ error: emailProblem }, 422)
 
   const logged = await logSubmission(env, "booking", form.name, form.email, await hashIp(request), form)
   if (!logged.ok) return json({ error: "rate_limited" }, 429)

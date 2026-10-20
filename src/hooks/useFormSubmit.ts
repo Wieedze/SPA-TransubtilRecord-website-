@@ -7,6 +7,9 @@ const ERRORS: Record<string, string> = {
   missing_fields: "Please fill in the required fields.",
   invalid_email: "Please enter a valid email address.",
   captcha_failed: "The anti-bot check didn't pass. Please try again.",
+  invalid_email_domain: "This email address can't receive mail. Please check it for typos.",
+  disposable_email: "Please use a permanent email address, not a temporary one.",
+  too_many_links: "Your message has too many links. Please keep it to 3 at most.",
 }
 const FALLBACK = "Something went wrong. Please try again, or email us at transubtilrec@gmail.com."
 

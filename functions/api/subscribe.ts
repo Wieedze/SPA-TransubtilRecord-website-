@@ -1,6 +1,7 @@
 import type { Env } from "../../cf/env"
 import { field, isBot, isEmail, json, readJson } from "../../cf/http"
 import { sendTemplate } from "../../cf/resend"
+import { checkEmailDomain } from "../../cf/checks"
 import { verifyTurnstile } from "../../cf/turnstile"
 
 const token = () => crypto.randomUUID().replace(/-/g, "")
@@ -16,6 +17,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const email = field(data, "email", 254).toLowerCase()
   const source = field(data, "source", 40) || "site"
   if (!isEmail(email)) return json({ error: "invalid_email" }, 422)
+  const emailProblem = await checkEmailDomain(email)
+  if (emailProblem) return json({ error: emailProblem }, 422)
 
   const existing = await env.DB.prepare(
     "SELECT status, confirm_token, created_at > datetime('now', '-10 minutes') AS recent FROM subscribers WHERE email = ?"
