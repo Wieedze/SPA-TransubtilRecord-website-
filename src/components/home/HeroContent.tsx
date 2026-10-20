@@ -11,25 +11,52 @@ import { useHoverCount } from "../../hooks/useHoverCount"
 // Static flames from the "10 Years" artwork, mirrored so both sides are identical, cut
 // into ~120 "atoms" that appear layer by layer from the bottom and then each breathe at
 // their own pace (CSS animation inside hero-flames.svg). Dark vignette and yellow halo on top.
+// Everything is placed from --logo-y (the brandmark's centre in the hero, set by
+// useLogoAnchor). Desktop: the logo sits at 63.6% of the artwork's height (the reference
+// look). Phones: the part of the artwork below its 40.6% line is shown under the logo and
+// mirrored above it, so the screen is filled symmetrically around the logo.
+const FLAMES_SIZE = "max(100vw, min(125svh, 180vw))"
+const DESKTOP_LOGO_AT = 0.636
+const MOBILE_LOGO_AT = 0.406
+export const LOGO_Y = "var(--logo-y, 40%)"
+
+// The lower half of the phone layout: artwork from the logo line down. Flipped, it is the upper half.
+function MobileFlamesHalf({ mirrored }: { mirrored?: boolean }) {
+  return (
+    <div
+      className="absolute inset-x-0 bottom-0 overflow-hidden md:hidden"
+      style={{ top: LOGO_Y, transform: mirrored ? "scaleY(-1)" : undefined, transformOrigin: "top" }}
+    >
+      <img
+        src={flames}
+        alt=""
+        className="absolute left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60 [mask-image:linear-gradient(to_bottom,black_85%,transparent)]"
+        style={{ width: FLAMES_SIZE, top: `calc(-${MOBILE_LOGO_AT} * ${FLAMES_SIZE})` }}
+      />
+    </div>
+  )
+}
+
 export function HeroBackground() {
   return (
     <>
       <img
         src={flames}
         alt=""
-        className="absolute bottom-0 left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60"
-        style={{ width: "max(100%, min(125svh, 160vw))" }}
+        className="absolute left-1/2 hidden aspect-square max-w-none -translate-x-1/2 opacity-60 md:block"
+        style={{ width: FLAMES_SIZE, top: `calc(${LOGO_Y} - ${DESKTOP_LOGO_AT} * ${FLAMES_SIZE})` }}
       />
+      <MobileFlamesHalf />
+      <MobileFlamesHalf mirrored />
       <div
         className="absolute inset-0"
         style={{
-          background:
-            "radial-gradient(circle at 50% 45%, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)",
+          background: `radial-gradient(circle at 50% ${LOGO_Y}, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)`,
         }}
       />
       <div
-        className="absolute left-1/2 top-[38%] h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full md:h-[520px] md:w-[520px]"
-        style={{ background: "radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)" }}
+        className="absolute left-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full md:h-[520px] md:w-[520px]"
+        style={{ top: LOGO_Y, background: "radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)" }}
       />
     </>
   )
@@ -75,6 +102,7 @@ export default function HeroContent({
         alt=""
         animate={{ scale: hovered ? 0.88 : 1 }}
         transition={{ duration: 0.8, ease: "easeInOut" }}
+        data-hero-anchor=""
         className="w-[190px] animate-breathe md:w-[min(300px,26svh)]"
       />
       <h1>

@@ -231,11 +231,10 @@ export default function ArtistPage() {
                 ))}
               </FadeUp>
             )}
-            {artist.links.soundcloud && (
+            {artist.listen && (
               <FadeUp className="flex flex-col gap-4" delay={0.1}>
                 <SectionTitle>Listen</SectionTitle>
-                <p className="text-brand-300">Latest releases and mixes from {artist.name}.</p>
-                <SoundCloudPlayer soundcloudUrl={artist.links.soundcloud} artistName={artist.name} height={450} visual />
+                <SoundCloudPlayer soundcloudUrl={artist.listen} artistName={artist.name} height={450} visual />
               </FadeUp>
             )}
             {artist.rider && (
