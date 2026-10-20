@@ -1,6 +1,7 @@
 import type { Env } from "../../cf/env"
 import { escapeHtml, escapeMultiline, field, hashIp, isBot, isEmail, isUrl, json, readJson } from "../../cf/http"
 import { sendTemplate } from "../../cf/resend"
+import { verifyTurnstile } from "../../cf/turnstile"
 import { logSubmission } from "../../cf/submissions"
 
 // POST /api/demo — demo submission from the Label page
@@ -8,6 +9,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const data = await readJson(request)
   if (!data) return json({ error: "invalid_request" }, 400)
   if (isBot(data)) return json({ ok: true })
+  if (!(await verifyTurnstile(request, data, env))) return json({ error: "captcha_failed" }, 403)
 
   const form = {
     artist: field(data, "artist", 120),

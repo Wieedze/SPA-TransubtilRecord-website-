@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import DecryptedText from "../components/DecryptedText"
 import { fieldClass, labelClass, textareaClass } from "../components/site/formStyles"
 import Honeypot from "../components/site/Honeypot"
+import Turnstile from "../components/site/Turnstile"
 import { useFormSubmit } from "../hooks/useFormSubmit"
 
 const DEMO_FIELDS = [
@@ -14,7 +15,7 @@ const DEMO_FIELDS = [
 ] as const
 
 function DemoForm() {
-  const { state, message, submit, sending } = useFormSubmit(
+  const { state, message, submit, sending, attempt } = useFormSubmit(
     "/api/demo",
     "Demo sent. Check your inbox: we've sent you a confirmation."
   )
@@ -42,6 +43,9 @@ function DemoForm() {
           Message
         </label>
         <textarea id="dm-msg" name="message" rows={5} placeholder="Your background, style, projects…" className={textareaClass} />
+      </div>
+      <div className="md:col-span-2">
+        <Turnstile key={attempt} />
       </div>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-span-2">
         <button type="submit" disabled={sending} className="btn-primary">

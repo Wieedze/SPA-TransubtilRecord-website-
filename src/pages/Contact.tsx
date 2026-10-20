@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import DecryptedText from "../components/DecryptedText"
 import { fieldClass, labelClass, textareaClass } from "../components/site/formStyles"
 import Honeypot from "../components/site/Honeypot"
+import Turnstile from "../components/site/Turnstile"
 import { useFormSubmit } from "../hooks/useFormSubmit"
 
 // Each subject changes the message placeholder (06-contact mockup)
@@ -19,7 +20,7 @@ const SUBJECTS: Record<string, string> = {
 
 export default function Contact() {
   const [subject, setSubject] = useState("Press")
-  const { state, message, submit, sending } = useFormSubmit(
+  const { state, message, submit, sending, attempt } = useFormSubmit(
     "/api/contact",
     "Message sent. Check your inbox: we've sent you a confirmation."
   )
@@ -105,6 +106,7 @@ export default function Contact() {
           <textarea id="ct-msg" name="message" rows={6} required placeholder={SUBJECTS[subject]} className={textareaClass} />
         </div>
 
+        <Turnstile key={attempt} />
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <button type="submit" disabled={sending} className="btn-primary">
             {sending ? "Sending…" : "Send"}

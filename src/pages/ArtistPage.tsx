@@ -10,6 +10,7 @@ import SoundCloudPlayer from "../components/SoundCloudPlayer"
 import SocialIcons from "../components/site/SocialIcons"
 import Seo from "../components/site/Seo"
 import Honeypot from "../components/site/Honeypot"
+import Turnstile from "../components/site/Turnstile"
 import { useFormSubmit } from "../hooks/useFormSubmit"
 import { artistLd, artistSummary, breadcrumbLd } from "../lib/structuredData"
 import { fieldClass, textareaClass } from "../components/site/formStyles"
@@ -73,7 +74,7 @@ function SectionTitle({ children }: { children: string }) {
 }
 
 function BookingForm({ artist }: { artist: RosterArtist }) {
-  const { state, message, submit, sending } = useFormSubmit(
+  const { state, message, submit, sending, attempt } = useFormSubmit(
     "/api/booking",
     "Request sent. Check your inbox: we've sent you a confirmation."
   )
@@ -121,6 +122,9 @@ function BookingForm({ artist }: { artist: RosterArtist }) {
           placeholder="Line-up, set times, accommodation, travel…"
           className={textareaClass}
         />
+      </div>
+      <div className="md:col-span-2">
+        <Turnstile key={attempt} />
       </div>
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-span-2">
         <button type="submit" disabled={sending} className="btn-primary">

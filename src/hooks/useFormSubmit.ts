@@ -6,6 +6,7 @@ const ERRORS: Record<string, string> = {
   rate_limited: "Too many messages from your connection. Please try again in an hour.",
   missing_fields: "Please fill in the required fields.",
   invalid_email: "Please enter a valid email address.",
+  captcha_failed: "The anti-bot check didn't pass. Please try again.",
 }
 const FALLBACK = "Something went wrong. Please try again, or email us at transubtilrec@gmail.com."
 
@@ -13,6 +14,8 @@ const FALLBACK = "Something went wrong. Please try again, or email us at transub
 export function useFormSubmit(endpoint: string, successMessage: string) {
   const [state, setState] = useState<FormState>("idle")
   const [message, setMessage] = useState<string | null>(null)
+  // Bumped after every attempt: use as the Turnstile key so it issues a fresh token
+  const [attempt, setAttempt] = useState(0)
 
   const submit = async (event: FormEvent<HTMLFormElement>, extra: Record<string, string> = {}) => {
     event.preventDefault()
@@ -34,8 +37,10 @@ export function useFormSubmit(endpoint: string, successMessage: string) {
     } catch (error) {
       setState("error")
       setMessage(ERRORS[(error as Error).message] ?? FALLBACK)
+    } finally {
+      setAttempt((n) => n + 1)
     }
   }
 
-  return { state, message, submit, sending: state === "sending" }
+  return { state, message, submit, sending: state === "sending", attempt }
 }

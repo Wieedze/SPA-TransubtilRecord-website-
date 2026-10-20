@@ -1,6 +1,7 @@
 import type { Env } from "../../cf/env"
 import { field, isBot, isEmail, json, readJson } from "../../cf/http"
 import { sendTemplate } from "../../cf/resend"
+import { verifyTurnstile } from "../../cf/turnstile"
 
 const token = () => crypto.randomUUID().replace(/-/g, "")
 
@@ -10,6 +11,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const data = await readJson(request)
   if (!data) return json({ error: "invalid_request" }, 400)
   if (isBot(data)) return json({ ok: true })
+  if (!(await verifyTurnstile(request, data, env))) return json({ error: "captcha_failed" }, 403)
 
   const email = field(data, "email", 254).toLowerCase()
   const source = field(data, "source", 40) || "site"

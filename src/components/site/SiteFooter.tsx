@@ -4,6 +4,7 @@ import logo from "../../assets/brand/transubtil-logo-white.svg"
 import { activeSocialLinks } from "../../config/site"
 import { useFormSubmit } from "../../hooks/useFormSubmit"
 import Honeypot from "./Honeypot"
+import Turnstile from "./Turnstile"
 
 // Messages for the double opt-in link (/api/confirm redirects to /?newsletter=…)
 const CONFIRM_MESSAGES: Record<string, string> = {
@@ -12,7 +13,7 @@ const CONFIRM_MESSAGES: Record<string, string> = {
 }
 
 function NewsletterBand() {
-  const { message, submit, sending } = useFormSubmit(
+  const { message, submit, sending, attempt } = useFormSubmit(
     "/api/subscribe",
     "Almost done: check your inbox and confirm your email."
   )
@@ -50,6 +51,9 @@ function NewsletterBand() {
           >
             {sending ? "Sending…" : "Subscribe"}
           </button>
+          <div className="w-full">
+            <Turnstile key={attempt} theme="light" />
+          </div>
           <p role="status" className="w-full text-small font-semibold">
             {message ?? confirmNotice}
           </p>
