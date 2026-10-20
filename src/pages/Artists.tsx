@@ -13,7 +13,7 @@ const FORMATS: Record<string, (artist: RosterArtist) => boolean> = {
 }
 
 const selectClass =
-  "h-11 rounded-field border-[1.5px] border-brand-700 bg-brand-900 px-3.5 text-[15px] text-bone hover:border-brand-500"
+  "select-chevron h-11 rounded-field border-[1.5px] border-brand-700 bg-brand-900 pl-3.5 text-[15px] text-bone hover:border-brand-500"
 
 export default function Artists() {
   const [format, setFormat] = useState("All")

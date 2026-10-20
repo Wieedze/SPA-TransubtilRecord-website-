@@ -104,7 +104,7 @@ function BookingForm({ artist }: { artist: RosterArtist }) {
           Fee budget
         </label>
         {/* TODO(content): fee ranges to be provided by the label */}
-        <select id="bk-budget" name="budget" defaultValue="" className={`${fieldClass} px-3.5`}>
+        <select id="bk-budget" name="budget" defaultValue="" className={`${fieldClass} select-chevron pl-3.5`}>
           <option value="" disabled>
             Pick a range
           </option>
