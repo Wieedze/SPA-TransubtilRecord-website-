@@ -8,9 +8,10 @@ import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import SiteNav from "../components/site/SiteNav"
 import SiteFooter from "../components/site/SiteFooter"
-import HeroContent, { HeroBackground, useHeroHover } from "../components/home/HeroContent"
+import HeroContent, { HeroBackground, LOGO_Y, useHeroHover } from "../components/home/HeroContent"
 import ArtistCard from "../components/home/ArtistCard"
 import { useIntroZoom, ZOOM_DURATION } from "../components/home/useIntroZoom"
+import { useLogoAnchor } from "../components/home/useLogoAnchor"
 import { getRosterArtist, roster, type RosterArtist } from "../data/roster"
 import { BOOKING_PATH } from "../config/site"
 
@@ -21,6 +22,7 @@ export default function Home() {
   const heroRef = useRef<HTMLElement>(null)
   const player = usePlayer()
   const { phase, heroStyle, backgroundStyle } = useIntroZoom(heroRef)
+  useLogoAnchor(heroRef)
   const intro = phase === "intro"
   const { hovered, hoverProps } = useHeroHover()
   const navigate = useNavigate()
@@ -79,8 +81,12 @@ export default function Home() {
             "relative overflow-hidden [clip-path:inset(0)]",
           ].join(" ")}
         >
-          {/* Background, confined to the hero */}
-          <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0" style={backgroundStyle}>
+          {/* Background, confined to the hero; the intro scales it around the logo */}
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{ ...backgroundStyle, transformOrigin: `50% ${LOGO_Y}` }}
+          >
             <HeroBackground />
           </motion.div>
           {/* Short fade into the page below */}
@@ -91,7 +97,7 @@ export default function Home() {
           />
           {/* Content block: 20% taller than the space under the nav, logo and text centred */}
           <div
-            className="relative flex h-[calc((100svh-68px-6svh)*1.2)] min-h-[672px] w-full items-center justify-center md:h-[calc((100svh-96px-10svh)*1.2)] md:min-h-[720px]"
+            className="relative flex h-[clamp(540px,calc(100svh-68px-22svh),620px)] w-full items-center justify-center md:h-[calc((100svh-96px-10svh)*1.2)] md:min-h-[720px]"
           >
             <div className="relative flex w-full justify-center" {...hoverProps}>
               <HeroContent hovered={hovered} onNavigate={handleHeroNavigate} />

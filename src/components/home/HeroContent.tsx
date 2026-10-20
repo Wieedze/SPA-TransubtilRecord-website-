@@ -11,25 +11,31 @@ import { useHoverCount } from "../../hooks/useHoverCount"
 // Static flames from the "10 Years" artwork, mirrored so both sides are identical, cut
 // into ~120 "atoms" that appear layer by layer from the bottom and then each breathe at
 // their own pace (CSS animation inside hero-flames.svg). Dark vignette and yellow halo on top.
+// Everything is placed from --logo-y (the brandmark's centre in the hero, set by
+// useLogoAnchor): the logo sits at LOGO_AT of the artwork's height on every screen size.
+// On phones the artwork is narrower than the logo stack is tall, so its bottom fades out.
+const FLAMES_SIZE = "max(100vw, min(125svh, 160vw))"
+const LOGO_AT = 0.636 // where the logo sits on desktop, the reference look
+export const LOGO_Y = "var(--logo-y, 40%)"
+
 export function HeroBackground() {
   return (
     <>
       <img
         src={flames}
         alt=""
-        className="absolute bottom-0 left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60"
-        style={{ width: "max(100%, min(125svh, 160vw))" }}
+        className="absolute left-1/2 aspect-square max-w-none -translate-x-1/2 opacity-60 [mask-image:linear-gradient(to_bottom,black_82%,transparent)] md:[mask-image:none]"
+        style={{ width: FLAMES_SIZE, top: `calc(${LOGO_Y} - ${LOGO_AT} * ${FLAMES_SIZE})` }}
       />
       <div
         className="absolute inset-0"
         style={{
-          background:
-            "radial-gradient(circle at 50% 45%, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)",
+          background: `radial-gradient(circle at 50% ${LOGO_Y}, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.6) 50%, rgba(7,6,11,0.92) 85%)`,
         }}
       />
       <div
-        className="absolute left-1/2 top-[38%] h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full md:h-[520px] md:w-[520px]"
-        style={{ background: "radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)" }}
+        className="absolute left-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 animate-halo rounded-full md:h-[520px] md:w-[520px]"
+        style={{ top: LOGO_Y, background: "radial-gradient(circle, rgba(249,188,20,0.35), rgba(249,188,20,0) 65%)" }}
       />
     </>
   )
@@ -75,6 +81,7 @@ export default function HeroContent({
         alt=""
         animate={{ scale: hovered ? 0.88 : 1 }}
         transition={{ duration: 0.8, ease: "easeInOut" }}
+        data-hero-anchor=""
         className="w-[190px] animate-breathe md:w-[min(300px,26svh)]"
       />
       <h1>
