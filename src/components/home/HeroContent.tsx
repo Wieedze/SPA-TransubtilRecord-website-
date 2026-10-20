@@ -14,7 +14,7 @@ import { useHoverCount } from "../../hooks/useHoverCount"
 // Everything is placed from --logo-y (the brandmark's centre in the hero, set by
 // useLogoAnchor): the logo sits at LOGO_AT of the artwork's height on every screen size.
 // On phones the artwork is narrower than the logo stack is tall, so its bottom fades out.
-const FLAMES_SIZE = "max(100vw, min(125svh, 160vw))"
+const FLAMES_SIZE = "max(100vw, min(125svh, 180vw))"
 const LOGO_AT = 0.636 // where the logo sits on desktop, the reference look
 export const LOGO_Y = "var(--logo-y, 40%)"
 

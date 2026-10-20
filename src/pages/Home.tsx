@@ -97,7 +97,7 @@ export default function Home() {
           />
           {/* Content block: 20% taller than the space under the nav, logo and text centred */}
           <div
-            className="relative flex h-[clamp(540px,calc(100svh-68px-22svh),620px)] w-full items-center justify-center md:h-[calc((100svh-96px-10svh)*1.2)] md:min-h-[720px]"
+            className="relative flex h-[calc((100svh-68px-6svh)*1.2)] min-h-[672px] w-full items-center justify-center md:h-[calc((100svh-96px-10svh)*1.2)] md:min-h-[720px]"
           >
             <div className="relative flex w-full justify-center" {...hoverProps}>
               <HeroContent hovered={hovered} onNavigate={handleHeroNavigate} />
