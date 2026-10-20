@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import logo from "../../assets/brand/transubtil-logo-white.svg"
 import { activeSocialLinks } from "../../config/site"
 import { useFormSubmit } from "../../hooks/useFormSubmit"
+import { useConsent } from "../../contexts/ConsentContext"
 import Honeypot from "./Honeypot"
 import Turnstile from "./Turnstile"
 
@@ -64,6 +65,7 @@ function NewsletterBand() {
 }
 
 export default function SiteFooter() {
+  const { openSettings } = useConsent()
   return (
     <footer className="w-full bg-brand-950 text-bone">
       <NewsletterBand />
@@ -95,6 +97,9 @@ export default function SiteFooter() {
         <div className="flex flex-wrap justify-between gap-4 border-t border-brand-700 pt-6 text-[13px] text-brand-300">
           <span>© {new Date().getFullYear()} Transubtil Records</span>
           {/* TODO: legal notice and privacy pages (content phase) */}
+          <button type="button" onClick={openSettings} className="hover:text-accent">
+            Cookie settings
+          </button>
         </div>
       </div>
     </footer>

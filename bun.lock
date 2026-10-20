@@ -5,6 +5,8 @@
     "": {
       "name": "transubtil-records",
       "dependencies": {
+        "@fontsource/instrument-sans": "^5.3.0",
+        "@fontsource/michroma": "^5.3.0",
         "@supabase/supabase-js": "^2.83.0",
         "@types/bcrypt": "^6.0.0",
         "axios": "^1.7.0",
@@ -124,6 +126,10 @@
     "@esbuild/win32-ia32": ["@esbuild/win32-ia32@0.21.5", "", { "os": "win32", "cpu": "ia32" }, "sha512-SWXFF1CL2RVNMaVs+BBClwtfZSvDgtL//G/smwAc5oVK/UPu2Gu9tIaRgFmYFFKrmg3SyAjSrElf0TiJ1v8fYA=="],
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.21.5", "", { "os": "win32", "cpu": "x64" }, "sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw=="],
+
+    "@fontsource/instrument-sans": ["@fontsource/instrument-sans@5.3.0", "", {}, "sha512-QwXc4hb/px3XvSPS2CPAOgey8nyrQFxgxrmXQQ+pN+P51hKdAcchxpg8rSbjANFfPu6VKXhDqkVDucXMZ9CM5g=="],
+
+    "@fontsource/michroma": ["@fontsource/michroma@5.3.0", "", {}, "sha512-9sbGD7ek1hGvq0TmgNPFbuI3k7qwXVdZ+zCDsTHDGRIQqfYrpYWwEYcwH2fzOtvn8uiGqzAoJ72vuFE3v/hDdg=="],
 
     "@img/colour": ["@img/colour@1.1.0", "", {}, "sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ=="],
 

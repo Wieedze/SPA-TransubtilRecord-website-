@@ -9,7 +9,7 @@ import SiteFooter from "../components/site/SiteFooter"
 import HeroContent, { HeroBackground, useHeroHover } from "../components/home/HeroContent"
 import ArtistCard from "../components/home/ArtistCard"
 import { useIntroZoom, ZOOM_DURATION } from "../components/home/useIntroZoom"
-import { allCountries, getRosterArtist, roster, type RosterArtist } from "../data/roster"
+import { getRosterArtist, roster, type RosterArtist } from "../data/roster"
 import { BOOKING_PATH, SOCIAL_LINKS } from "../config/site"
 import artwork from "../assets/design/assets/artwork-10-years.jpg"
 
@@ -131,10 +131,7 @@ export default function Home() {
           <section className="border-y border-brand-700 bg-brand-900">
             <div className="mx-auto flex max-w-page flex-col gap-10 px-4 py-16 md:px-6 md:py-24">
               <div className="flex flex-col gap-3">
-                <h2 className="font-display text-[22px] md:text-[30px] md:leading-tight">Artists to book</h2>
-                <p className="meta">
-                  {roster.length} artists · {allCountries.length} countries
-                </p>
+                <h2 className="font-display text-[22px] uppercase md:text-[30px] md:leading-tight">Roster</h2>
               </div>
               <div className="grid grid-cols-2 gap-x-3.5 gap-y-8 lg:grid-cols-4 lg:gap-6">
                 {featured.map((artist) => (
@@ -142,7 +139,7 @@ export default function Home() {
                 ))}
               </div>
               <Link to="/artists" className="text-link self-start">
-                See all {roster.length} artists
+                See all
               </Link>
             </div>
           </section>

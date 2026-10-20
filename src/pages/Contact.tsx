@@ -42,7 +42,7 @@ export default function Contact() {
           <DecryptedText text="Talk to us" animateOn="view" speed={60} maxIterations={8} />
         </h1>
         <p className="max-w-[48ch] text-[17px] leading-[1.7] text-body">
-          Partnerships or anything else. For bookings, the artist page is faster.
+          Partnerships or anything else.
         </p>
         <Link to="/artists" className="text-link self-start">
           Find an artist to book

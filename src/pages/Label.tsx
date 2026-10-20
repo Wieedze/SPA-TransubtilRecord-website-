@@ -102,7 +102,7 @@ export default function Label() {
             <h2 className="font-display text-[22px] leading-tight md:text-[30px]">
               <DecryptedText text="Send your demo" animateOn="view" speed={60} maxIterations={5} />
             </h2>
-            <p className="text-body">We listen to everything. To help us listen fast:</p>
+            <p className="text-body">We listen to everything.</p>
             <ol className="flex list-decimal flex-col gap-2 pl-5 text-body marker:text-accent">
               <li>A private SoundCloud, Dropbox or Drive link, no attachments.</li>
               <li>Two or three finished tracks.</li>

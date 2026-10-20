@@ -30,149 +30,154 @@ import { FEATURE_AUTH, FEATURE_STUDIO } from "./config/features.ts"
 import ScrollToTop from "./components/site/ScrollToTop.tsx"
 import MiniPlayer from "./components/site/MiniPlayer.tsx"
 import { PlayerProvider } from "./contexts/PlayerContext.tsx"
+import { ConsentProvider } from "./contexts/ConsentContext.tsx"
+import CookieBanner from "./components/site/CookieBanner.tsx"
 
 function App() {
   return (
     <AuthProvider>
-      <PlayerProvider>
-        <ScrollToTop />
-        {/* Page content stays clear of the player bar */}
-        <div style={{ paddingBottom: "var(--player-h, 0px)" }}>
-          <Routes>
-            {/* Home renders its own nav and footer (fullscreen intro) */}
-            <Route path="/" element={<Home />} />
-
-            {FEATURE_AUTH && (
-              <>
-                {/* Public shared file download page (no layout) */}
-                <Route path="/shared/:token" element={<SharedDownload />} />
-
-                {/* Auth pages without Layout */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/auth/callback" element={<AuthCallback />} />
-              </>
-            )}
-
-            {/* All other pages with Layout */}
-            <Route element={<Layout />}>
-              {FEATURE_STUDIO && (
-                <>
-                  <Route path="/studio" element={<Studio />} />
-
-                  {/* Protected Studio Routes */}
-                  <Route
-                    path="/studio/request"
-                    element={
-                      <ProtectedRoute>
-                        <StudioRequest />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/studio/my-projects"
-                    element={
-                      <ProtectedRoute>
-                        <MyProjects />
-                      </ProtectedRoute>
-                    }
-                  />
-
-                  {/* Project Detail Route */}
-                  <Route
-                    path="/studio/project/:projectId"
-                    element={
-                      <ProtectedRoute>
-                        <ProjectDetail />
-                      </ProtectedRoute>
-                    }
-                  />
-                </>
-              )}
+      <ConsentProvider>
+        <PlayerProvider>
+          <ScrollToTop />
+          {/* Page content stays clear of the player bar */}
+          <div style={{ paddingBottom: "var(--player-h, 0px)" }}>
+            <Routes>
+              {/* Home renders its own nav and footer (fullscreen intro) */}
+              <Route path="/" element={<Home />} />
 
               {FEATURE_AUTH && (
                 <>
-                  {/* Dashboard Route */}
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    }
-                  />
+                  {/* Public shared file download page (no layout) */}
+                  <Route path="/shared/:token" element={<SharedDownload />} />
 
-                  {/* Admin Routes */}
-                  <Route
-                    path="/admin/submissions"
-                    element={
-                      <ProtectedRoute requireAdmin>
-                        <LabelSubmissions />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/studio-requests"
-                    element={
-                      <ProtectedRoute requireAdmin>
-                        <StudioRequests />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/users"
-                    element={
-                      <ProtectedRoute requireAdmin>
-                        <UserManagement />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/my-drive"
-                    element={
-                      <ProtectedRoute requireAdmin>
-                        <MyDrive />
-                      </ProtectedRoute>
-                    }
-                  />
+                  {/* Auth pages without Layout */}
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
                 </>
               )}
 
-              <Route path="/artists" element={<Artists />} />
-              <Route path="/artists/:slug" element={<ArtistPage />} />
-              <Route path="/releases" element={<Releases />} />
-              <Route path="/label" element={<Label />} />
-              <Route path="/contact" element={<Contact />} />
-              {/* v1 URL */}
-              <Route path="/about" element={<Navigate to="/label" replace />} />
-              {FEATURE_AUTH && (
-                <>
-                  <Route
-                    path="/admin/instagram-generator"
-                    element={
-                      <ProtectedRoute requireAdmin>
-                        <InstagramGenerator />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/admin/catalogue"
-                    element={
-                      <ProtectedRoute requireAdmin>
-                        <CatalogueManager />
-                      </ProtectedRoute>
-                    }
-                  />
-                </>
-              )}
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </div>
-        <MiniPlayer />
-      </PlayerProvider>
+              {/* All other pages with Layout */}
+              <Route element={<Layout />}>
+                {FEATURE_STUDIO && (
+                  <>
+                    <Route path="/studio" element={<Studio />} />
+
+                    {/* Protected Studio Routes */}
+                    <Route
+                      path="/studio/request"
+                      element={
+                        <ProtectedRoute>
+                          <StudioRequest />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/studio/my-projects"
+                      element={
+                        <ProtectedRoute>
+                          <MyProjects />
+                        </ProtectedRoute>
+                      }
+                    />
+
+                    {/* Project Detail Route */}
+                    <Route
+                      path="/studio/project/:projectId"
+                      element={
+                        <ProtectedRoute>
+                          <ProjectDetail />
+                        </ProtectedRoute>
+                      }
+                    />
+                  </>
+                )}
+
+                {FEATURE_AUTH && (
+                  <>
+                    {/* Dashboard Route */}
+                    <Route
+                      path="/dashboard"
+                      element={
+                        <ProtectedRoute>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      }
+                    />
+
+                    {/* Admin Routes */}
+                    <Route
+                      path="/admin/submissions"
+                      element={
+                        <ProtectedRoute requireAdmin>
+                          <LabelSubmissions />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/studio-requests"
+                      element={
+                        <ProtectedRoute requireAdmin>
+                          <StudioRequests />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/users"
+                      element={
+                        <ProtectedRoute requireAdmin>
+                          <UserManagement />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/my-drive"
+                      element={
+                        <ProtectedRoute requireAdmin>
+                          <MyDrive />
+                        </ProtectedRoute>
+                      }
+                    />
+                  </>
+                )}
+
+                <Route path="/artists" element={<Artists />} />
+                <Route path="/artists/:slug" element={<ArtistPage />} />
+                <Route path="/releases" element={<Releases />} />
+                <Route path="/label" element={<Label />} />
+                <Route path="/contact" element={<Contact />} />
+                {/* v1 URL */}
+                <Route path="/about" element={<Navigate to="/label" replace />} />
+                {FEATURE_AUTH && (
+                  <>
+                    <Route
+                      path="/admin/instagram-generator"
+                      element={
+                        <ProtectedRoute requireAdmin>
+                          <InstagramGenerator />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/admin/catalogue"
+                      element={
+                        <ProtectedRoute requireAdmin>
+                          <CatalogueManager />
+                        </ProtectedRoute>
+                      }
+                    />
+                  </>
+                )}
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </div>
+          <MiniPlayer />
+          <CookieBanner />
+        </PlayerProvider>
+      </ConsentProvider>
     </AuthProvider>
   )
 }

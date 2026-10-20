@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import { useConsent } from "../contexts/ConsentContext"
+import EmbedConsent from "./site/EmbedConsent"
 
 interface SoundCloudPlayerProps {
   soundcloudUrl: string
@@ -18,6 +20,7 @@ export default function SoundCloudPlayer({
   const [embedUrl, setEmbedUrl] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
+  const { embedsAllowed } = useConsent()
 
   useEffect(() => {
     // Extract SoundCloud URL and convert to embed format
@@ -55,6 +58,11 @@ export default function SoundCloudPlayer({
 
     extractEmbedUrl()
   }, [soundcloudUrl, autoPlay, visual])
+
+  // No request to SoundCloud before consent
+  if (!embedsAllowed) {
+    return <EmbedConsent service="SoundCloud" href={soundcloudUrl} height={height} />
+  }
 
   if (isLoading) {
     return (
