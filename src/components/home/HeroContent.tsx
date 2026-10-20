@@ -81,7 +81,7 @@ export default function HeroContent({
         <img src={wordmark} alt="Transubtil Records" className="w-[280px] sm:w-[400px] md:w-[min(560px,52svh)]" />
       </h1>
       <p className="max-w-[620px] text-base leading-relaxed text-body md:text-[19px]">
-        Psytrance, darkpsy and forest. Artists to book for your festival, releases to play tonight.
+        Psytrance, darkpsy and forest.
       </p>
       <div className="mt-3 flex flex-wrap items-center justify-center gap-x-8 gap-y-5">
         <HeroAction to="/artists" label="Artists" onNavigate={onNavigate} />
