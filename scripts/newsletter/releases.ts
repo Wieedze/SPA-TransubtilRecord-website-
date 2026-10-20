@@ -11,12 +11,18 @@
 import { releases } from "../../src/data/releases"
 import { createBroadcast, d1, devVar, releaseEmail, sqlString } from "./lib"
 
+const KIND = { album: "Album", ep: "EP", track: "Single", compilation: "Compilation" } as const
+
 const dryRun = process.argv.includes("--dry-run")
 const markAll = process.argv.includes("--mark-all")
 const send = process.argv.includes("--send") || devVar("NEWSLETTER_AUTO_SEND") === "true"
 
-const announced = new Set(d1<{ bandcamp_id: string }>("SELECT bandcamp_id FROM announced_releases").map((r) => r.bandcamp_id))
-const fresh = releases.filter((r) => r.bandcampId && !announced.has(r.bandcampId))
+// Matched on the Bandcamp id or the link (the release watcher Worker only knows the link)
+const announced = new Set(
+  d1<{ bandcamp_id: string; url: string | null }>("SELECT bandcamp_id, url FROM announced_releases").flatMap((r) => [r.bandcamp_id, r.url])
+)
+const urlOf = (r: (typeof releases)[number]) => r.bandcampUrl.toLowerCase().replace(/\/$/, "")
+const fresh = releases.filter((r) => r.bandcampId && !announced.has(r.bandcampId) && !announced.has(urlOf(r)))
 
 if (fresh.length === 0) {
   console.log("Newsletter: no new release to announce.")
@@ -39,13 +45,20 @@ for (const release of fresh) {
     const { id, url } = await createBroadcast({
       name: `Release: ${release.title}`,
       subject: `New release: ${release.title}`,
-      html: releaseEmail(release),
+      html: releaseEmail({
+        title: release.title,
+        artist: release.artist,
+        kind: KIND[release.type],
+        coverUrl: release.coverUrl,
+        bandcampUrl: release.bandcampUrl,
+        description: release.description,
+      }),
       send,
     })
     broadcastId = id
     console.log(send ? `Sent: ${release.title} (${url})` : `Draft ready for ${release.title}: ${url}`)
   }
   d1(
-    `INSERT INTO announced_releases (bandcamp_id, title, broadcast_id) VALUES (${sqlString(release.bandcampId)}, ${sqlString(release.title)}, ${sqlString(broadcastId)})`
+    `INSERT INTO announced_releases (bandcamp_id, title, broadcast_id, url) VALUES (${sqlString(release.bandcampId)}, ${sqlString(release.title)}, ${sqlString(broadcastId)}, ${sqlString(urlOf(release))})`
   )
 }

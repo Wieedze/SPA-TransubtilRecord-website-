@@ -1,0 +1,21 @@
+# Email Worker on releases@transubtil-record.com: turns Bandcamp "new release"
+# notifications into a draft newsletter (see index.ts).
+# Deploy: bun run watcher:deploy · Secret: RESEND_API_KEY (full-access Resend key)
+name = "transubtil-release-watcher"
+main = "index.ts"
+compatibility_date = "2025-09-01"
+workers_dev = false
+
+[[d1_databases]]
+binding = "DB"
+database_name = "transubtil-db"
+database_id = "d04725a8-8b60-43ad-9d18-ccc8b95ecbd9"
+migrations_dir = "../../db/migrations"
+
+[vars]
+LABEL_EMAIL = "transubtilrec@gmail.com"
+MAIL_FROM = "Transubtil Records <hello@mail.transubtil-record.com>"
+NEWS_FROM = "Transubtil Records <news@news.transubtil-record.com>"
+REPLY_TO = "contact@transubtil-record.com"
+RESEND_SEGMENT_ID = "0dcad3d1-427d-4f0d-be5c-b9f782ae8a8c"
+BANDCAMP_HOST = "transubtilrec.bandcamp.com"

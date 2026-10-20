@@ -1,0 +1,42 @@
+-- Release link on announced releases: the release watcher (workers/release-watcher)
+-- only knows the Bandcamp URL, the site catalogue knows both, so either can match.
+ALTER TABLE announced_releases ADD COLUMN url TEXT;
+CREATE UNIQUE INDEX idx_announced_releases_url ON announced_releases (url);
+
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/v-a-nightmare-cage' WHERE bandcamp_id = '1276691280';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/anchronorium-paradoxal-ep' WHERE bandcamp_id = '4158104841';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/track/anchronorium-dissonus' WHERE bandcamp_id = '2775504586';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/v-a-chaos-simulator' WHERE bandcamp_id = '155406373';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/creepy-deep-karev-tongue-twister' WHERE bandcamp_id = '3369648476';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/kanaloa-obsidian' WHERE bandcamp_id = '452095018';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/best-of-7-years' WHERE bandcamp_id = '3676051951';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/track/opsuruus-no-humans' WHERE bandcamp_id = '307314221';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/v-a-ultra-heaven' WHERE bandcamp_id = '3402257404';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/ingenious-brain-brain-terms' WHERE bandcamp_id = '1106676205';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/zeo-whispers-of-chaos' WHERE bandcamp_id = '2879833548';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/xipe-totecs-party-games' WHERE bandcamp_id = '120594099';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/opsuruus-surreal-contrast' WHERE bandcamp_id = '3318037261';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/warp-drive-jungle-worms' WHERE bandcamp_id = '3401677597';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/ingenious-brain-dirty-experiments-20' WHERE bandcamp_id = '2293845675';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/the-horrids-biohackers' WHERE bandcamp_id = '1823970644';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/ingenious-brain-dirty-experiments' WHERE bandcamp_id = '1760532212';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/dr-fractal-red-spicy' WHERE bandcamp_id = '6011190';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/strange-creatures-collective' WHERE bandcamp_id = '3468402328';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/v-a-divergent-polarity' WHERE bandcamp_id = '2123996018';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/precisely-nowhere' WHERE bandcamp_id = '1918549876';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/v-a-ta-na-tsiic' WHERE bandcamp_id = '1576423401';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/xipe-totecs-evil-in-the-shell-ep' WHERE bandcamp_id = '3535232346';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/dr-fractal-into-matter' WHERE bandcamp_id = '2062036570';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/v-a-freaky-riders' WHERE bandcamp_id = '1863032189';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/veheme-subtil-cruizer' WHERE bandcamp_id = '3482061100';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/dr-fractal-smooth-lobotomy' WHERE bandcamp_id = '832945600';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/paranoid-ep' WHERE bandcamp_id = '3496769874';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/v-a-new-wave-killer' WHERE bandcamp_id = '3965082094';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/unsinkable-ep' WHERE bandcamp_id = '3420337027';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/don-piano' WHERE bandcamp_id = '17496551';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/galaktic-garbage-ep' WHERE bandcamp_id = '1913421101';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/andromed-in-loading-ep' WHERE bandcamp_id = '1085913171';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/transsiberian' WHERE bandcamp_id = '985067329';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/midnight-snacks' WHERE bandcamp_id = '1502904550';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/south-syndicate' WHERE bandcamp_id = '3624884228';
+UPDATE announced_releases SET url = 'https://transubtilrec.bandcamp.com/album/shrezonant' WHERE bandcamp_id = '4078066189';

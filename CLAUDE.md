@@ -19,6 +19,7 @@ Package manager / script runner: **Bun** (`bun.lock`). Vite remains the bundler.
 - `bun run deploy:prod` — Build and deploy to production (Pages production branch: `main`)
 - `bun run newsletter` — local newsletter editor at http://localhost:4321 (fields, live preview, test email, draft broadcast in Resend)
 - `bun run newsletter:releases [--dry-run | --send | --mark-all]` — broadcast for each release in `src/data/releases.ts` not yet in D1 `announced_releases` (draft unless `--send` or `NEWSLETTER_AUTO_SEND=true` in `.dev.vars`). Needs the full-access `RESEND_API_KEY` in `.dev.vars`
+- `bun run watcher:deploy` — deploy the release-watcher Email Worker (`workers/release-watcher/`)
 - Legacy Express backend (studio/auth, feature-flagged off): `bun run dev:server`, `bun run server`
 
 No test runner or linter is configured. Typecheck with `bunx tsc --noEmit -p tsconfig.json` (app) and `bunx tsc --noEmit -p functions/tsconfig.json` (Pages Functions).
@@ -38,7 +39,8 @@ No test runner or linter is configured. Typecheck with `bunx tsc --noEmit -p tsc
 
 - `wrangler.toml`: Pages build output `dist/`, D1 binding `DB` (`transubtil-db`)
 - `functions/api/*` — Pages Functions; shared `Env` type in `cf/env.ts`
-- `db/migrations/` — D1 (SQLite) schema: `subscribers`, `submissions`
+- `db/migrations/` — D1 (SQLite) schema: `subscribers`, `submissions`, `announced_releases`
+- `workers/release-watcher/` — separate Email Worker on releases@transubtil-record.com: Bandcamp "new release" notifications (a fan account on that address follows the label) become a draft Resend broadcast + an alert to the label; every email is forwarded to the label inbox. Email templates shared via `cf/newsletter-email.ts`
 
 ## Architecture
 
