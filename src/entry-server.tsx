@@ -7,6 +7,7 @@ import { HelmetProvider, type HelmetServerState } from "react-helmet-async"
 import App from "./App"
 import { roster, styleGroups, type RosterArtist } from "./data/roster"
 import { releases } from "./data/releases"
+import { activeSocialLinks } from "./config/site"
 import { SITE_URL, SITE_NAME } from "./config/seo"
 import { artistPlace, artistSummary } from "./lib/structuredData"
 
@@ -72,6 +73,7 @@ export function buildLlmsTxt() {
 - Roster: ${roster.length} artists (DJs and live acts)
 - Catalogue: ${releases.length} releases on Bandcamp (https://transubtilrec.bandcamp.com)
 - Booking: each artist page has a booking form
+- Follow the label: ${activeSocialLinks.map((l) => `[${l.label}](${l.href})`).join(", ")}
 
 ## Pages
 

@@ -62,7 +62,7 @@ ${eyebrow}<h1 style="margin:0 0 20px;font-family:Michroma,Helvetica,Arial,sans-s
 ${opts.body}
 <div style="height:1px;background:#2C2A36;margin:34px 0 16px;line-height:1px;font-size:1px">&nbsp;</div>
 <p style="margin:0 0 8px;font-size:12px;line-height:1.6;color:#A8A5B0">Transubtil Records · International psytrance label from France<br>
-<a href="${SITE}/artists" style="color:#A8A5B0">Artists</a> · <a href="${SITE}/releases" style="color:#A8A5B0">Releases</a> · <a href="https://transubtilrec.bandcamp.com" style="color:#A8A5B0">Bandcamp</a> · <a href="https://soundcloud.com/transubtil" style="color:#A8A5B0">SoundCloud</a></p>
+<a href="${SITE}/artists" style="color:#A8A5B0">Artists</a> · <a href="${SITE}/releases" style="color:#A8A5B0">Releases</a> · <a href="https://transubtilrec.bandcamp.com" style="color:#A8A5B0">Bandcamp</a> · <a href="https://soundcloud.com/transubtil" style="color:#A8A5B0">SoundCloud</a><br><a href="https://www.instagram.com/transubtilrecords/" style="color:#A8A5B0">Instagram</a> · <a href="https://www.facebook.com/Transubtilrec" style="color:#A8A5B0">Facebook</a> · <a href="https://www.youtube.com/@transubtilrecord4776" style="color:#A8A5B0">YouTube</a></p>
 <p style="margin:0;font-size:12px;line-height:1.6;color:#6F6C78">You get this email because you subscribed on transubtil-record.com. <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color:#A8A5B0">Unsubscribe</a></p>
 </td>
 ${band("right")}
