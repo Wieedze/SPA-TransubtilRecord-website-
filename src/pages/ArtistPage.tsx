@@ -231,7 +231,7 @@ export default function ArtistPage() {
                 ))}
               </FadeUp>
             )}
-            {(artist.featuredSet || artist.links.soundcloud) && (
+            {(artist.featuredSet || artist.links.soundcloud || artist.sideProject) && (
               <FadeUp className="flex flex-col gap-4" delay={0.1}>
                 <SectionTitle>Listen</SectionTitle>
                 {artist.featuredSet && (
@@ -246,6 +246,19 @@ export default function ArtistPage() {
                       <p className="mt-4 text-xs uppercase tracking-[0.16em] text-brand-300">Latest on SoundCloud</p>
                     )}
                     <SoundCloudPlayer soundcloudUrl={artist.links.soundcloud} artistName={artist.name} height={450} visual />
+                  </>
+                )}
+                {artist.sideProject && (
+                  <>
+                    <p className="mt-4 text-xs uppercase tracking-[0.16em] text-brand-300">
+                      Side project · {artist.sideProject.name}
+                    </p>
+                    <SoundCloudPlayer
+                      soundcloudUrl={artist.sideProject.url}
+                      artistName={artist.sideProject.name}
+                      height={300}
+                      visual
+                    />
                   </>
                 )}
               </FadeUp>

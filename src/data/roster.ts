@@ -28,12 +28,14 @@ export interface RosterArtist {
   }
   /** SoundCloud set highlighted above the profile player on the artist page */
   featuredSet: string | null
+  /** A side project's set, shown under the profile player */
+  sideProject: { name: string; url: string } | null
   presskitZip: string | null
   rider: string | null
   upcomingDates: unknown[]
 }
 
-type RawArtist = Omit<RosterArtist, "photo" | "act" | "country" | "styles" | "links" | "featuredSet"> & {
+type RawArtist = Omit<RosterArtist, "photo" | "act" | "country" | "styles" | "links" | "featuredSet" | "sideProject"> & {
   photo: string
   links: { soundcloud: string | null; bandcamp: string | null; instagram: string | null }
 }
@@ -58,6 +60,7 @@ export const roster: RosterArtist[] = (rawArtists as RawArtist[]).map((artist) =
     country: extras?.country ?? null,
     styles: extras?.styles ?? artist.style.split(" · "),
     featuredSet: extras?.featuredSet ?? null,
+    sideProject: extras?.sideProject ?? null,
     links: {
       soundcloud: artist.links.soundcloud ?? extras?.soundcloud ?? null,
       bandcamp: artist.links.bandcamp,

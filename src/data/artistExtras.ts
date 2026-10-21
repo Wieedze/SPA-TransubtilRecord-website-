@@ -9,6 +9,8 @@ export interface ArtistExtras {
   /** A set shown above the profile player on the artist page: a track, set or playlist
    *  URL, also on another account (e.g. a festival or label showcase the artist reposts) */
   featuredSet?: string
+  /** A side project's set, shown under the profile player with its name */
+  sideProject?: { name: string; url: string }
   instagram: string | null
   facebook: string | null
 }
@@ -17,7 +19,7 @@ export const artistExtras: Record<string, ArtistExtras> = {
   thehorrids: { act: "Live Act", country: "France", styles: ["Darkpsy", "Forest"], soundcloud: "https://soundcloud.com/thehorrids", featuredSet: "https://soundcloud.com/mo_dem/the-horrids-the-hive-modem", instagram: "https://www.instagram.com/the.horrids/", facebook: "https://www.facebook.com/Thehorridspsy/" },
   anchronorium: { act: "Live Act", country: "Portugal", styles: ["Darkpsy", "Hitech"], soundcloud: "https://soundcloud.com/anchronorium", instagram: "https://www.instagram.com/rafyx_anchronorium", facebook: null },
   balku: { act: "Live Set", country: "Portugal", styles: ["Darkpsy", "Forest", "Hitech"], soundcloud: "https://soundcloud.com/balkumusic", instagram: "https://www.instagram.com/balkumusic/", facebook: "https://www.facebook.com/balkumusic" },
-  drfractal: { act: "Live Act", country: "France", styles: ["Darkpsy", "Forest"], soundcloud: "https://soundcloud.com/theosantinacci", featuredSet: "https://soundcloud.com/user-211014637-830247290/bakubai-promo-mix-for-back-to-nature-festival-2025", instagram: "https://www.instagram.com/dr.fractal_bakubai", facebook: "https://www.facebook.com/dr.fractal/" },
+  drfractal: { act: "Live Act", country: "France", styles: ["Darkpsy", "Forest"], soundcloud: "https://soundcloud.com/theosantinacci", sideProject: { name: "Bakubai", url: "https://soundcloud.com/user-211014637-830247290/bakubai-promo-mix-for-back-to-nature-festival-2025" }, instagram: "https://www.instagram.com/dr.fractal_bakubai", facebook: "https://www.facebook.com/dr.fractal/" },
   intrapsyche: { act: "Live Act", country: "Italy", styles: ["Twilight", "Darkpsy"], soundcloud: "https://soundcloud.com/francescointrapsyche", instagram: "https://www.instagram.com/intrapsyche_transubtil", facebook: "https://www.facebook.com/profile.php?id=61553932695541" },
   lamarquise: { act: "Live Set", country: "France", styles: ["Twilight"], soundcloud: "https://soundcloud.com/m-t-0ryk", instagram: "https://www.instagram.com/angelolamarquise", facebook: null },
   opsuruus: { act: "Live Act", country: "Portugal", styles: ["Darkpsy", "Forest", "Hitech"], soundcloud: "https://soundcloud.com/opsuruus", instagram: "https://www.instagram.com/opsuruus.music", facebook: "https://www.facebook.com/Opsuruus" },
