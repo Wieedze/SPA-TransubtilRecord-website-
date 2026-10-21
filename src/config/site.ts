@@ -12,10 +12,11 @@ export const NAV_LINKS = [
 export const BOOKING_PATH = "/artists"
 
 export const SOCIAL_LINKS: Array<{ label: string; href: string | null }> = [
+  { label: "Instagram", href: "https://www.instagram.com/transubtilrecords/" },
+  { label: "Facebook", href: "https://www.facebook.com/Transubtilrec" },
+  { label: "YouTube", href: "https://www.youtube.com/@transubtilrecord4776" },
   { label: "SoundCloud", href: "https://soundcloud.com/transubtil" },
   { label: "Bandcamp", href: "https://transubtilrec.bandcamp.com" },
-  { label: "YouTube", href: null },
-  { label: "Instagram", href: null },
   { label: "TikTok", href: null },
 ]
 
